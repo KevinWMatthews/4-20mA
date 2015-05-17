@@ -1,0 +1,7 @@
+#Ignore results of production code build
+build/
+obj/
+
+#Ignore results of CppUTest test build
+*/test/build/
+*/test/obj/
