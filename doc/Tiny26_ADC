@@ -1,0 +1,90 @@
+Tiny26_ADC
+
+~ ADMUX (Multiplexer Selection Register) ~
+Bits 7,6 - REFS1, REFS0 (Reference Selection)
+  You can set the reference voltage to AVCC or to PA3 with a variety of options.
+  Let's start with AVCC:
+    Set bits 7,6 (REFS1, REFS0) of ADMUX to 00 to select AVCC as the reference voltage.
+
+Bit 5 - ADLAR (Left Adjust Result)
+  Set to 1 to left adjust the ADC reading.
+  Set to 0 to right adjust the ADC reading.
+
+
+Bits 4..0 MUX4..MUX0 (Analog Channel and Gain Selection)
+  Use to select which analog input(s) are connected to the ADC. Also specifies 1x or 20x gain.
+  Looks like you can only read from one ADC at a time!
+    Set bits 4..0 of ADMUX to 00000 to select ADC0
+    (Set bits 4..0 of ADMUX to 01010 [10 in binary] to select ADC10)
+
+
+~ ADCSR (Control and Status Register) ~
+Bit 7 - ADEN (Enable)
+  Write 1 to enable the ADC, 0 to disable the ADC
+
+Bit 6 - ADSC (Start Conversion)
+  Write 1 to start a/all conversion(s)
+    In Single Conversion mode, write 1 to start each conversion
+    In Free Running mode, write 1 to start the first (and all successive) conversions.
+    The first conversion may be a dummy conversion. Do this at startup! (I think).
+  Writing 0 has no effect.
+  ADC will read 1 when a conversion is in progress.
+  Hardware will set to 0 when the conversion is finished.
+
+Bit 5 - ADFR (Free Running select)
+  Write 1 to operate in Free Running mode
+    The ADC is constantly sampling and updating
+  Write 0 return to Single Conversion mode
+    each conversion must be initiated by the user
+
+Bit 4 - ADIF (Interrupt Flag)
+  Hardware sets this bit to 1 when an ADC conversion has been completed and data registers are updated.
+  Hardware will also execute the ADC Conversion Complete Interrupt if:
+    The ADIE bit is set
+    The I-bit in SREG is set
+  ADIF is cleared by:
+    By hardware in the ADC Conversion Complete interrupt  OR
+    Manually writing a 1 to ADIF
+
+Bit 3 - ADIE (Interrupt Enable)
+  When this bit is set and the I-bit in SREG is set, the ADC Conversion Complete Interrupt is activated.
+  This can be used to scan multiple analog channels.
+
+Bits 2.0 - ADPS2..0 (Prescaler Select)
+  The ADC's input clock frequency must be between 50 and 200 kHz. Use a prescaler appropriately.
+  Set the prescaler by:
+    Setting the ADPS (PreScaler) bits in the ADCSR register
+    These bits set the division factor to 2^n where
+    n is expressed in binary in these three bits.
+
+
+~ ADCH and ADCL (Data Registers)
+The ADC generates a 10-bit result that is stored over two data registers:
+  ADCH (High)
+  ADCL (Low)
+It is right adjusted by default, meaning:
+  ADCH      ADCL
+  xxxx xx98 7654 3210
+ADCL must be read first.
+Then ADCH is read.
+Both must occur, and in this order!
+Once ADCL is read the ADC can not put new readings in the data registers.
+The ADC can only access the data registers after ADCH is read.
+
+
+
+A normal ADC conversion takes 13 ADC (NOT main CPU) clock cycles.
+That's a long time!!
+
+
+Can look into Noise Reduction mode.
+Can also look into hardware for noise cancelling.
+
+
+For a single ended conversion, the resulting value is:
+  ADC = (Vin*1024)/Vref
+
+
+We might need to set the I-bit (bit 7) in SREG.
+We also might need to set something in GIMSK or TIMSK.
+Hopefully not ;)
