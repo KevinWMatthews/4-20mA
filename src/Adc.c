@@ -1,5 +1,12 @@
 #include "Adc.h"
 
+static uint8_t * adcsrPtr;
+
+void Adc_Init(uint8_t * adcsr)
+{
+  adcsrPtr = adcsr;
+}
+
 BOOL Adc_IsAdcBusy(void)
 {
   //Read and return the ADSC register
@@ -33,7 +40,7 @@ void Adc_ClearInterruptFlag(void)
 //Setup functions
 void Adc_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
 {
-  //Set REFS1 and REFS0
+  *adcsrPtr = voltageSource << REFS0;
 }
 
 void Adc_SelectResultAdjust(Adc_ResultAdjust resultAdjust)

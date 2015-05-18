@@ -4,14 +4,24 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=Default
+TESTS_TO_RUN=Adc
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
 
+ATOD_DIR=AtoD
+
+ADC_DIR=Adc
+
 #Create a makefile target for each series of tests
 Default:
 	$(MAKE_TESTS) $(DEFAULT_DIR) $(MAKECMDGOALS)
+
+AtoD:
+	$(MAKE_TESTS) $(ATOD_DIR) $(MAKECMDGOALS)
+
+Adc:
+	$(MAKE_TESTS) $(ADC_DIR) $(MAKECMDGOALS)
 
 ### Makefile targets ###
 .DEFAULT_GOAL:=all

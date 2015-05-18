@@ -17,3 +17,6 @@ Main functionality:
   ReadDataRegister_High
   ReadDataRegister_Low
   ClearInterruptFlag
+
+
+Deal with NULL pointers. What if the user doesn't run the init?

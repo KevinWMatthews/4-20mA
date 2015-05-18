@@ -24,6 +24,9 @@ typedef enum
   ADC_PRESCALE_FACTOR_2 = 0b001
 } Adc_PrescaleFactor;
 
+#define REFS1 7
+#define REFS0 6
+
 BOOL Adc_IsAdcBusy(void);
 void Adc_StartConversion(void);
 BOOL Adc_IsInterruptFlagSet(void);
@@ -32,6 +35,7 @@ int8_t Adc_ReadDataRegister_Low(void);
 void Adc_ClearInterruptFlag(void);
 
 //Setup functions
+void Adc_Init(uint8_t * adcsr);
 void Adc_SelectReferenceVoltage(Adc_VoltageSource);
 void Adc_SelectResultAdjust(Adc_ResultAdjust);
 void Adc_SelectInputAndGain(Adc_AnalogInputAndGain);
