@@ -1,5 +1,5 @@
 #include "AtoD.h"
-#include "ADC.h"
+#include "Adc.h"
 
 void AtoD_Setup(void)
 {

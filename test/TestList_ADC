@@ -1,0 +1,19 @@
+TestList_ADC
+
+Simulate registers and verify that they are written to and read from.
+
+Setup:
+  SelectReferenceVoltage
+  SelectResultAdjust
+  SelectInputAndGainGain
+  SetPrescaleFactor
+  Enable
+  FirstConversion
+
+Main functionality:
+  IsAdcBusy
+  StartConversion
+  IsInterruptFlagSet
+  ReadDataRegister_High
+  ReadDataRegister_Low
+  ClearInterruptFlag

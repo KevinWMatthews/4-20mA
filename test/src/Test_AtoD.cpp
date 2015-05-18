@@ -1,7 +1,7 @@
 extern "C"
 {
   #include "AtoD.h" //Code under test
-  #include "ADC.h"  //HW communication
+  #include "Adc.h"  //HW communication
 }
 
 //CppUTest includes should be after your and system includes

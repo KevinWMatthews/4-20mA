@@ -1,4 +1,4 @@
-#include "ADC.h"
+#include "Adc.h"
 
 BOOL Adc_IsAdcBusy(void)
 {
