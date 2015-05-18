@@ -11,5 +11,6 @@ enum
 };
 
 int8_t AtoD_StartConversion(void);
+int8_t AtoD_Read(int16_t * reading);
 
 #endif

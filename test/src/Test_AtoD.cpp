@@ -13,9 +13,12 @@ static uint8_t adcsr; //ADC Control and Status Register
 
 TEST_GROUP(AtoD)
 {
+  int16_t adcReading;
+
   void setup()
   {
     adcsr = 0;
+    adcReading = 0;
   }
 
   void teardown()
@@ -32,6 +35,11 @@ BOOL checkRegister(uint8_t adcRegister, uint8_t bitmask)
   return (BOOL)(1 && (adcRegister & bitmask));
 }
 
+void setAdcAsBusy(void)
+{
+  adcsr |= ADSC;
+}
+
 BOOL isAdcBusy(void)
 {
   mock().actualCall("isAdcBusy");
@@ -41,7 +49,7 @@ BOOL isAdcBusy(void)
 void startConversion(void)
 {
   mock().actualCall("startConversion");
-  adcsr |= ADSC;
+  setAdcAsBusy();
   return;
 }
 
@@ -55,7 +63,7 @@ BOOL isInterruptFlagSet(void)
 //*** The tests! ***//
 TEST(AtoD, StartConversion_AdcIsBusy)
 {
-  adcsr |= ADSC;
+  setAdcAsBusy();
   mock().expectOneCall("isAdcBusy");
   LONGS_EQUAL(ATOD_BUSY, AtoD_StartConversion());
   mock().checkExpectations();
@@ -66,5 +74,13 @@ TEST(AtoD, StartConversion_AdcIsFree)
   mock().expectOneCall("isAdcBusy");
   mock().expectOneCall("startConversion");
   LONGS_EQUAL(ATOD_CONVERSION_STARTED, AtoD_StartConversion());
+  mock().checkExpectations();
+}
+
+TEST(AtoD, Read_AdcIsBusy)
+{
+  setAdcAsBusy();
+  mock().expectOneCall("isAdcBusy");
+  LONGS_EQUAL(ATOD_BUSY, AtoD_Read(&adcReading));
   mock().checkExpectations();
 }

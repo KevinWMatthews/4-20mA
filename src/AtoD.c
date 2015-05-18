@@ -11,3 +11,11 @@ int8_t AtoD_StartConversion(void)
   startConversion();
   return ATOD_CONVERSION_STARTED;
 }
+
+int8_t AtoD_Read(int16_t * reading)
+{
+  if (isAdcBusy())
+  {
+    return ATOD_BUSY;
+  }
+}
