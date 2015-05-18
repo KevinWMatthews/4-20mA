@@ -6,9 +6,14 @@
 
 enum
 {
-  ATOD_INTERRUPT_FLAG_NOT_SET = -2,
-  ATOD_BUSY                   = -1,
-  ATOD_CONVERSION_STARTED     = 1
+  ATOD_BUSY               = -1,
+  ATOD_CONVERSION_STARTED = 1
+};
+
+enum
+{
+  ATOD_INTERRUPT_FLAG_NOT_SET = -1,
+  ATOD_READ_SUCCESS           = 1
 };
 
 int8_t AtoD_StartConversion(void);

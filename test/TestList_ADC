@@ -14,24 +14,22 @@ ADCSR:
   Set ADSC to run the ADC initialization (dummy conversion).
 
 
-Start conversion:
+~Start conversion:
   Verify that ADC is free.
   Start conversion
 
-Read from ADC:
-Could use a state machine, but that may be ugly/hard to test.
-Could have the function wait until the ADC returns a value, but that's inefficient.
-See if we can use registers and flags to be clean and quick.
+~Read from ADC:
 Could use the interrupt handler, but let's do it manually for now. Should try both.
   Verify that ADC is free.
-  Return ADC_BUSY if the interrupt flag is not yet set (i.e. wait for the interrupt flag to be set)
+  Verify that the interrupt flag is set
   Read ADCL
   Read ADCH
   Bit shift result, store in 16-bit variable.
   Clear interrupt flag
+  Return success
 
 
-Clear/reset ADC (?):
+\Clear/reset ADC (?):
   Might need this in case one of our ADCL or ADCH reads fails.
   If we figure out that the ADC has gone bunk, try this:
     Read ADCL

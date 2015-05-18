@@ -3,23 +3,26 @@
 
 int8_t AtoD_StartConversion(void)
 {
-  if (isAdcBusy())
+  if (Adc_IsAdcBusy())
   {
     return ATOD_BUSY;
   }
 
-  startConversion();
+  Adc_StartConversion();
   return ATOD_CONVERSION_STARTED;
 }
 
 int8_t AtoD_Read(int16_t * reading)
 {
-  if (isAdcBusy())
+  if (Adc_IsAdcBusy())
   {
     return ATOD_BUSY;
   }
-  if (!isInterruptFlagSet())
+  if (!Adc_IsInterruptFlagSet())
   {
     return ATOD_INTERRUPT_FLAG_NOT_SET;
   }
+  *reading = Adc_ReadDataRegisters();
+  Adc_ClearInterruptFlag();
+  return ATOD_READ_SUCCESS;
 }

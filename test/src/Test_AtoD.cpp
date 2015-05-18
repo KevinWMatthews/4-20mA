@@ -35,9 +35,14 @@ BOOL checkRegister(uint8_t adcRegister, uint8_t bitmask)
   return (BOOL)(1 && (adcRegister & bitmask));
 }
 
-void setAdcAsBusy(void)
+void setAdcBusy(void)
 {
   adcsr |= ADSC;
+}
+
+void setInterruptFlag(void)
+{
+  adcsr |= ADIF;
 }
 
 void clearInterruptFlag(void)
@@ -45,47 +50,59 @@ void clearInterruptFlag(void)
   adcsr &= ~ADIF;
 }
 
-BOOL isAdcBusy(void)
+BOOL Adc_IsAdcBusy(void)
 {
-  mock().actualCall("isAdcBusy");
+  mock().actualCall("Adc_IsAdcBusy");
   return checkRegister(adcsr, ADSC);
 }
 
-void startConversion(void)
+void Adc_StartConversion(void)
 {
-  mock().actualCall("startConversion");
-  setAdcAsBusy();
+  mock().actualCall("Adc_StartConversion");
+  setAdcBusy();
   return;
 }
 
-BOOL isInterruptFlagSet(void)
+BOOL Adc_IsInterruptFlagSet(void)
 {
-  mock().actualCall("isInterruptFlagSet");
+  mock().actualCall("Adc_IsInterruptFlagSet");
   return checkRegister(adcsr, ADIF);
 }
 
+int16_t Adc_ReadDataRegisters(void)
+{
+  mock().actualCall("Adc_ReadDataRegisters");
+  return mock().intReturnValue();
+}
+
+void Adc_ClearInterruptFlag(void)
+{
+  mock().actualCall("Adc_ClearInterruptFlag");
+  clearInterruptFlag();
+  return;
+}
 
 //*** The tests! ***//
 TEST(AtoD, StartConversion_AdcIsBusy)
 {
-  setAdcAsBusy();
-  mock().expectOneCall("isAdcBusy");
+  setAdcBusy();
+  mock().expectOneCall("Adc_IsAdcBusy");
   LONGS_EQUAL(ATOD_BUSY, AtoD_StartConversion());
   mock().checkExpectations();
 }
 
 TEST(AtoD, StartConversion_AdcIsFree)
 {
-  mock().expectOneCall("isAdcBusy");
-  mock().expectOneCall("startConversion");
+  mock().expectOneCall("Adc_IsAdcBusy");
+  mock().expectOneCall("Adc_StartConversion");
   LONGS_EQUAL(ATOD_CONVERSION_STARTED, AtoD_StartConversion());
   mock().checkExpectations();
 }
 
 TEST(AtoD, Read_AdcIsBusy)
 {
-  setAdcAsBusy();
-  mock().expectOneCall("isAdcBusy");
+  setAdcBusy();
+  mock().expectOneCall("Adc_IsAdcBusy");
   LONGS_EQUAL(ATOD_BUSY, AtoD_Read(&adcReading));
   mock().checkExpectations();
 }
@@ -93,8 +110,35 @@ TEST(AtoD, Read_AdcIsBusy)
 TEST(AtoD, Read_InterruptFlagNotSet)
 {
   clearInterruptFlag();
-  mock().expectOneCall("isAdcBusy");
-  mock().expectOneCall("isInterruptFlagSet");
+  mock().expectOneCall("Adc_IsAdcBusy");
+  mock().expectOneCall("Adc_IsInterruptFlagSet");
   LONGS_EQUAL(ATOD_INTERRUPT_FLAG_NOT_SET, AtoD_Read(&adcReading));
+  mock().checkExpectations();
+}
+
+TEST(AtoD, Read_SuccessReadZero)
+{
+  setInterruptFlag();
+  mock().expectOneCall("Adc_IsAdcBusy");
+  mock().expectOneCall("Adc_IsInterruptFlagSet");
+  mock().expectOneCall("Adc_ReadDataRegisters");
+  mock().expectOneCall("Adc_ClearInterruptFlag");
+  LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
+  LONGS_EQUAL(0, adcsr & ADIF)
+  LONGS_EQUAL(0, adcReading);
+  mock().checkExpectations();
+}
+
+TEST(AtoD, Read_SuccessReadMax)
+{
+  setInterruptFlag();
+  mock().expectOneCall("Adc_IsAdcBusy");
+  mock().expectOneCall("Adc_IsInterruptFlagSet");
+  mock().expectOneCall("Adc_ReadDataRegisters")
+        .andReturnValue(1023);
+  mock().expectOneCall("Adc_ClearInterruptFlag");
+  LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
+  LONGS_EQUAL(0, adcsr & ADIF)
+  LONGS_EQUAL(1023, adcReading);
   mock().checkExpectations();
 }
