@@ -1,0 +1,39 @@
+TestList_ADC
+
+~Setup:
+ADMUX:
+  ~Select AVCC as the reference voltage.
+  ~Select right adjusted data
+  ~Select ADC0 as single ended input
+
+ADCSR:
+  ~Set to Single Conversion mode
+  ~Set the Prescaler (need to depend on the main CPU frequency)
+  xSet the Interrupt Enable flag? Not using it at the moment.
+  ~Enable the ADC!
+  ~Set ADSC to run the ADC initialization (dummy conversion).
+
+
+~Start conversion:
+  ~Verify that ADC is free.
+  ~Start conversion
+
+~Read from ADC:
+Could use the interrupt handler, but let's do it manually for now. Should try both.
+  ~Verify that ADC is free.
+  ~Verify that the interrupt flag is set
+  ~Read ADCL
+  ~Read ADCH
+  ~Bit shift result, store in 16-bit variable. Filter out top 6 bits of high register?
+  ~Clear interrupt flag
+  ~Return success
+
+
+xClear/reset ADC (?):
+  Might need this in case one of our ADCL or ADCH reads fails.
+  If we figure out that the ADC has gone bunk, try this:
+    Read ADCL
+    Read ADCH
+  With any other prerequisites.
+
+Might want to split initialization data off into another file if it gets too large?

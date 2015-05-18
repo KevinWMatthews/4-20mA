@@ -29,3 +29,34 @@ void Adc_ClearInterruptFlag(void)
 {
   //Write a 1 to the ADIF register
 }
+
+//Setup functions
+void Adc_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
+{
+  //Set REFS1 and REFS0
+}
+
+void Adc_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
+{
+  //Set ADLAR
+}
+
+void Adc_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
+{
+  //Set MUX4..0
+}
+
+void Adc_SetPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
+{
+  //Set ADPS2..0
+}
+
+void Adc_Enable(void)
+{
+  //Set ADEN
+}
+
+void Adc_FirstConversion(void)
+{
+  //Set ADSC
+}

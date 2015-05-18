@@ -1,6 +1,16 @@
 #include "AtoD.h"
 #include "ADC.h"
 
+void AtoD_Setup(void)
+{
+  Adc_SelectReferenceVoltage(ADC_AVCC);
+  Adc_SelectResultAdjust(ADC_RIGHT_ADJUST);
+  Adc_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
+  Adc_SetPrescaleFactor(ADC_PRESCALE_FACTOR_2);
+  Adc_Enable();
+  Adc_FirstConversion();
+}
+
 int8_t AtoD_StartConversion(void)
 {
   if (Adc_IsAdcBusy())

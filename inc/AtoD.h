@@ -16,6 +16,7 @@ enum
   ATOD_READ_SUCCESS           = 1
 };
 
+void AtoD_Setup(void);
 int8_t AtoD_StartConversion(void);
 int8_t AtoD_Read(int16_t * reading);
 

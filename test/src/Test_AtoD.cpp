@@ -9,6 +9,18 @@ extern "C"
 #include "CppUTestExt/MockSupport.h"
 #include "Test_AtoD.h"
 
+TEST_GROUP(AtoDSetup)
+{
+  void setup()
+  {
+  }
+
+  void teardown()
+  {
+    mock().clear();
+  }
+};
+
 TEST_GROUP(AtoD)
 {
   int16_t adcReading;
@@ -25,7 +37,7 @@ TEST_GROUP(AtoD)
 };
 
 
-//*** Mock functions ***//
+//*** Function mocks ***//
 BOOL Adc_IsAdcBusy(void)
 {
   mock().actualCall("Adc_IsAdcBusy");
@@ -61,6 +73,42 @@ void Adc_ClearInterruptFlag(void)
   mock().actualCall("Adc_ClearInterruptFlag");
   return;
 }
+
+//Setup functions mocks
+void Adc_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
+{
+  mock().actualCall("Adc_SelectReferenceVoltage")
+        .withParameter("voltageSource", voltageSource);
+}
+
+void Adc_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
+{
+  mock().actualCall("Adc_SelectResultAdjust")
+        .withParameter("resultAdjust", resultAdjust);
+}
+
+void Adc_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
+{
+  mock().actualCall("Adc_SelectInputAndGain")
+        .withParameter("inputAndGain", inputAndGain);
+}
+
+void Adc_SetPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
+{
+  mock().actualCall("Adc_SetPrescaleFactor")
+        .withParameter("prescaleFactor", prescaleFactor);
+}
+
+void Adc_Enable(void)
+{
+  mock().actualCall("Adc_Enable");
+}
+
+void Adc_FirstConversion(void)
+{
+  mock().actualCall("Adc_FirstConversion");
+}
+
 
 //*** The tests! ***//
 TEST(AtoD, StartConversion_AdcIsBusy)
@@ -175,5 +223,22 @@ TEST(AtoD, Read_FilterBadValuesInHighDataRegister)
   mock().expectOneCall("Adc_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(0, adcReading);
+  mock().checkExpectations();
+}
+
+//Setup test
+TEST(AtoDSetup, test)
+{
+  mock().expectOneCall("Adc_SelectReferenceVoltage")
+        .withParameter("voltageSource", ADC_AVCC);
+  mock().expectOneCall("Adc_SelectResultAdjust")
+        .withParameter("resultAdjust", ADC_RIGHT_ADJUST);
+  mock().expectOneCall("Adc_SelectInputAndGain")
+        .withParameter("inputAndGain", ADC_SINGLE_ENDED_ADC0);
+  mock().expectOneCall("Adc_SetPrescaleFactor")
+        .withParameter("prescaleFactor", ADC_PRESCALE_FACTOR_2);
+  mock().expectOneCall("Adc_Enable");
+  mock().expectOneCall("Adc_FirstConversion");
+  AtoD_Setup();
   mock().checkExpectations();
 }
