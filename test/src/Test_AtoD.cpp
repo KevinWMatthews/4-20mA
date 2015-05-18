@@ -24,18 +24,48 @@ TEST_GROUP(AtoD)
   }
 };
 
+
 //*** Mock functions ***//
+//Helper functions
+BOOL checkRegister(uint8_t adcRegister, uint8_t bitmask)
+{
+  return (BOOL)(1 && (adcRegister & bitmask));
+}
+
 BOOL isAdcBusy(void)
 {
   mock().actualCall("isAdcBusy");
-  return (BOOL)(1 && (adcsr & ADSC));
+  return checkRegister(adcsr, ADSC);
 }
+
+void startConversion(void)
+{
+  mock().actualCall("startConversion");
+  adcsr |= ADSC;
+  return;
+}
+
+BOOL isInterruptFlagSet(void)
+{
+  mock().actualCall("isInterruptFlagSet");
+  return checkRegister(adcsr, ADIF);
+}
+
 
 //*** The tests! ***//
 TEST(AtoD, AdcIsBusy)
 {
   adcsr |= ADSC;
   mock().expectOneCall("isAdcBusy");
+  LONGS_EQUAL(ATOD_BUSY, AtoD_Read());
+  mock().checkExpectations();
+}
+
+TEST(AtoD, StartConversion)
+{
+  mock().expectOneCall("isAdcBusy");
+  mock().expectOneCall("startConversion");
+  mock().expectOneCall("isInterruptFlagSet");
   LONGS_EQUAL(ATOD_BUSY, AtoD_Read());
   mock().checkExpectations();
 }
