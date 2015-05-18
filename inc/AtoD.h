@@ -6,9 +6,10 @@
 
 enum
 {
-  ATOD_BUSY = 1
+  ATOD_BUSY               = -1,
+  ATOD_CONVERSION_STARTED = 1
 };
 
-int8_t AtoD_Read(void);
+int8_t AtoD_StartConversion(void);
 
 #endif

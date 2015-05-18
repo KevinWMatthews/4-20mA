@@ -53,19 +53,18 @@ BOOL isInterruptFlagSet(void)
 
 
 //*** The tests! ***//
-TEST(AtoD, AdcIsBusy)
+TEST(AtoD, StartConversion_AdcIsBusy)
 {
   adcsr |= ADSC;
   mock().expectOneCall("isAdcBusy");
-  LONGS_EQUAL(ATOD_BUSY, AtoD_Read());
+  LONGS_EQUAL(ATOD_BUSY, AtoD_StartConversion());
   mock().checkExpectations();
 }
 
-TEST(AtoD, StartConversion)
+TEST(AtoD, StartConversion_AdcIsFree)
 {
   mock().expectOneCall("isAdcBusy");
   mock().expectOneCall("startConversion");
-  mock().expectOneCall("isInterruptFlagSet");
-  LONGS_EQUAL(ATOD_BUSY, AtoD_Read());
+  LONGS_EQUAL(ATOD_CONVERSION_STARTED, AtoD_StartConversion());
   mock().checkExpectations();
 }
