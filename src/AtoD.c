@@ -18,4 +18,8 @@ int8_t AtoD_Read(int16_t * reading)
   {
     return ATOD_BUSY;
   }
+  if (!isInterruptFlagSet())
+  {
+    return ATOD_INTERRUPT_FLAG_NOT_SET;
+  }
 }

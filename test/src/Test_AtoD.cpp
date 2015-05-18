@@ -40,6 +40,11 @@ void setAdcAsBusy(void)
   adcsr |= ADSC;
 }
 
+void clearInterruptFlag(void)
+{
+  adcsr &= ~ADIF;
+}
+
 BOOL isAdcBusy(void)
 {
   mock().actualCall("isAdcBusy");
@@ -82,5 +87,14 @@ TEST(AtoD, Read_AdcIsBusy)
   setAdcAsBusy();
   mock().expectOneCall("isAdcBusy");
   LONGS_EQUAL(ATOD_BUSY, AtoD_Read(&adcReading));
+  mock().checkExpectations();
+}
+
+TEST(AtoD, Read_InterruptFlagNotSet)
+{
+  clearInterruptFlag();
+  mock().expectOneCall("isAdcBusy");
+  mock().expectOneCall("isInterruptFlagSet");
+  LONGS_EQUAL(ATOD_INTERRUPT_FLAG_NOT_SET, AtoD_Read(&adcReading));
   mock().checkExpectations();
 }
