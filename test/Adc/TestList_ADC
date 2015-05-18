@@ -21,3 +21,13 @@ Main functionality:
 
 Deal with NULL pointers. What if the user doesn't run the init?
 Check if registers are all 0 after initialization.
+
+Figure out what if/how to include iotn26.h
+This gets pulled in by <avr/io.h>
+How will gcc know how to resolve this include?
+Hmmmm.
+In the short term, we could try using
+#ifndef ADCSR
+and
+#ifndef ADMUX
+to prevent compiler errors.
