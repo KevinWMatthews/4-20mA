@@ -1,69 +1,77 @@
 #include "Adc.h"
+#include "BitManip.h"
 
 static uint8_t * adcsrPtr;
+static uint8_t * admuxPtr;
+static uint8_t * adchPtr;
+static uint8_t * adclPtr;
 
-void Adc_Init(uint8_t * adcsr)
+void Adc_Init(uint8_t * adcsr, uint8_t * admux, uint8_t * adch, uint8_t * adcl)
 {
   adcsrPtr = adcsr;
+  admuxPtr = admux;
+  adchPtr = adch;
+  adclPtr = adcl;
 }
 
 BOOL Adc_IsAdcBusy(void)
 {
-  //Read and return the ADSC register
+  return IFBIT(*adcsrPtr, ADSC);
 }
 
 void Adc_StartConversion(void)
 {
-  //Set the ADSC register
+  *adcsrPtr = 1 << ADSC;
 }
 
 BOOL Adc_IsInterruptFlagSet(void)
 {
-  //Read and return the ADIF register
+  return IFBIT(*adcsrPtr, ADIF);
 }
 
-int8_t Adc_ReadDataRegister_Low(void)
+uint8_t Adc_ReadDataRegister_High(void)
 {
-  //Return ADCL
+  //HW only puts values in the lowest two bits of the high register
+  return (*adchPtr & 0b11);
 }
 
-int8_t Adc_ReadDataRegister_High(void)
+uint8_t Adc_ReadDataRegister_Low(void)
 {
-  //Return ADCH
+  return *adclPtr;
 }
 
 void Adc_ClearInterruptFlag(void)
 {
-  //Write a 1 to the ADIF register
+  *adcsrPtr = 1 << ADIF;
 }
 
 //Setup functions
 void Adc_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
 {
-  *adcsrPtr = voltageSource << REFS0;
+  *admuxPtr = voltageSource << REFS0;
 }
 
 void Adc_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
 {
-  //Set ADLAR
+  *admuxPtr = resultAdjust << ADLAR;
 }
 
 void Adc_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
 {
-  //Set MUX4..0
+  *admuxPtr = inputAndGain << MUX0;
 }
 
 void Adc_SetPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
 {
-  //Set ADPS2..0
+  *adcsrPtr = prescaleFactor << ADPS0;
 }
 
 void Adc_Enable(void)
 {
-  //Set ADEN
+  *adcsrPtr = ADC_ENABLED << ADEN;
 }
 
 void Adc_FirstConversion(void)
 {
-  //Set ADSC
+  *adcsrPtr = 1 << ADSC;
 }

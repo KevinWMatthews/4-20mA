@@ -56,13 +56,13 @@ BOOL Adc_IsInterruptFlagSet(void)
   return (BOOL)(mock().intReturnValue());
 }
 
-int8_t Adc_ReadDataRegister_High(void)
+uint8_t Adc_ReadDataRegister_High(void)
 {
   mock().actualCall("Adc_ReadDataRegister_High");
   return mock().intReturnValue();
 }
 
-int8_t Adc_ReadDataRegister_Low(void)
+uint8_t Adc_ReadDataRegister_Low(void)
 {
   mock().actualCall("Adc_ReadDataRegister_Low");
   return mock().intReturnValue();

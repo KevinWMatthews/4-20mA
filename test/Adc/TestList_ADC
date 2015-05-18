@@ -3,20 +3,21 @@ TestList_ADC
 Simulate registers and verify that they are written to and read from.
 
 Setup:
-  SelectReferenceVoltage
-  SelectResultAdjust
-  SelectInputAndGainGain
-  SetPrescaleFactor
-  Enable
-  FirstConversion
+  ~SelectReferenceVoltage
+  ~SelectResultAdjust
+  ~SelectInputAndGainGain
+  ~SetPrescaleFactor
+  ~Enable
+  ~FirstConversion
 
 Main functionality:
-  IsAdcBusy
-  StartConversion
-  IsInterruptFlagSet
+  ~IsAdcBusy
+  ~StartConversion
+  ~IsInterruptFlagSet
   ReadDataRegister_High
   ReadDataRegister_Low
-  ClearInterruptFlag
+  ~ClearInterruptFlag
 
 
 Deal with NULL pointers. What if the user doesn't run the init?
+Check if registers are all 0 after initialization.
