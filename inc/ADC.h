@@ -7,7 +7,8 @@
 BOOL Adc_IsAdcBusy(void);
 void Adc_StartConversion(void);
 BOOL Adc_IsInterruptFlagSet(void);
-int16_t Adc_ReadDataRegisters(void);
+int8_t Adc_ReadDataRegister_High(void);
+int8_t Adc_ReadDataRegister_Low(void);
 void Adc_ClearInterruptFlag(void);
 
 #endif

@@ -24,7 +24,7 @@ Could use the interrupt handler, but let's do it manually for now. Should try bo
   Verify that the interrupt flag is set
   Read ADCL
   Read ADCH
-  Bit shift result, store in 16-bit variable.
+  Bit shift result, store in 16-bit variable. Filter out top 6 bits of high register?
   Clear interrupt flag
   Return success
 

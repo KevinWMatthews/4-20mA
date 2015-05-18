@@ -44,9 +44,15 @@ BOOL Adc_IsInterruptFlagSet(void)
   return (BOOL)(mock().intReturnValue());
 }
 
-int16_t Adc_ReadDataRegisters(void)
+int8_t Adc_ReadDataRegister_High(void)
 {
-  mock().actualCall("Adc_ReadDataRegisters");
+  mock().actualCall("Adc_ReadDataRegister_High");
+  return mock().intReturnValue();
+}
+
+int8_t Adc_ReadDataRegister_Low(void)
+{
+  mock().actualCall("Adc_ReadDataRegister_Low");
   return mock().intReturnValue();
 }
 
@@ -98,7 +104,10 @@ TEST(AtoD, Read_SuccessReadZero)
         .andReturnValue(FALSE);
   mock().expectOneCall("Adc_IsInterruptFlagSet")
         .andReturnValue(TRUE);
-  mock().expectOneCall("Adc_ReadDataRegisters");
+  mock().expectOneCall("Adc_ReadDataRegister_Low")
+        .andReturnValue(0);
+  mock().expectOneCall("Adc_ReadDataRegister_High")
+        .andReturnValue(0);
   mock().expectOneCall("Adc_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(0, adcReading);
@@ -111,10 +120,60 @@ TEST(AtoD, Read_SuccessReadMax)
         .andReturnValue(FALSE);
   mock().expectOneCall("Adc_IsInterruptFlagSet")
         .andReturnValue(TRUE);
-  mock().expectOneCall("Adc_ReadDataRegisters")
-        .andReturnValue(1023);
+  mock().expectOneCall("Adc_ReadDataRegister_Low")
+        .andReturnValue(0xFF);
+  mock().expectOneCall("Adc_ReadDataRegister_High")
+        .andReturnValue(0x03);
   mock().expectOneCall("Adc_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(1023, adcReading);
+  mock().checkExpectations();
+}
+
+TEST(AtoD, Read_SuccesLowRegisterFullHighRegisterEmpty)
+{
+  mock().expectOneCall("Adc_IsAdcBusy")
+        .andReturnValue(FALSE);
+  mock().expectOneCall("Adc_IsInterruptFlagSet")
+        .andReturnValue(TRUE);
+  mock().expectOneCall("Adc_ReadDataRegister_Low")
+        .andReturnValue(0xFF);
+  mock().expectOneCall("Adc_ReadDataRegister_High")
+        .andReturnValue(0);
+  mock().expectOneCall("Adc_ClearInterruptFlag");
+  LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
+  LONGS_EQUAL(255, adcReading);
+  mock().checkExpectations();
+}
+
+TEST(AtoD, Read_SuccesLowRegisterEmptyHighRegisterFull)
+{
+  mock().expectOneCall("Adc_IsAdcBusy")
+        .andReturnValue(FALSE);
+  mock().expectOneCall("Adc_IsInterruptFlagSet")
+        .andReturnValue(TRUE);
+  mock().expectOneCall("Adc_ReadDataRegister_Low")
+        .andReturnValue(0);
+  mock().expectOneCall("Adc_ReadDataRegister_High")
+        .andReturnValue(0x03);
+  mock().expectOneCall("Adc_ClearInterruptFlag");
+  LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
+  LONGS_EQUAL(768, adcReading);
+  mock().checkExpectations();
+}
+
+TEST(AtoD, Read_FilterBadValuesInHighDataRegister)
+{
+  mock().expectOneCall("Adc_IsAdcBusy")
+        .andReturnValue(FALSE);
+  mock().expectOneCall("Adc_IsInterruptFlagSet")
+        .andReturnValue(TRUE);
+  mock().expectOneCall("Adc_ReadDataRegister_Low")
+        .andReturnValue(0);
+  mock().expectOneCall("Adc_ReadDataRegister_High")
+        .andReturnValue(0xFC);
+  mock().expectOneCall("Adc_ClearInterruptFlag");
+  LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
+  LONGS_EQUAL(0, adcReading);
   mock().checkExpectations();
 }

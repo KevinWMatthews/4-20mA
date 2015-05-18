@@ -15,11 +15,14 @@ BOOL Adc_IsInterruptFlagSet(void)
   //Read and return the ADIF register
 }
 
-int16_t Adc_ReadDataRegisters(void)
+int8_t Adc_ReadDataRegister_Low(void)
 {
-  //Read ADCL
-  //Read ADCH
-  //Bit shift result, return as 16-bit variable.
+  //Return ADCL
+}
+
+int8_t Adc_ReadDataRegister_High(void)
+{
+  //Return ADCH
 }
 
 void Adc_ClearInterruptFlag(void)
