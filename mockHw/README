@@ -1,0 +1,2 @@
+This folder contains mocks/simulations for the ATtiny26 HW, in particular avr/*.h files.
+It enables gcc to build source and test files that have a direct hardware dependence.

@@ -2,6 +2,7 @@ extern "C"
 {
   #include "Adc.h"  //Code under test
   #include "BitManip.h"
+  #include <avr/io.h>
 }
 
 //CppUTest includes should be after your and system includes

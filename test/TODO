@@ -1,3 +1,7 @@
 TODO
 
-Need to check IFBITMASK
+Look into how/if to stub out <avr/io.h>. Is this a good design pattern?
+Also need to figure out how to get this into the file list.
+It IS already in the dependency list :)
+
+Get test code to build using avr-gcc.

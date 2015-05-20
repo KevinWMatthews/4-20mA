@@ -10,7 +10,7 @@ TEST_TARGET_NAME=Adc
 # List all production code folders
 ROOT_DIR=../..
 SRC_DIRS=$(ROOT_DIR)/src
-INC_DIRS=$(ROOT_DIR)/inc
+INC_DIRS=$(ROOT_DIR)/inc $(ROOT_DIR)/mockHw
 LIB_DIRS=
 #Static library names without lib prefix and .a suffix
 LIB_LIST=
