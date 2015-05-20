@@ -1,6 +1,7 @@
 extern "C"
 {
   #include "LineFit.h"
+  #include "DataTypes.h"
 }
 
 //CppUTest includes should be after your and system includes
@@ -9,16 +10,37 @@ extern "C"
 
 TEST_GROUP(LineFit)
 {
+  LineFit line;
+
   void setup()
   {
+    line = LineFit_Create();
   }
 
   void teardown()
   {
+    LineFit_Destroy(&line);
   }
 };
 
-TEST(LineFit, WiringCheck)
+TEST(LineFit, Create)
 {
-  FAIL("Start here!");
+  //TODO learn how to detect a memory leak if free() isn't called
+}
+
+TEST(LineFit, DestroyCanHandleNullPointer)
+{
+  LineFit_Destroy(NULL);
+}
+
+TEST(LineFit, DestroyCanHandlePointerToNull)
+{
+  LineFit pointer = NULL;
+  LineFit_Destroy(&pointer);
+}
+
+TEST(LineFit, DestroyClearsPointer)
+{
+  LineFit_Destroy(&line);
+  POINTERS_EQUAL(NULL, line);
 }

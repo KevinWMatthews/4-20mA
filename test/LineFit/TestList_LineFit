@@ -6,6 +6,7 @@ The user is only interested in the y value.
 
 We do want a multi-instance module. This project doesn't explicitly require it yet, but I have many projects that will use this.
 
+~Initialize multi-instance module
 Set low point.
 Set high point.
 Calculate line.
