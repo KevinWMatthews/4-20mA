@@ -1,0 +1,15 @@
+TestList_LineFit
+
+Map two integer points to floating point output.
+Given two points, calculate the equation of the line between them.
+The user is only interested in the y value.
+
+We do want a multi-instance module. This project doesn't explicitly require it yet, but I have many projects that will use this.
+
+Set low point.
+Set high point.
+Calculate line.
+  Fail if both inputs are identical.
+  Store m and b of y=mx+b
+GetOutput
+  Calculate y using y=mx+b
