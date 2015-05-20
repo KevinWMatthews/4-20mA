@@ -1,0 +1,6 @@
+SDD
+
+Get value from AtoD converter.
+Convert into 4-20mA reading.
+Convert 4-20mA reading into format that can be sent to display
+Send reading data to display.
