@@ -1,0 +1,38 @@
+HowTo_Led_Toyo_E10561
+
+Pins 3 and 8 must be hooked up to ground? Negative?
+The demo has pins 3 and 8 hooked up to +5v through a TP2104N3 transistor. This transistor is hooked up to a CPU pin. Hmmmmm, There is only one set of lines to control all of the LEDs. They must use the DIGIT pins through the transistor to select which digit to fire. I wonder if we cycle power on the digit very quickly (> 60 Hz) so the eye doesn't notice.
+
+Use a darlington transistor IC to provide power rather than the direct CPU pin so that we can provide enough current to the LED
+The rest of pins 1-10 are hooked up to pins on the processor.
+
+
+    A
+   ___
+F |   | B
+  |___|
+E | G | C
+  |___|o  DP
+    D
+
+A->7
+B->6
+C->4
+D->2
+E->1
+F->9
+G->10
+DP->5
+
+List of numbers:
+1:  B C
+2:  A B G E D
+3:  A B C D G
+4:  F G B C
+5:  A F G C D
+6:  A F E D C G
+7:  A B C
+8:  A B C D E F G
+9:  A B C F G
+0:  A B C D E F
+.:  DP

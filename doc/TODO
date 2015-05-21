@@ -9,3 +9,5 @@ Get test code to build using avr-gcc.
 Is it possiblel to avoid recompiling tests unnecessarily? Each time we change any source code, the library must be recompiled, and this takes some time. It might be necessary; the tests need to run on the new source code, after all.
 
 CHECK_NULL_AND_RETURN
+
+Look through 250 code to see how we select which LED to light up.

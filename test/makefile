@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=LineFit
+TESTS_TO_RUN=LedDigit
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
@@ -14,6 +14,8 @@ ATOD_DIR=AtoD
 ADC_DIR=Adc
 
 LINEFIT_DIR=LineFit
+
+LEDDIGIT_DIR=LedDigit
 
 #Create a makefile target for each series of tests
 Default:
@@ -27,6 +29,9 @@ Adc:
 
 LineFit:
 	$(MAKE_TESTS) $(LINEFIT_DIR) $(MAKECMDGOALS)
+
+LedDigit:
+	$(MAKE_TESTS) $(LEDDIGIT_DIR) $(MAKECMDGOALS)
 
 ### Makefile targets ###
 .DEFAULT_GOAL:=all

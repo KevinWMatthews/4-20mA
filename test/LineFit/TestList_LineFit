@@ -7,10 +7,14 @@ The user is only interested in the y value.
 We do want a multi-instance module. This project doesn't explicitly require it yet, but I have many projects that will use this.
 
 ~Initialize multi-instance module
-Set low point.
-Set high point.
-Calculate line.
-  Fail if both inputs are identical.
-  Store m and b of y=mx+b
-GetOutput
-  Calculate y using y=mx+b
+~All functions handle NULL
+~Set low point
+~Set high point
+~Calculate line
+  ~Fail if vertical line
+~GetOutput
+  ~Points not set
+  ~Horizontal line
+  ~Fractional slope
+  ~Fractional intercept
+
