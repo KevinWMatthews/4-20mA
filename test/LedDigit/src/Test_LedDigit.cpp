@@ -45,3 +45,14 @@ TEST(LedDigit, DestroyClearsPointer)
   LedDigit_Destroy(&digit);
   POINTERS_EQUAL(NULL, digit);
 }
+
+TEST(LedDigit, DigitClearAfterInit)
+{
+  LONGS_EQUAL(LED_DIGIT_NO_DIGIT, LedDigit_CurrentDigit(digit));
+}
+
+TEST(LedDigit, SetDigit_8)
+{
+  LedDigit_SetDigit(digit, LED_DIGIT_8);
+  LONGS_EQUAL(LED_DIGIT_8, LedDigit_CurrentDigit(digit));
+}
