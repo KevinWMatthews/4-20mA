@@ -3,3 +3,7 @@ Todo_LedDigit
 Convert current_digit struct element to an enum
 
 Think about pointer destroy. What should we set to null?
+
+Do we need to manually clear the digit/pins on power-up?
+
+Default case in SetDigit()?
