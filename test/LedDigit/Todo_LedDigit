@@ -1,0 +1,5 @@
+Todo_LedDigit
+
+Convert current_digit struct element to an enum
+
+Think about pointer destroy. What should we set to null?
