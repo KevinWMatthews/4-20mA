@@ -25,14 +25,35 @@ G->10
 DP->5
 
 List of numbers:
-1:  B C
-2:  A B G E D
-3:  A B C D G
-4:  F G B C
-5:  A F G C D
-6:  A F E D C G
-7:  A B C
-8:  A B C D E F G
-9:  A B C F G
-0:  A B C D E F
+1:  B  C
+    6  4
+
+2:  A  B  G  E  D
+    7  6  10 1  2
+
+3:  A  B  C  D  G
+    7  6  4  2  10
+
+4:  F  G  B  C
+    9  10 6  4
+
+5:  A  F  G  C  D
+    7  9  10 4  2
+
+6:  A  F  E  D  C  G
+    7  9  1  2  4  10
+
+7:  A  B  C
+    7  6  4
+
+8:  A  B  C  D  E  F  G
+    7  6  4  2  1  9  10
+
+9:  A  B  C  F  G
+    7  6  4  9  10
+
+0:  A  B  C  D  E  F
+    7  6  4  2  1  9
+
 .:  DP
+    5

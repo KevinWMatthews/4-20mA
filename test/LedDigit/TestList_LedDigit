@@ -1,20 +1,18 @@
 TestList_LedDigit
 
-Initialization - multi-instance module
-All functions can handle NULL
-Clear/display nothing
-Display digits:
-  1
-  2
-  3
-  4
-  5
-  6
-  7
-  8
-  9
-  0
-  .
-
-Deal with pins 3 and 8
-Set pins by number or letter? Probably letter
+~Initialization - multi-instance module
+~All functions can handle NULL
+~Clear/display nothing
+~Display digits:
+  ~1
+  ~2
+  ~3
+  ~4
+  ~5
+  ~6
+  ~7
+  ~8
+  ~9
+  ~0
+  ~.
+~Deal with pins 3 and 8

@@ -14,4 +14,11 @@ typedef enum
 #define CHECK_NULL(pointer) if ((pointer) == NULL) return
 #define CHECK_NULL_RETURN_VALUE(pointer, retVal) if ((pointer) == NULL) return (retVal)
 
+typedef enum
+{
+  PIN_UNDEFINED = -1,
+  PIN_OFF = 0,
+  PIN_ON  = 1
+} PinState;
+
 #endif
