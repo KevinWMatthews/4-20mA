@@ -1,8 +1,8 @@
 SDD
 
-Get value from AtoD converter.
-Convert into 4-20mA reading.
-Convert 4-20mA reading into format that can be sent to display
-Send reading data to display.
+~Get value from AtoD converter.
+~Convert into 4-20mA reading.
+Send reading to display.
+~Send part of reading to each digit.
 
 Might need to use a "sink driver" to provide enough power to the LEDs. Now that I think about it, I doubt that the chip can directly handle that much current.
