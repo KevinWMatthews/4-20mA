@@ -1,6 +1,7 @@
 extern "C"
 {
-  #include "LedNumber.h"
+  #include "LedNumber.h"    //Code under test
+  #include "Spy_LedDigit.h"
   #include "DataTypes.h"
 }
 
@@ -24,14 +25,19 @@ TEST_GROUP(LedNumber)
   }
 };
 
+TEST(LedNumber, CreateAndDestroy)
+{
+  //TODO learn how to detect a memory leak!
+}
+
 TEST(LedNumber, NoLedSelectedAfterInit)
 {
   LONGS_EQUAL(onesSelect, PIN_OFF);
 }
 
-// TEST(LedNumber, ShowSingleDigitNumber)
-// {
-//   LedNumber_ShowNumber(number, 7);
-//   TEST(PIN_ON, HwSelect_Led1);
-//   TEST(LedDigitSpy_GetDigit, SEVEN);
-// }
+TEST(LedNumber, ShowSingleDigitNumber)
+{
+  LedNumber_ShowNumber(7);
+  LONGS_EQUAL(PIN_ON, onesSelect);
+  LONGS_EQUAL(SEVEN, LedDigitSpy_GetDigit());
+}

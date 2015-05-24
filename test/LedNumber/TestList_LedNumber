@@ -5,7 +5,7 @@ Initialize:
   !Number of digits
   !Location of decimal point
   xPins of Darlington?
-  Pins for switching/selecting LEDs
+  ~Pins for switching/selecting LEDs
 
 Display single digit
 Display two digit number
@@ -13,6 +13,9 @@ Display n-digit number
 Blank leading zeros
 Set demical point location
 No LEDs?
+
+Create creates digits
+Destroy destroys digits
 
 We're going to light up the LEDs sequentially.
 All LEDs use the same Darlington IC; we'll use transistors to select which LED we're going to light up. Then we just do it > 60 Hz and the human eye shouldn't notice. :)
