@@ -21,8 +21,8 @@ typedef enum
   PIN_UNDEFINED = -1,
   PIN_OFF = 0,
   PIN_ON  = 1
-} PinState;
+} Pin;
 
-typedef PinState * PinAddress;
+typedef Pin * PinAddress;
 
 #endif

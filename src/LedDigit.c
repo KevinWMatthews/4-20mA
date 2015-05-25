@@ -27,7 +27,7 @@ typedef enum
 
 
 //*** Prototypes for file-scope functions ***//
-static void setPinState(LedDigit self, LedDigit_LetterCode letter, PinState state);
+static void setPinState(LedDigit self, LedDigit_LetterCode letter, Pin state);
 static void showOne(LedDigit self);
 static void showTwo(LedDigit self);
 static void showThree(LedDigit self);
@@ -116,7 +116,7 @@ void LedDigit_Clear(LedDigit self)
 
 
 //*** Private functions ***//
-static void setPinState(LedDigit self, LedDigit_LetterCode letter, PinState state)
+static void setPinState(LedDigit self, LedDigit_LetterCode letter, Pin state)
 {
   CHECK_NULL(self->pins[letter]);
   *(self->pins[letter]) = state;

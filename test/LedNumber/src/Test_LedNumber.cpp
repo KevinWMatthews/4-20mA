@@ -12,18 +12,21 @@ extern "C"
 #define NUMBER_OF_DIGITS 2
 
 //Simulate memory address of select pin
-static PinState led1Select;
-static PinState led2Select;
+static Pin ledSelect[NUMBER_OF_DIGITS];
 
 TEST_GROUP(LedNumber)
 {
   void setup()
   {
-    led1Select = PIN_UNDEFINED;
-    led2Select = PIN_UNDEFINED;
+    for (int i = 0; i < NUMBER_OF_DIGITS; i++)
+    {
+      ledSelect[i] = PIN_UNDEFINED;
+    }
     LedNumber_Create(NUMBER_OF_DIGITS);
-    LedNumber_WireSelectPin(1, &led1Select); //TODO macro
-    LedNumber_WireSelectPin(2, &led2Select); //TODO macro
+    for (int i = 0; i < NUMBER_OF_DIGITS; i++)
+    {
+      LedNumber_WireSelectPin(i+1, &ledSelect[i]); //TODO macro
+    }
   }
 
   void teardown()
@@ -39,14 +42,16 @@ TEST(LedNumber, CreateAndDestroy)
 
 TEST(LedNumber, SelectPinsUndefinedAfterCreate)
 {
-  LONGS_EQUAL(led1Select, PIN_UNDEFINED);
-  LONGS_EQUAL(led2Select, PIN_UNDEFINED);
+  for (int i = 0; i < NUMBER_OF_DIGITS; i++)
+  {
+    LONGS_EQUAL(ledSelect[i], PIN_UNDEFINED);
+  }
 }
 
 TEST(LedNumber, ShowDigitOnFirstLed)
 {
   LedNumber_ShowNumber(1, 7);
-  LONGS_EQUAL(PIN_ON, led1Select);
+  LONGS_EQUAL(PIN_ON, ledSelect[0]);
   LONGS_EQUAL(SEVEN, LedDigitSpy_GetDigit());
 }
 
