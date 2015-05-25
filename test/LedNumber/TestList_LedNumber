@@ -13,6 +13,7 @@ Display n-digit number
 Blank leading zeros
 Set demical point location
 No LEDs?
+Test wiring
 
 Create creates digits
 Destroy destroys digits

@@ -1,6 +1,8 @@
 #ifndef DataTypes_H_
 #define DataTypes_H_
 
+#include <stdint.h>
+
 typedef enum
 {
   FALSE = 0,
@@ -20,5 +22,7 @@ typedef enum
   PIN_OFF = 0,
   PIN_ON  = 1
 } PinState;
+
+typedef PinState * PinAddress;
 
 #endif

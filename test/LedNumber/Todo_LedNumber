@@ -1,2 +1,11 @@
+//How to dynamically allocate an array pointers?
+Define PIN struct and make it global.
+That way we don't need **.
+
+Then figure out how to do the dead drop (or do that first).
+
 Figure out what to do with LedDigit wiring.
 Populate number Destroy() with all digit Destroy() calls.
+
+Test wiring - check that we don't wire too many pins (memory leak/array overflow)
+Will need/want return code for _WirePin()

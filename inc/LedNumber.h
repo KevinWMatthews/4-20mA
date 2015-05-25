@@ -1,10 +1,11 @@
 #ifndef LedNumber_H_
 #define LedNumber_H_
 
-#include <stdint.h>
+#include "DataTypes.h"
 
-void LedNumber_Create(int8_t * ledSelectPin);
+void LedNumber_Create(int8_t numberOfDigits);
+void LedNumber_WireSelectPin(int8_t pinNumber, PinAddress memoryAddress);
 void LedNumber_Destroy(void);
-void LedNumber_ShowNumber(int16_t number);
+void LedNumber_ShowNumber(int8_t ledNumber, int16_t number);
 
 #endif
