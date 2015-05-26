@@ -1,3 +1,6 @@
+What if we display a three-digit number with only two LEDs?
+
+
 //How to dynamically allocate an array pointers?
 Define PIN struct and make it global.
 That way we don't need **.
