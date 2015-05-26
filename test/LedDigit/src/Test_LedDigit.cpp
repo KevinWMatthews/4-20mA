@@ -31,7 +31,7 @@ TEST_GROUP(LedDigit)
     LedDigit_Destroy(&digit);
   }
 
-  void checkStateOfAllPins(LedDigit self, PinState state)
+  void checkStateOfAllPins(LedDigit self, Pin state)
   {
     for (int i = 0; i < PIN_MAX; i++)
     {
