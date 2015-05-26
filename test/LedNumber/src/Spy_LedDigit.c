@@ -47,9 +47,6 @@ void LedDigit_Destroy(LedDigit * self)
 
 }
 
-void LedDigit_WirePin(LedDigit self, LedDigit_PinNumber pinNumber, int8_t * pinAddress)
-{}
-
 void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number)
 {
   //Due to the way we've wired LedDigit_Create, self points to the dead drop

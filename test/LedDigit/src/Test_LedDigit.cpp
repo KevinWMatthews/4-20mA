@@ -9,26 +9,51 @@ extern "C"
 #include "CppUTest/TestHarness.h"
 #include "Test_LedDigit.h"
 
+typedef enum
+{
+  //Pins 3 and 8 are not available for use
+  PIN1 = 0,
+  PIN2 = 1,
+  PIN4 = 2,
+  PIN5 = 3,
+  PIN6 = 4,
+  PIN7 = 5,
+  PIN9 = 6,
+  PIN10 = 7,
+  PIN_MAX = 8
+} VirtualPin_PinNumber;
+
 int8_t virtualPins[PIN_MAX];
+
 
 TEST_GROUP(LedDigit)
 {
   LedDigit digit;
+  LedDigit_DataPins dataPins;
 
   void setup()
   {
-    digit = LedDigit_Create();
-    for (int i = 0; i < PIN_MAX; i++)
-    {
-      LedDigit_WirePin(digit, (LedDigit_PinNumber)i, &virtualPins[i]);
-    }
+    wireVirtualPins();
 
+    digit = LedDigit_Create(&dataPins);
     memset(virtualPins, PIN_UNDEFINED, PIN_MAX);
   }
 
   void teardown()
   {
     LedDigit_Destroy(&digit);
+  }
+
+  void wireVirtualPins(void)
+  {
+    dataPins.pin1 = &virtualPins[0];
+    dataPins.pin2 = &virtualPins[1];
+    dataPins.pin4 = &virtualPins[2];
+    dataPins.pin5 = &virtualPins[3];
+    dataPins.pin6 = &virtualPins[4];
+    dataPins.pin7 = &virtualPins[5];
+    dataPins.pin9 = &virtualPins[6];
+    dataPins.pin10 = &virtualPins[7];
   }
 
   void checkStateOfAllPins(LedDigit self, Pin state)
@@ -64,26 +89,70 @@ TEST(LedDigit, DestroyClearsPointer)
   POINTERS_EQUAL(NULL, digit);
 }
 
-TEST(LedDigit, AllFunctionsCanHandleNull)
+TEST(LedDigit, AllFunctionsCanHandleNullSelf)
 {
-  LedDigit_WirePin(NULL, PIN1, virtualPins);
-  LedDigit_WirePin(digit, PIN1, NULL);
   LedDigit_ShowDigit(NULL, EIGHT);
   LedDigit_ShowDecimal(NULL);
-  LedDigit_Clear(NULL);
+  LedDigit_ClearAll(NULL);
+  LedDigit_ClearDigit(NULL);
+  LedDigit_ClearDecimal(NULL);
 }
 
-TEST(LedDigit, WontShowDigitIfPinsWiredToNull)
+TEST(LedDigit, NullDataPins)
 {
-  LedDigit nullWires = LedDigit_Create();
-  LedDigit_ShowDigit(nullWires, EIGHT);
-  LedDigit_ShowDecimal(nullWires);
+  LedDigit hasNullPins;
+  LedDigit_DataPins nullPins = {};
+  hasNullPins = LedDigit_Create(&nullPins);
+  LedDigit_ShowDigit(hasNullPins, EIGHT);
+  LedDigit_ShowDecimal(hasNullPins);
+  LedDigit_ClearAll(hasNullPins); //This might be the only test needed, if any
+  LedDigit_ClearDigit(hasNullPins);
+  LedDigit_ClearDecimal(hasNullPins);
+  LedDigit_Destroy(&hasNullPins);
 }
 
-TEST(LedDigit, Clear)
+TEST(LedDigit, PointerToDataPinsIsNull)
 {
-  LedDigit_Clear(digit);
+  LedDigit hasNullPinPointer;
+  hasNullPinPointer = LedDigit_Create(NULL);
+  LedDigit_ShowDigit(hasNullPinPointer, EIGHT);
+  LedDigit_ShowDecimal(hasNullPinPointer);
+  LedDigit_ClearAll(hasNullPinPointer);
+  LedDigit_ClearDigit(hasNullPinPointer);
+  LedDigit_ClearDecimal(hasNullPinPointer);
+  LedDigit_Destroy(&hasNullPinPointer);
+}
+
+TEST(LedDigit, ClearAll)
+{
+  LedDigit_ClearAll(digit);
   checkStateOfAllPins(digit, PIN_OFF);
+}
+
+TEST(LedDigit, ClearDigit)
+{
+  LedDigit_ClearDigit(digit);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN5]);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN7]);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN6]);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN4]);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN2]);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN1]);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN9]);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN10]);
+}
+
+TEST(LedDigit, ClearDecimal)
+{
+  LedDigit_ClearDecimal(digit);
+  LONGS_EQUAL(PIN_OFF, virtualPins[PIN5]);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN7]);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN6]);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN4]);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN2]);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN1]);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN9]);
+  LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN10]);
 }
 
 TEST(LedDigit, ShowNothing)

@@ -15,7 +15,7 @@ void LedNumber_Create(int8_t numDigits)
 
   for (i = 0; i < numberOfDigits; i++)
   {
-    ledDigits[i] = LedDigit_Create();
+    // ledDigits[i] = LedDigit_Create();
   }
 }
 

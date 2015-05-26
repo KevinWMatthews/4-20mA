@@ -1,5 +1,7 @@
 Todo_LedDigit
 
+Re-check all NULL tests with new pointers
+
 Convert current_digit struct element to an enum
 
 Think about pointer destroy. What should we set to null?

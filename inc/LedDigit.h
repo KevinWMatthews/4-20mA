@@ -7,20 +7,6 @@ typedef struct LedDigitStruct * LedDigit;
 
 typedef enum
 {
-  //Pins 3 and 8 are not available for use
-  PIN1 = 0,
-  PIN2 = 1,
-  PIN4 = 2,
-  PIN5 = 3,
-  PIN6 = 4,
-  PIN7 = 5,
-  PIN9 = 6,
-  PIN10 = 7,
-  PIN_MAX = 8
-} LedDigit_PinNumber;
-
-typedef enum
-{
   NOTHING = -1,
   ZERO = 0,
   ONE = 1,
@@ -34,11 +20,24 @@ typedef enum
   NINE = 9
 } LedDigit_DisplayDigit;
 
-LedDigit LedDigit_Create(void);
+typedef struct
+{
+  int8_t * pin1;
+  int8_t * pin2;
+  int8_t * pin4;
+  int8_t * pin5;
+  int8_t * pin6;
+  int8_t * pin7;
+  int8_t * pin9;
+  int8_t * pin10;
+} LedDigit_DataPins;
+
+LedDigit LedDigit_Create(LedDigit_DataPins * dataPins);
 void LedDigit_Destroy(LedDigit * self);
-void LedDigit_WirePin(LedDigit self, LedDigit_PinNumber pinNumber, int8_t * pinAddress);
 void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number);
 void LedDigit_ShowDecimal(LedDigit self);
-void LedDigit_Clear(LedDigit self);
+void LedDigit_ClearDigit(LedDigit self);
+void LedDigit_ClearDecimal(LedDigit self);
+void LedDigit_ClearAll(LedDigit self);
 
 #endif
