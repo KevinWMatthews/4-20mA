@@ -2,34 +2,23 @@
 #include "LedDigit.h"
 #include <stdlib.h>
 
-static PinAddress * ledSelectPins;
-static LedDigit * ledDigits;
 
-void LedNumber_Create(int8_t numberOfDigits)
+static LedDigit ledDigits[1];
+
+
+void LedNumber_Create(int8_t numDigits)
 {
-  int i;
-  ledSelectPins = calloc(numberOfDigits, sizeof(PinAddress));
-  ledDigits = calloc(numberOfDigits, sizeof(LedDigit));
-
-  for (i = 0; i < numberOfDigits; i++)
-  {
-    ledSelectPins[i] = PIN_OFF;
-  }
+  // ledDigits = calloc(numDigits, sizeof(LedDigit));
+  ledDigits[0] = LedDigit_Create();
 }
 
-void LedNumber_WireSelectPin(int8_t ledNumber, PinAddress memoryAddress)
-{
-  ledSelectPins[ledNumber-1] = memoryAddress;
-}
 
 void LedNumber_Destroy(void)
 {
-  free(ledSelectPins);
-  free(ledDigits);
+  LedDigit_Destroy(&ledDigits[0]);
 }
 
 void LedNumber_ShowNumber(int8_t ledNumber, int16_t number)
 {
   LedDigit_ShowDigit(ledDigits[0], number);
-  *(ledSelectPins[ledNumber-1]) = PIN_ON;
 }

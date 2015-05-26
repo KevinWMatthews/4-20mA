@@ -3,32 +3,23 @@
 #include <stdlib.h>
 
 
-//Spy's dead drop
-// static LedDigit_DisplayDigit * ones;
+static LedDigit_DisplayDigit deadDrop;
 
 
-//Spy functions
-LedDigit_DisplayDigit LedDigitSpy_GetDigit(void)
+LedDigit_DisplayDigit LedDigitSpy_GetDigit(int8_t ledNumber)
 {
-  return NOTHING;
-  // return *ones;
+  return deadDrop;
 }
 
 
 //Spy's re-implementation of LedDigit functions
 LedDigit LedDigit_Create(void)
 {
-  //Return a dummy pointer that we'll hijack with our spy
-  // ones = calloc(1, sizeof(int8_t));
-  // return (LedDigit)ones;
-  return NULL;
+  return (LedDigit)&deadDrop;
 }
 
 void LedDigit_Destroy(LedDigit * self)
 {
-  // CHECK_NULL(self);
-  // free(*self);
-  // *self = NULL;
 }
 
 void LedDigit_WirePin(LedDigit self, LedDigit_PinNumber pinNumber, int8_t * pinAddress)
@@ -36,7 +27,9 @@ void LedDigit_WirePin(LedDigit self, LedDigit_PinNumber pinNumber, int8_t * pinA
 
 void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number)
 {
-  // *ones = number;
+  //Due to the way we've wired LedDigit_Create, self points to the dead drop
+  LedDigit_DisplayDigit * ptrCast = (LedDigit_DisplayDigit *)self;
+  *ptrCast = number;
 }
 
 void LedDigit_ShowDecimal(LedDigit self)

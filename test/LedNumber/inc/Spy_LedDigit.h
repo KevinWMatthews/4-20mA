@@ -3,6 +3,6 @@
 
 #include "LedDigit.h"
 
-LedDigit_DisplayDigit LedDigitSpy_GetDigit(void);
+LedDigit_DisplayDigit LedDigitSpy_GetDigit(int8_t ledNumber);
 
 #endif
