@@ -5,6 +5,4 @@
 
 void LedNumber_Create(int8_t numberOfDigits);
 void LedNumber_Destroy(void);
-void LedNumber_ShowNumber(int16_t number);
-
 #endif
