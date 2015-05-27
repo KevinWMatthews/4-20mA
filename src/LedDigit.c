@@ -8,6 +8,7 @@ typedef struct LedDigitPinStruct * LedDigitPins;
 typedef struct LedDigitStruct
 {
   LedDigit_DataPins * dataPins;
+  LedDigit_DisplayDigit currentDigit;
 } LedDigitStruct;
 
 //The user manual denotes sections of the LED with letters
@@ -25,6 +26,7 @@ typedef struct LedDigitStruct
 //*** Prototypes for file-scope functions ***//
 static void setPinState(int8_t * dataPin, Pin state);
 static void showNothing(LedDigit_DataPins * pins);
+static void showZero(LedDigit_DataPins * pins);
 static void showOne(LedDigit_DataPins * pins);
 static void showTwo(LedDigit_DataPins * pins);
 static void showThree(LedDigit_DataPins * pins);
@@ -43,6 +45,7 @@ LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses)
   CHECK_NULL_RETURN_VALUE(dataPinAddresses, NULL);
   self = calloc(1, sizeof(LedDigitStruct));
   self->dataPins = dataPinAddresses;
+  self->currentDigit = NOTHING;
   return self;
 }
 
@@ -56,10 +59,14 @@ void LedDigit_Destroy(LedDigit * self)
 void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number)
 {
   CHECK_NULL(self);
-  switch (number)
+  self->currentDigit = number;
+  switch (self->currentDigit)
   {
   case NOTHING:
     showNothing(self->dataPins);
+    break;
+  case ZERO:
+    showZero(self->dataPins);
     break;
   case ONE:
     showOne(self->dataPins);
@@ -95,6 +102,12 @@ void LedDigit_ShowDecimal(LedDigit self)
 {
   CHECK_NULL(self);
   setPinState(self->dataPins->PIN_DP, PIN_ON);
+}
+
+LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self)
+{
+  CHECK_NULL(self);
+  return self->currentDigit;
 }
 
 void LedDigit_ClearDigit(LedDigit self)
@@ -139,6 +152,16 @@ static void showNothing(LedDigit_DataPins * pins)
   setPinState(pins->PIN_F, PIN_OFF);
   setPinState(pins->PIN_G, PIN_OFF);
   setPinState(pins->PIN_DP, PIN_OFF);
+}
+
+static void showZero(LedDigit_DataPins * pins)
+{
+  setPinState(pins->PIN_A, PIN_ON);
+  setPinState(pins->PIN_B, PIN_ON);
+  setPinState(pins->PIN_C, PIN_ON);
+  setPinState(pins->PIN_D, PIN_ON);
+  setPinState(pins->PIN_E, PIN_ON);
+  setPinState(pins->PIN_F, PIN_ON);
 }
 
 static void showOne(LedDigit_DataPins * pins)

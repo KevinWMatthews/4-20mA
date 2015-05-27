@@ -1,5 +1,9 @@
 Todo_LedDigit
 
+Current Digit
+
+IsDecimalShown?
+
 checkStateOfAllPins doesn't need self?
 
 Re-check all NULL tests with new pointers

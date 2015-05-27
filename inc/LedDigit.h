@@ -36,6 +36,7 @@ LedDigit LedDigit_Create(LedDigit_DataPins * dataPins);
 void LedDigit_Destroy(LedDigit * self);
 void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number);
 void LedDigit_ShowDecimal(LedDigit self);
+LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self);
 void LedDigit_ClearDigit(LedDigit self);
 void LedDigit_ClearDecimal(LedDigit self);
 void LedDigit_ClearAll(LedDigit self);

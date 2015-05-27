@@ -96,6 +96,7 @@ TEST(LedDigit, AllFunctionsCanHandleNullSelf)
   LedDigit_ClearAll(NULL);
   LedDigit_ClearDigit(NULL);
   LedDigit_ClearDecimal(NULL);
+  LedDigit_CurrentDigit(NULL);
 }
 
 TEST(LedDigit, NullDataPins)
@@ -126,12 +127,14 @@ TEST(LedDigit, PointerToDataPinsIsNull)
 TEST(LedDigit, ClearAll)
 {
   LedDigit_ClearAll(digit);
+  LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(digit));
   checkStateOfAllPins(digit, PIN_OFF);
 }
 
 TEST(LedDigit, ClearDigit)
 {
   LedDigit_ClearDigit(digit);
+  LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(digit))
   LONGS_EQUAL(PIN_UNDEFINED, virtualPins[PIN5]);
   LONGS_EQUAL(PIN_OFF, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_OFF, virtualPins[PIN6]);
@@ -158,12 +161,26 @@ TEST(LedDigit, ClearDecimal)
 TEST(LedDigit, ShowNothing)
 {
   LedDigit_ShowDigit(digit, NOTHING);
+  LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(digit))
   checkStateOfAllPins(digit, PIN_OFF);
+}
+
+TEST(LedDigit, ShowZero)
+{
+  LedDigit_ShowDigit(digit, ZERO);
+  LONGS_EQUAL(ZERO, LedDigit_CurrentDigit(digit));
+  LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
+  LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
+  LONGS_EQUAL(PIN_ON, virtualPins[PIN4]);
+  LONGS_EQUAL(PIN_ON, virtualPins[PIN2]);
+  LONGS_EQUAL(PIN_ON, virtualPins[PIN1]);
+  LONGS_EQUAL(PIN_ON, virtualPins[PIN9]);
 }
 
 TEST(LedDigit, ShowOne)
 {
   LedDigit_ShowDigit(digit, ONE);
+  LONGS_EQUAL(ONE, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN4]);
 }
@@ -171,6 +188,7 @@ TEST(LedDigit, ShowOne)
 TEST(LedDigit, ShowTwo)
 {
   LedDigit_ShowDigit(digit, TWO);
+  LONGS_EQUAL(TWO, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN10]);
@@ -181,6 +199,7 @@ TEST(LedDigit, ShowTwo)
 TEST(LedDigit, ShowThree)
 {
   LedDigit_ShowDigit(digit, THREE);
+  LONGS_EQUAL(THREE, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN4]);
@@ -191,6 +210,7 @@ TEST(LedDigit, ShowThree)
 TEST(LedDigit, ShowFour)
 {
   LedDigit_ShowDigit(digit, FOUR);
+  LONGS_EQUAL(FOUR, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN9]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN10]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
@@ -200,6 +220,7 @@ TEST(LedDigit, ShowFour)
 TEST(LedDigit, ShowFive)
 {
   LedDigit_ShowDigit(digit, FIVE);
+  LONGS_EQUAL(FIVE, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN9]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN10]);
@@ -210,6 +231,7 @@ TEST(LedDigit, ShowFive)
 TEST(LedDigit, ShowSix)
 {
   LedDigit_ShowDigit(digit, SIX);
+  LONGS_EQUAL(SIX, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN9]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN1]);
@@ -221,6 +243,7 @@ TEST(LedDigit, ShowSix)
 TEST(LedDigit, ShowSeven)
 {
   LedDigit_ShowDigit(digit, SEVEN);
+  LONGS_EQUAL(SEVEN, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN4]);
@@ -229,6 +252,7 @@ TEST(LedDigit, ShowSeven)
 TEST(LedDigit, ShowEight)
 {
   LedDigit_ShowDigit(digit, EIGHT);
+  LONGS_EQUAL(EIGHT, LedDigit_CurrentDigit(digit));
   LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN4]);
@@ -241,6 +265,7 @@ TEST(LedDigit, ShowEight)
 TEST(LedDigit, ShowNine)
 {
   LedDigit_ShowDigit(digit, NINE);
+  LONGS_EQUAL(NINE, LedDigit_CurrentDigit(digit))
   LONGS_EQUAL(PIN_ON, virtualPins[PIN7]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN6]);
   LONGS_EQUAL(PIN_ON, virtualPins[PIN4]);
