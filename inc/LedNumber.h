@@ -4,7 +4,9 @@
 #include "LedDigit.h"
 #include "DataTypes.h"
 
-void LedNumber_Create(LedDigit_DataPins * dataPinAddresses, int8_t numberOfDigits);
-void LedNumber_Destroy(void);
+typedef struct LedNumberStruct * LedNumber;
+
+LedNumber LedNumber_Create(LedDigit_DataPins * dataPinAddresses, int8_t numberOfDigits);
+void LedNumber_Destroy(LedNumber * self);
 
 #endif

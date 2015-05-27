@@ -30,18 +30,19 @@ int8_t virtualPins[PIN_MAX];
 
 TEST_GROUP(LedNumber)
 {
+  LedNumber number;
   LedDigit_DataPins dataPins;
 
   void setup()
   {
     memset(virtualPins, PIN_UNDEFINED, PIN_MAX);
     wireVirtualPins();
-    LedNumber_Create(&dataPins, NUMBER_OF_DIGITS);
+    number = LedNumber_Create(&dataPins, NUMBER_OF_DIGITS);
   }
 
   void teardown()
   {
-    LedNumber_Destroy();
+    LedNumber_Destroy(&number);
   }
 
   void wireVirtualPins(void)
@@ -75,3 +76,10 @@ TEST(LedNumber, Destroy)
 {
   checkStateOfAllPins(PIN_UNDEFINED);
 }
+
+// TEST(LedNumber, ShowSingleDigitNumber)
+// {
+//   LedNumber_Show(7);
+//   LONGS_EQUAL(SEVEN, SpyDeadDrop);
+//   LONGS_EQUAL(PIN_ON, SelectPinForLed1);
+// }

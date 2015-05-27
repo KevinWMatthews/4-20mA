@@ -3,37 +3,43 @@
 #include <stdlib.h>
 
 
-typedef struct LedNumber
+typedef struct LedNumberStruct
 {
   LedDigit * ledDigits;  //Pointer to a dynamically allocated array of LEDs
   int8_t numberOfDigits;
-} LedNumber;
+} LedNumberStruct;
 
 
-// Single-instance module, so here's our single instance
-static LedNumber ledNumber;
-
-
-void LedNumber_Create(LedDigit_DataPins * dataPinAddresses, int8_t numberOfDigits)
+LedNumber LedNumber_Create(LedDigit_DataPins * dataPinAddresses, int8_t numberOfDigits)
 {
+  LedNumber self = NULL;
   int i;
 
-  ledNumber.numberOfDigits = numberOfDigits;
-  ledNumber.ledDigits = calloc(ledNumber.numberOfDigits, sizeof(LedDigit));
-  for (i = 0; i < ledNumber.numberOfDigits; i++)
+  self = calloc(1, sizeof(LedNumberStruct));
+  self->numberOfDigits = numberOfDigits;
+  self->ledDigits = calloc(self->numberOfDigits, sizeof(LedDigit));
+  for (i = 0; i < self->numberOfDigits; i++)
   {
-    ledNumber.ledDigits[i] = LedDigit_Create(dataPinAddresses);
+    self->ledDigits[i] = LedDigit_Create(dataPinAddresses);
   }
+  return self;
 }
 
-void LedNumber_Destroy(void)
+void LedNumber_Destroy(LedNumber * self)
 {
+  LedNumber pointer;
   int i;
 
-  for (i = 0; i < ledNumber.numberOfDigits; i++)
+  CHECK_NULL(self);
+  CHECK_NULL(*self);
+
+  pointer = *self;
+
+  for (i = 0; i < pointer->numberOfDigits; i++)
   {
-    LedDigit_Destroy(&ledNumber.ledDigits[i]);
+    LedDigit_Destroy(&pointer->ledDigits[i]);
   }
-  free(ledNumber.ledDigits);
-  ledNumber.numberOfDigits = 0;
+  free(pointer->ledDigits);
+  free(pointer);
+  self = NULL;
 }
