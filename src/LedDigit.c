@@ -8,6 +8,7 @@ typedef struct LedDigitPinStruct * LedDigitPins;
 typedef struct LedDigitStruct
 {
   LedDigit_DataPins * dataPins;
+  PinAddress selectPin;
   LedDigit_DisplayDigit currentDigit;
 } LedDigitStruct;
 
@@ -24,7 +25,6 @@ typedef struct LedDigitStruct
 
 
 //*** Prototypes for file-scope functions ***//
-static void setPinState(int8_t * dataPin, Pin state);
 static void showNothing(LedDigit_DataPins * pins);
 static void showZero(LedDigit_DataPins * pins);
 static void showOne(LedDigit_DataPins * pins);
@@ -39,13 +39,20 @@ static void showNine(LedDigit_DataPins * pins);
 
 
 //*** Public functions ***//
-LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses)
+LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress selectPin)
 {
   LedDigit self;
   CHECK_NULL_RETURN_VALUE(dataPinAddresses, NULL);
+  CHECK_NULL_RETURN_VALUE(selectPin, NULL);
+
   self = calloc(1, sizeof(LedDigitStruct));
   self->dataPins = dataPinAddresses;
+  self->selectPin = selectPin;
+
+  showNothing(self->dataPins);
+  *(self->selectPin) = PIN_OFF;
   self->currentDigit = NOTHING;
+
   return self;
 }
 
@@ -60,6 +67,7 @@ void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number)
 {
   CHECK_NULL(self);
   self->currentDigit = number;
+  *(self->selectPin) = PIN_ON;
   switch (self->currentDigit)
   {
   case NOTHING:
@@ -136,12 +144,6 @@ void LedDigit_ClearAll(LedDigit self)
 
 
 //*** Private functions ***//
-static void setPinState(int8_t * dataPin, Pin state)
-{
-  CHECK_NULL(dataPin);
-  *(dataPin) = state;
-}
-
 static void showNothing(LedDigit_DataPins * pins)
 {
   setPinState(pins->PIN_A, PIN_OFF);

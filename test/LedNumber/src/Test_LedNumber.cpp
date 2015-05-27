@@ -25,8 +25,10 @@ TEST_GROUP(LedNumber)
     number = LedNumber_Create(NUMBER_OF_DIGITS);
     for (int i = 0; i < NUMBER_OF_DIGITS; i++)
     {
-      spyDigits[i] = (Spy_LedDigit)LedDigit_Create(&dataPins);
+      spyDigits[i] = (Spy_LedDigit)LedDigit_Create(&dataPins, &ledSelectPins[i]);
       //Watch out for changes to the DigitPlace enum
+
+      //TODO change this because we don't need the select pin here anymore.
       LedNumber_AddLedDigit(number, (LedDigit)spyDigits[i], (LedNumber_DigitPlace)i, &ledSelectPins[i]);
     }
   }

@@ -1,6 +1,11 @@
 Todo_LedDigit
 
+Implement set and show functions
+Move select pin from LedNumber to LedDigit
+
 Current Digit
+
+Should we turn all pins off when we destroy?
 
 IsDecimalShown?
 

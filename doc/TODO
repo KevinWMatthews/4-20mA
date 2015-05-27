@@ -15,3 +15,5 @@ Look through 250 code to see how we select which LED to light up.
 Add documentation to header files
 
 Think hard about the ADC and AtoD task division.
+
+Move pin functions and data type to its own file?

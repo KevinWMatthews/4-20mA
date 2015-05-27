@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-LedDigit LedDigit_Create(LedDigit_DataPins * dataPins)
+LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress selectPin)
 {
   Spy_LedDigit self = calloc(1, sizeof(Spy_LedDigit));
   *self = NOTHING;

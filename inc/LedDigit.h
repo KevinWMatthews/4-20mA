@@ -1,6 +1,7 @@
 #ifndef LedDigit_H_
 #define LedDigit_H_
 
+#include "DataTypes.h"
 #include <stdint.h>
 
 typedef struct LedDigitStruct * LedDigit;
@@ -22,17 +23,17 @@ typedef enum
 
 typedef struct
 {
-  int8_t * pin1;
-  int8_t * pin2;
-  int8_t * pin4;
-  int8_t * pin5;
-  int8_t * pin6;
-  int8_t * pin7;
-  int8_t * pin9;
-  int8_t * pin10;
+  PinAddress pin1;
+  PinAddress pin2;
+  PinAddress pin4;
+  PinAddress pin5;
+  PinAddress pin6;
+  PinAddress pin7;
+  PinAddress pin9;
+  PinAddress pin10;
 } LedDigit_DataPins;
 
-LedDigit LedDigit_Create(LedDigit_DataPins * dataPins);
+LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress selectPin);
 void LedDigit_Destroy(LedDigit * self);
 void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number);
 void LedDigit_ShowDecimal(LedDigit self);

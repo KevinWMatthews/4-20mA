@@ -25,4 +25,6 @@ typedef enum
 
 typedef Pin * PinAddress;
 
+void setPinState(PinAddress pin, Pin state);
+
 #endif
