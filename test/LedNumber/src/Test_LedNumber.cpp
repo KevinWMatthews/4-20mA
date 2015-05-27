@@ -17,29 +17,45 @@ TEST_GROUP(LedNumber)
 {
   LedDigit_DataPins dataPins;
   LedNumber number;
-  Spy_LedDigit spy_led1;
-  Pin selectPinLed1;
+
+  Spy_LedDigit spyDigits[NUMBER_OF_DIGITS]; //An array of pointers
+  Pin ledSelectPins[NUMBER_OF_DIGITS];
 
   void setup()
   {
-    // Spy_LedDigit_Create(NUMBER_OF_DIGITS);
     number = LedNumber_Create(NUMBER_OF_DIGITS);
-    spy_led1 = (Spy_LedDigit)LedDigit_Create(&dataPins);
-    LedNumber_AddLedDigit(number, (LedDigit)spy_led1, LED1, &selectPinLed1);
+    for (int i = 0; i < NUMBER_OF_DIGITS; i++)
+    {
+      spyDigits[i] = (Spy_LedDigit)LedDigit_Create(&dataPins);
+      //Watch out for the DigitPlace enum
+      LedNumber_AddLedDigit(number, (LedDigit)spyDigits[i], (LedNumber_DigitPlace)i, &ledSelectPins[i]);
+    }
   }
 
   void teardown()
   {
-    // Spy_LedDigit_Destroy();
     LedNumber_Destroy(&number);
+  }
+
+  LedDigit_DisplayDigit getSpyDigit(LedNumber_DigitPlace place)
+  {
+    return *spyDigits[place];
+  }
+
+  Pin getLedSelectPinState(LedNumber_DigitPlace place)
+  {
+    return ledSelectPins[place];
   }
 };
 
 TEST(LedNumber, Create)
 {
   //TODO learn how to detect a memory leak!
-  LONGS_EQUAL(NOTHING, *spy_led1);
-  LONGS_EQUAL(PIN_OFF, selectPinLed1);
+  for (int i = 0; i < NUMBER_OF_DIGITS; i++)
+  {
+    LONGS_EQUAL(NOTHING, getSpyDigit((LedNumber_DigitPlace)i));
+    LONGS_EQUAL(PIN_OFF, getLedSelectPinState((LedNumber_DigitPlace)i));
+  }
 }
 
 TEST(LedNumber, Destroy)
@@ -49,6 +65,6 @@ TEST(LedNumber, Destroy)
 TEST(LedNumber, ShowSingleDigitNumber)
 {
   LedNumber_Show(number, 7);
-  LONGS_EQUAL(SEVEN, *spy_led1);
-  LONGS_EQUAL(PIN_ON, selectPinLed1);
+  LONGS_EQUAL(SEVEN, getSpyDigit(LED1));
+  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED1));
 }
