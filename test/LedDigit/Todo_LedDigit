@@ -1,5 +1,7 @@
 Todo_LedDigit
 
+checkStateOfAllPins doesn't need self?
+
 Re-check all NULL tests with new pointers
 
 Convert current_digit struct element to an enum
