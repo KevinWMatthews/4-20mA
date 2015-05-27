@@ -2,6 +2,7 @@ extern "C"
 {
   #include "LedNumber.h"    //Code under test
   #include "DataTypes.h"
+  #include "Spy_LedDigit.h"
   #include <string.h>
 }
 
@@ -35,6 +36,7 @@ TEST_GROUP(LedNumber)
 
   void setup()
   {
+    Spy_LedDigit_Create(NUMBER_OF_DIGITS);
     memset(virtualPins, PIN_UNDEFINED, PIN_MAX);
     wireVirtualPins();
     number = LedNumber_Create(&dataPins, NUMBER_OF_DIGITS);
@@ -42,6 +44,7 @@ TEST_GROUP(LedNumber)
 
   void teardown()
   {
+    Spy_LedDigit_Destroy();
     LedNumber_Destroy(&number);
   }
 
@@ -77,9 +80,9 @@ TEST(LedNumber, Destroy)
   checkStateOfAllPins(PIN_UNDEFINED);
 }
 
-// TEST(LedNumber, ShowSingleDigitNumber)
-// {
-//   LedNumber_Show(7);
-//   LONGS_EQUAL(SEVEN, SpyDeadDrop);
-//   LONGS_EQUAL(PIN_ON, SelectPinForLed1);
-// }
+TEST(LedNumber, ShowSingleDigitNumber)
+{
+  LedNumber_Show(number, 7);
+  LONGS_EQUAL(SEVEN, Spy_LedDigit_GetDigit(1));
+  // LONGS_EQUAL(PIN_ON, SelectPinForLed1);
+}

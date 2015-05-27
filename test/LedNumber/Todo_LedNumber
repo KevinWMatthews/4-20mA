@@ -1,8 +1,8 @@
 Change this into a multi-instance module.
 Then we can pass in a pointer and initialize it to a spy.
 We can spy in great detail, I think.
-We'll probably initialize the spy and then have a dummy LedDigit_Create() so that we don't need a static pointer to figure out what memory to refer to.
-This spy will have the select pins and the array of digits, but we have flexibility because we can have the pointer refer to anything with typecasting; it will pointer to just a set of DisplayDigits instead of the actual LedDigit structure.
+We'll probably initialize the spy and then have a dummy LedDigit_Create() so that we don't need a static counter in the create function to figure out what memory to refer to.
+This spy will have the select pins and the array of digits, but we have flexibility because we can have the pointer refer to anything with typecasting; it will point to a set of DisplayDigits instead of the actual LedDigit structure.
 Single-instance is just too hard to test.
 
 What if we display a three-digit number with only two LEDs?

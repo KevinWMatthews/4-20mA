@@ -43,3 +43,8 @@ void LedNumber_Destroy(LedNumber * self)
   free(pointer);
   self = NULL;
 }
+
+void LedNumber_Show(LedNumber self, int16_t number)
+{
+  LedDigit_ShowDigit(self->ledDigits[0], number);
+}
