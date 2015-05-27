@@ -5,6 +5,4 @@
 
 typedef LedDigit_DisplayDigit * Spy_LedDigit;
 
-LedDigit_DisplayDigit Spy_LedDigit_GetDigit(int8_t ledNumber);
-
 #endif

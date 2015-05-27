@@ -10,8 +10,7 @@ extern "C"
 #include "CppUTest/TestHarness.h"
 #include "Test_LedNumber.h"
 
-#define NUMBER_OF_DIGITS 1
-
+#define NUMBER_OF_DIGITS 4
 
 TEST_GROUP(LedNumber)
 {
@@ -27,7 +26,7 @@ TEST_GROUP(LedNumber)
     for (int i = 0; i < NUMBER_OF_DIGITS; i++)
     {
       spyDigits[i] = (Spy_LedDigit)LedDigit_Create(&dataPins);
-      //Watch out for the DigitPlace enum
+      //Watch out for changes to the DigitPlace enum
       LedNumber_AddLedDigit(number, (LedDigit)spyDigits[i], (LedNumber_DigitPlace)i, &ledSelectPins[i]);
     }
   }
@@ -58,13 +57,43 @@ TEST(LedNumber, Create)
   }
 }
 
-TEST(LedNumber, Destroy)
+TEST(LedNumber, DestroyCanHandleNullNumber)
 {
+  LedNumber_Destroy(NULL);
 }
+
+TEST(LedNumber, AllFunctionsCanHandleNullDigits)
+{
+  LedDigit_DataPins dataPins;
+  LedNumber hasNullDigits = LedNumber_Create(4);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED1, &ledSelectPins[LED1]);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED2, &ledSelectPins[LED2]);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED3, &ledSelectPins[LED3]);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED4, &ledSelectPins[LED4]);
+
+  LedNumber_Show(hasNullDigits, 5);
+
+  LedNumber_Destroy(&hasNullDigits);
+}
+
+// TEST(LedNumber, ShowNothingIfLedDigitsNotSet)
 
 TEST(LedNumber, ShowSingleDigitNumber)
 {
   LedNumber_Show(number, 7);
   LONGS_EQUAL(SEVEN, getSpyDigit(LED1));
+  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED1));
+}
+
+TEST(LedNumber, ShowFourDigitNumber)
+{
+  LedNumber_Show(number, 6789);
+  LONGS_EQUAL(SIX, getSpyDigit(LED4));
+  LONGS_EQUAL(SEVEN, getSpyDigit(LED3));
+  LONGS_EQUAL(EIGHT, getSpyDigit(LED2));
+  LONGS_EQUAL(NINE, getSpyDigit(LED1));
+  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED4));
+  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED3));
+  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED2));
   LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED1));
 }

@@ -1,7 +1,6 @@
 #include "Spy_LedDigit.h"
 #include "DataTypes.h"
 #include <stdlib.h>
-#include <assert.h>
 
 
 LedDigit LedDigit_Create(LedDigit_DataPins * dataPins)
@@ -13,7 +12,8 @@ LedDigit LedDigit_Create(LedDigit_DataPins * dataPins)
 
 void LedDigit_Destroy(LedDigit * self)
 {
-  return;
+  CHECK_NULL(self);
+  free(*self);
 }
 
 void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number)

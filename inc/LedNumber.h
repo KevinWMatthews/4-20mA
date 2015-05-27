@@ -8,7 +8,10 @@ typedef struct LedNumberStruct * LedNumber;
 
 typedef enum
 {
-  LED1 = 0
+  LED1 = 0,
+  LED2 = 1,
+  LED3 = 2,
+  LED4 = 3,
 } LedNumber_DigitPlace;
 
 LedNumber LedNumber_Create(int8_t numberOfDigits);
