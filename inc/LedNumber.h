@@ -6,7 +6,13 @@
 
 typedef struct LedNumberStruct * LedNumber;
 
-LedNumber LedNumber_Create(LedDigit_DataPins * dataPinAddresses, int8_t numberOfDigits);
+typedef enum
+{
+  LED1 = 0
+} LedNumber_DigitPlace;
+
+LedNumber LedNumber_Create(int8_t numberOfDigits);
+void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place, PinAddress selectPin);
 void LedNumber_Destroy(LedNumber * self);
 void LedNumber_Show(LedNumber self, int16_t number);
 

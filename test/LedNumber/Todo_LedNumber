@@ -1,3 +1,5 @@
+Add return status to AddLedDigit() (what if we add too many digits?).
+
 Change this into a multi-instance module.
 Then we can pass in a pointer and initialize it to a spy.
 We can spy in great detail, I think.

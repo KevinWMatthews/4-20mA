@@ -12,77 +12,43 @@ extern "C"
 
 #define NUMBER_OF_DIGITS 1
 
-typedef enum
-{
-  //Pins 3 and 8 are not available for use
-  PIN1 = 0,
-  PIN2 = 1,
-  PIN4 = 2,
-  PIN5 = 3,
-  PIN6 = 4,
-  PIN7 = 5,
-  PIN9 = 6,
-  PIN10 = 7,
-  PIN_MAX = 8
-} VirtualPin_PinNumber;
-
-int8_t virtualPins[PIN_MAX];
-
 
 TEST_GROUP(LedNumber)
 {
-  LedNumber number;
   LedDigit_DataPins dataPins;
+  LedNumber number;
+  Spy_LedDigit spy_led1;
+  Pin selectPinLed1;
 
   void setup()
   {
-    Spy_LedDigit_Create(NUMBER_OF_DIGITS);
-    memset(virtualPins, PIN_UNDEFINED, PIN_MAX);
-    wireVirtualPins();
-    number = LedNumber_Create(&dataPins, NUMBER_OF_DIGITS);
+    // Spy_LedDigit_Create(NUMBER_OF_DIGITS);
+    number = LedNumber_Create(NUMBER_OF_DIGITS);
+    spy_led1 = (Spy_LedDigit)LedDigit_Create(&dataPins);
+    LedNumber_AddLedDigit(number, (LedDigit)spy_led1, LED1, &selectPinLed1);
   }
 
   void teardown()
   {
-    Spy_LedDigit_Destroy();
+    // Spy_LedDigit_Destroy();
     LedNumber_Destroy(&number);
-  }
-
-  void wireVirtualPins(void)
-  {
-    dataPins.pin1 = &virtualPins[0];
-    dataPins.pin2 = &virtualPins[1];
-    dataPins.pin4 = &virtualPins[2];
-    dataPins.pin5 = &virtualPins[3];
-    dataPins.pin6 = &virtualPins[4];
-    dataPins.pin7 = &virtualPins[5];
-    dataPins.pin9 = &virtualPins[6];
-    dataPins.pin10 = &virtualPins[7];
-  }
-
-  void checkStateOfAllPins(Pin state)
-  {
-    for (int i = 0; i < PIN_MAX; i++)
-    {
-      LONGS_EQUAL(state, virtualPins[i]);
-    }
   }
 };
 
 TEST(LedNumber, Create)
 {
   //TODO learn how to detect a memory leak!
-  checkStateOfAllPins(PIN_UNDEFINED);
+  LONGS_EQUAL(NOTHING, *spy_led1);
+  LONGS_EQUAL(PIN_OFF, selectPinLed1);
 }
 
 TEST(LedNumber, Destroy)
 {
-  checkStateOfAllPins(PIN_UNDEFINED);
 }
 
 TEST(LedNumber, ShowSingleDigitNumber)
 {
   LedNumber_Show(number, 7);
-  LONGS_EQUAL(SEVEN, Spy_LedDigit_GetDigit(1));
-  // LONGS_EQUAL(PIN_ON, SelectPinForLed1);
+  LONGS_EQUAL(SEVEN, *spy_led1);
+  LONGS_EQUAL(PIN_ON, selectPinLed1);
 }
