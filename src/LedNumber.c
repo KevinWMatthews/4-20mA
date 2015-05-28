@@ -8,13 +8,11 @@
 typedef struct LedNumberStruct
 {
   LedDigit * ledDigits;       //Pointer to a dynamically allocated array of LEDs
-  PinAddress * ledSelectPins; //Pointer to a dynamically allocated array of Pins
   int8_t numberOfDigits;
 } LedNumberStruct;
 
 
 //*** File-scope function prototypes ***//
-static void setSelectPinState(PinAddress pinPointer, Pin state);
 static int16_t getDigitFromNumber(int16_t number, int8_t place, int numberOfDigits);
 
 
@@ -27,15 +25,12 @@ LedNumber LedNumber_Create(int8_t numberOfDigits)
   self = calloc(1, sizeof(LedNumberStruct));
   self->numberOfDigits = numberOfDigits;
   self->ledDigits = calloc(self->numberOfDigits, sizeof(LedDigit));
-  self->ledSelectPins = calloc(self->numberOfDigits, sizeof(PinAddress));
   return self;
 }
 
-void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place, PinAddress selectPin)
+void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place)
 {
   self->ledDigits[place] = digit;
-  self->ledSelectPins[place] = selectPin;
-  *(self->ledSelectPins[place]) = PIN_OFF;
 }
 
 void LedNumber_Destroy(LedNumber * self)
@@ -54,12 +49,11 @@ void LedNumber_Destroy(LedNumber * self)
     LedDigit_Destroy(&pointer->ledDigits[i]);
   }
   free(pointer->ledDigits);
-  free(pointer->ledSelectPins);
   free(pointer);
   self = NULL;
 }
 
-void LedNumber_Show(LedNumber self, int16_t number)
+void LedNumber_SetNumber(LedNumber self, int16_t number)
 {
   int16_t digitToShow;
   int i;
@@ -67,20 +61,12 @@ void LedNumber_Show(LedNumber self, int16_t number)
   for (i = 0; i < self->numberOfDigits; i++)
   {
     digitToShow = getDigitFromNumber(number, i+1, self->numberOfDigits);
-    //TODO add SetDigit
-    // LedDigit_ShowDigit(self->ledDigits[i], digitToShow);
-    setSelectPinState(self->ledSelectPins[i], PIN_ON);
+    LedDigit_SetDigit(self->ledDigits[i], digitToShow);
   }
 }
 
 
 //*** File-scope function definitions ***//
-static void setSelectPinState(PinAddress pinPointer, Pin state)
-{
-  CHECK_NULL(pinPointer);
-  *pinPointer = state;
-}
-
 //place ranges from 1 to numberOfDigits
 static int16_t getDigitFromNumber(int16_t number, int8_t place, int numberOfDigits)
 {

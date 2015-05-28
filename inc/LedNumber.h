@@ -8,6 +8,7 @@ typedef struct LedNumberStruct * LedNumber;
 
 typedef enum
 {
+  //LED1 is the smallest digit
   LED1 = 0,
   LED2 = 1,
   LED3 = 2,
@@ -15,8 +16,8 @@ typedef enum
 } LedNumber_DigitPlace;
 
 LedNumber LedNumber_Create(int8_t numberOfDigits);
-void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place, PinAddress selectPin);
+void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place);
 void LedNumber_Destroy(LedNumber * self);
-void LedNumber_Show(LedNumber self, int16_t number);
+void LedNumber_SetNumber(LedNumber self, int16_t number);
 
 #endif

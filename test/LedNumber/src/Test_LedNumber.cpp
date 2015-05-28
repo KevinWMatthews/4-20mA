@@ -14,22 +14,19 @@ extern "C"
 
 TEST_GROUP(LedNumber)
 {
-  LedDigit_DataPins dataPins;
   LedNumber number;
-
   Spy_LedDigit spyDigits[NUMBER_OF_DIGITS]; //An array of pointers
-  Pin ledSelectPins[NUMBER_OF_DIGITS];
+  LedDigit_DataPins dummyDataPins;          //Used just to make LedDigit_Create() happy
+  Pin dummySelectPins[NUMBER_OF_DIGITS];
 
   void setup()
   {
     number = LedNumber_Create(NUMBER_OF_DIGITS);
     for (int i = 0; i < NUMBER_OF_DIGITS; i++)
     {
-      spyDigits[i] = (Spy_LedDigit)LedDigit_Create(&dataPins, &ledSelectPins[i]);
+      spyDigits[i] = (Spy_LedDigit)LedDigit_Create(&dummyDataPins, &dummySelectPins[i]);
       //Watch out for changes to the DigitPlace enum
-
-      //TODO change this because we don't need the select pin here anymore.
-      LedNumber_AddLedDigit(number, (LedDigit)spyDigits[i], (LedNumber_DigitPlace)i, &ledSelectPins[i]);
+      LedNumber_AddLedDigit(number, (LedDigit)spyDigits[i], (LedNumber_DigitPlace)i);
     }
   }
 
@@ -37,25 +34,16 @@ TEST_GROUP(LedNumber)
   {
     LedNumber_Destroy(&number);
   }
-
-  LedDigit_DisplayDigit getSpyDigit(LedNumber_DigitPlace place)
-  {
-    return *spyDigits[place];
-  }
-
-  Pin getLedSelectPinState(LedNumber_DigitPlace place)
-  {
-    return ledSelectPins[place];
-  }
 };
 
+//*** Test initialization and response to NULL pointers ***//
 TEST(LedNumber, Create)
 {
   //TODO learn how to detect a memory leak!
   for (int i = 0; i < NUMBER_OF_DIGITS; i++)
   {
-    LONGS_EQUAL(NOTHING, getSpyDigit((LedNumber_DigitPlace)i));
-    LONGS_EQUAL(PIN_OFF, getLedSelectPinState((LedNumber_DigitPlace)i));
+    LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[i]));
+    LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[i]));
   }
 }
 
@@ -68,34 +56,34 @@ TEST(LedNumber, AllFunctionsCanHandleNullDigits)
 {
   LedDigit_DataPins dataPins;
   LedNumber hasNullDigits = LedNumber_Create(4);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED1, &ledSelectPins[LED1]);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED2, &ledSelectPins[LED2]);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED3, &ledSelectPins[LED3]);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED4, &ledSelectPins[LED4]);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED1);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED2);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED3);
+  LedNumber_AddLedDigit(hasNullDigits, NULL, LED4);
 
-  LedNumber_Show(hasNullDigits, 5);
+  LedNumber_SetNumber(hasNullDigits, 5);
 
   LedNumber_Destroy(&hasNullDigits);
 }
 
-// TEST(LedNumber, ShowNothingIfLedDigitsNotSet)
 
-TEST(LedNumber, ShowSingleDigitNumber)
+//*** Test functionality ***//
+TEST(LedNumber, SetSingleDigitNumber)
 {
-  LedNumber_Show(number, 7);
-  LONGS_EQUAL(SEVEN, getSpyDigit(LED1));
-  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED1));
+  LedNumber_SetNumber(number, 7);
+  LONGS_EQUAL(SEVEN, Spy_LedDigit_CurrentDigit(spyDigits[LED1]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }
 
-TEST(LedNumber, ShowFourDigitNumber)
+TEST(LedNumber, SetFourDigitNumber)
 {
-  LedNumber_Show(number, 6789);
-  LONGS_EQUAL(SIX, getSpyDigit(LED4));
-  LONGS_EQUAL(SEVEN, getSpyDigit(LED3));
-  LONGS_EQUAL(EIGHT, getSpyDigit(LED2));
-  LONGS_EQUAL(NINE, getSpyDigit(LED1));
-  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED4));
-  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED3));
-  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED2));
-  LONGS_EQUAL(PIN_ON, getLedSelectPinState(LED1));
+  LedNumber_SetNumber(number, 6789);
+  LONGS_EQUAL(SIX, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
+  LONGS_EQUAL(SEVEN, Spy_LedDigit_CurrentDigit(spyDigits[LED3]));
+  LONGS_EQUAL(EIGHT, Spy_LedDigit_CurrentDigit(spyDigits[LED2]));
+  LONGS_EQUAL(NINE, Spy_LedDigit_CurrentDigit(spyDigits[LED1]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }

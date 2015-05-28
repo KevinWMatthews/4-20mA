@@ -28,3 +28,9 @@ Will need/want return code for _WirePin()
 Revise destroy() to make it more robust, clear non-null self even if *self is null? Make the test check for NULLs, etc
 Test NULL select pins
 Test NULL LedDigit pointers
+
+
+Watch out for the assert in LedNumber...
+Need to replace with a null check that can actually continue to run
+
+Look at using LedNumber_DigitPlace in getDigitFromNumber()

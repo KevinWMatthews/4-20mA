@@ -3,6 +3,9 @@
 
 #include "LedDigit.h"
 
-typedef LedDigit_DisplayDigit * Spy_LedDigit;
+typedef struct Spy_LedDigitStruct * Spy_LedDigit;
+
+LedDigit_DisplayDigit Spy_LedDigit_CurrentDigit(Spy_LedDigit self);
+Pin Spy_LedDigit_SelectPinState(Spy_LedDigit self);
 
 #endif
