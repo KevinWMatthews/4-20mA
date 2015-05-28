@@ -18,6 +18,8 @@ typedef enum
 LedNumber LedNumber_Create(int8_t numberOfDigits);
 void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place);
 void LedNumber_Destroy(LedNumber * self);
+
 void LedNumber_SetNumber(LedNumber self, int16_t number);
+void LedNumber_ClearNumber(LedNumber self);
 
 #endif

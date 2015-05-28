@@ -65,6 +65,15 @@ void LedNumber_SetNumber(LedNumber self, int16_t number)
   }
 }
 
+void LedNumber_ClearNumber(LedNumber self)
+{
+  int i;
+
+  for (i = 0; i < self->numberOfDigits; i++)
+  {
+    LedDigit_ClearDigit(self->ledDigits[i]);
+  }
+}
 
 //*** File-scope function definitions ***//
 //place ranges from 1 to numberOfDigits

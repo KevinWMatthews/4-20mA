@@ -87,3 +87,17 @@ TEST(LedNumber, SetFourDigitNumber)
   LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
   LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }
+
+TEST(LedNumber, ClearNumber)
+{
+  LedNumber_SetNumber(number, 2345);
+  LedNumber_ClearNumber(number);
+  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
+  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED3]));
+  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED2]));
+  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED1]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
+  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
+}

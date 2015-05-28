@@ -9,6 +9,7 @@ typedef struct Spy_LedDigitStruct
   Pin selectPinState;
 } Spy_LedDigitStruct;
 
+
 LedDigit_DisplayDigit Spy_LedDigit_CurrentDigit(Spy_LedDigit self)
 {
   CHECK_NULL(self);
@@ -20,6 +21,10 @@ Pin Spy_LedDigit_SelectPinState(Spy_LedDigit self)
   CHECK_NULL(self);
   return self->selectPinState;
 }
+
+
+//*** File-scope helper function prototypes ***//
+static void setSpyDigit(LedDigit self, LedDigit_DisplayDigit value);
 
 
 //*** Spy's mocks of LedDigit functions ***//
@@ -39,16 +44,16 @@ void LedDigit_Destroy(LedDigit * self)
 
 void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value)
 {
-  CHECK_NULL(self);
-  Spy_LedDigit ptrCast = (Spy_LedDigit)self;
-  ptrCast->digitOnLed = value;
+  setSpyDigit(self, value);
 }
 
 void LedDigit_SetDecimal(LedDigit self)
 {}
 
 void LedDigit_ClearDigit(LedDigit self)
-{}
+{
+  setSpyDigit(self, NOTHING);
+}
 
 void LedDigit_ClearDecimal(LedDigit self)
 {}
@@ -72,3 +77,11 @@ void LedDigit_UpdateLed(LedDigit self)
 
 void LedDigit_TurnLedOff(LedDigit self)
 {}
+
+
+static void setSpyDigit(LedDigit self, LedDigit_DisplayDigit value)
+{
+  CHECK_NULL(self);
+  Spy_LedDigit ptrCast = (Spy_LedDigit)self;
+  ptrCast->digitOnLed = value;
+}
