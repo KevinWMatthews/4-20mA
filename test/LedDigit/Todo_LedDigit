@@ -1,24 +1,7 @@
 Todo_LedDigit
 
-Implement set and show functions
-Move select pin from LedNumber to LedDigit
-
-Current Digit
-
 Should we turn all pins off when we destroy?
 
-IsDecimalShown?
-
-checkStateOfAllPins doesn't need self?
-
-Re-check all NULL tests with new pointers
-
-Convert current_digit struct element to an enum
-
-Think about pointer destroy. What should we set to null?
-
-Do we need to manually clear the digit/pins on power-up?
-
-Default case in SetDigit()?
+Re-check all NULL tests, especially struct pointer and select pint
 
 Change how we initialize the struct of data pins. Want to try using calloc and copying struct members so that we aren't dependent on the scoping of the init function.

@@ -35,14 +35,16 @@ typedef struct
 
 LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress selectPin);
 void LedDigit_Destroy(LedDigit * self);
+
 void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value);
 void LedDigit_SetDecimal(LedDigit self);
-void LedDigit_ShowDigit(LedDigit self);
-void LedDigit_ShowDecimal(LedDigit self);
-LedDigit_DisplayDigit LedDigit_CurrentValue(LedDigit self);
-BOOL LedDigit_IsDecimalShown(LedDigit self);
 void LedDigit_ClearDigit(LedDigit self);
 void LedDigit_ClearDecimal(LedDigit self);
 void LedDigit_ClearAll(LedDigit self);
+LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self);
+BOOL LedDigit_IsDecimalShown(LedDigit self);
+
+void LedDigit_UpdateLed(LedDigit self);
+void LedDigit_TurnLedOff(LedDigit self);
 
 #endif

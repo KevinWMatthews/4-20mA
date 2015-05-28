@@ -38,6 +38,7 @@ static void showSeven(LedDigit_DataPins * pins);
 static void showEight(LedDigit_DataPins * pins);
 static void showNine(LedDigit_DataPins * pins);
 static void showDecimal(LedDigit_DataPins * pins);
+static void clearDecimal(LedDigit_DataPins * pins);
 
 
 //*** Public functions ***//
@@ -74,16 +75,45 @@ void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value)
 
 void LedDigit_SetDecimal(LedDigit self)
 {
-  // CHECK_NULL(self);
+  CHECK_NULL(self);
   self->showDecimal = TRUE;
 }
 
-void LedDigit_ShowDigit(LedDigit self)
+void LedDigit_ClearDigit(LedDigit self)
 {
   CHECK_NULL(self);
-  // CHECK_NULL(self->selectPin);
+  self->digitToShow = NOTHING;
+}
 
-  setPinState(self->selectPin, PIN_ON);
+void LedDigit_ClearDecimal(LedDigit self)
+{
+  CHECK_NULL(self);
+  self->showDecimal = FALSE;
+}
+
+void LedDigit_ClearAll(LedDigit self)
+{
+  CHECK_NULL(self);
+  LedDigit_ClearDigit(self);
+  LedDigit_ClearDecimal(self);
+}
+
+LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self)
+{
+  CHECK_NULL(self);
+  return self->digitToShow;
+}
+
+BOOL LedDigit_IsDecimalShown(LedDigit self)
+{
+  CHECK_NULL(self);
+  return self->showDecimal;
+}
+
+void LedDigit_UpdateLed(LedDigit self)
+{
+  CHECK_NULL(self);
+
   switch (self->digitToShow)
   {
   case NOTHING:
@@ -125,37 +155,20 @@ void LedDigit_ShowDigit(LedDigit self)
   {
     showDecimal(self->dataPins);
   }
+  else
+  {
+    clearDecimal(self->dataPins);
+  }
+
+  setPinState(self->selectPin, PIN_ON);
 }
 
-LedDigit_DisplayDigit LedDigit_CurrentValue(LedDigit self)
+void LedDigit_TurnLedOff(LedDigit self)
 {
   CHECK_NULL(self);
-  return self->digitToShow;
-}
-
-BOOL LedDigit_IsDecimalShown(LedDigit self)
-{
-  return self->showDecimal;
-}
-
-void LedDigit_ClearDigit(LedDigit self)
-{
-  CHECK_NULL(self);
-  self->digitToShow = NOTHING;
-}
-
-void LedDigit_ClearDecimal(LedDigit self)
-{
-  CHECK_NULL(self);
-  setPinState(self->dataPins->PIN_DP, PIN_OFF);
-  self->showDecimal = FALSE;
-}
-
-void LedDigit_ClearAll(LedDigit self)
-{
-  CHECK_NULL(self);
-  LedDigit_ClearDigit(self);
-  LedDigit_ClearDecimal(self);
+  setPinState(self->selectPin, PIN_OFF);
+  showNothing(self->dataPins);
+  clearDecimal(self->dataPins);
 }
 
 
@@ -169,7 +182,6 @@ static void showNothing(LedDigit_DataPins * pins)
   setPinState(pins->PIN_E, PIN_OFF);
   setPinState(pins->PIN_F, PIN_OFF);
   setPinState(pins->PIN_G, PIN_OFF);
-  setPinState(pins->PIN_DP, PIN_OFF);
 }
 
 static void showZero(LedDigit_DataPins * pins)
@@ -180,21 +192,29 @@ static void showZero(LedDigit_DataPins * pins)
   setPinState(pins->PIN_D, PIN_ON);
   setPinState(pins->PIN_E, PIN_ON);
   setPinState(pins->PIN_F, PIN_ON);
+  setPinState(pins->PIN_G, PIN_OFF);
 }
 
 static void showOne(LedDigit_DataPins * pins)
 {
+  setPinState(pins->PIN_A, PIN_OFF);
   setPinState(pins->PIN_B, PIN_ON);
   setPinState(pins->PIN_C, PIN_ON);
+  setPinState(pins->PIN_D, PIN_OFF);
+  setPinState(pins->PIN_E, PIN_OFF);
+  setPinState(pins->PIN_F, PIN_OFF);
+  setPinState(pins->PIN_G, PIN_OFF);
 }
 
 static void showTwo(LedDigit_DataPins * pins)
 {
   setPinState(pins->PIN_A, PIN_ON);
   setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
-  setPinState(pins->PIN_E, PIN_ON);
+  setPinState(pins->PIN_C, PIN_OFF);
   setPinState(pins->PIN_D, PIN_ON);
+  setPinState(pins->PIN_E, PIN_ON);
+  setPinState(pins->PIN_F, PIN_OFF);
+  setPinState(pins->PIN_G, PIN_ON);
 }
 
 static void showThree(LedDigit_DataPins * pins)
@@ -203,33 +223,41 @@ static void showThree(LedDigit_DataPins * pins)
   setPinState(pins->PIN_B, PIN_ON);
   setPinState(pins->PIN_C, PIN_ON);
   setPinState(pins->PIN_D, PIN_ON);
+  setPinState(pins->PIN_E, PIN_OFF);
+  setPinState(pins->PIN_F, PIN_OFF);
   setPinState(pins->PIN_G, PIN_ON);
 }
 
 static void showFour(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
+  setPinState(pins->PIN_A, PIN_OFF);
   setPinState(pins->PIN_B, PIN_ON);
   setPinState(pins->PIN_C, PIN_ON);
+  setPinState(pins->PIN_D, PIN_OFF);
+  setPinState(pins->PIN_E, PIN_OFF);
+  setPinState(pins->PIN_F, PIN_ON);
+  setPinState(pins->PIN_G, PIN_ON);
 }
 
 static void showFive(LedDigit_DataPins * pins)
 {
   setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
+  setPinState(pins->PIN_B, PIN_OFF);
   setPinState(pins->PIN_C, PIN_ON);
   setPinState(pins->PIN_D, PIN_ON);
+  setPinState(pins->PIN_E, PIN_OFF);
+  setPinState(pins->PIN_F, PIN_ON);
+  setPinState(pins->PIN_G, PIN_ON);
 }
 
 static void showSix(LedDigit_DataPins * pins)
 {
   setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_E, PIN_ON);
-  setPinState(pins->PIN_D, PIN_ON);
+  setPinState(pins->PIN_B, PIN_OFF);
   setPinState(pins->PIN_C, PIN_ON);
+  setPinState(pins->PIN_D, PIN_ON);
+  setPinState(pins->PIN_E, PIN_ON);
+  setPinState(pins->PIN_F, PIN_ON);
   setPinState(pins->PIN_G, PIN_ON);
 }
 
@@ -238,6 +266,10 @@ static void showSeven(LedDigit_DataPins * pins)
   setPinState(pins->PIN_A, PIN_ON);
   setPinState(pins->PIN_B, PIN_ON);
   setPinState(pins->PIN_C, PIN_ON);
+  setPinState(pins->PIN_D, PIN_OFF);
+  setPinState(pins->PIN_E, PIN_OFF);
+  setPinState(pins->PIN_F, PIN_OFF);
+  setPinState(pins->PIN_G, PIN_OFF);
 }
 
 static void showEight(LedDigit_DataPins * pins)
@@ -256,6 +288,8 @@ static void showNine(LedDigit_DataPins * pins)
   setPinState(pins->PIN_A, PIN_ON);
   setPinState(pins->PIN_B, PIN_ON);
   setPinState(pins->PIN_C, PIN_ON);
+  setPinState(pins->PIN_D, PIN_OFF);
+  setPinState(pins->PIN_E, PIN_OFF);
   setPinState(pins->PIN_F, PIN_ON);
   setPinState(pins->PIN_G, PIN_ON);
 }
@@ -263,4 +297,9 @@ static void showNine(LedDigit_DataPins * pins)
 static void showDecimal(LedDigit_DataPins * pins)
 {
   setPinState(pins->PIN_DP, PIN_ON);
+}
+
+static void clearDecimal(LedDigit_DataPins * pins)
+{
+  setPinState(pins->PIN_DP, PIN_OFF);
 }
