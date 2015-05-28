@@ -25,6 +25,7 @@ Pin Spy_LedDigit_SelectPinState(Spy_LedDigit self)
 
 //*** File-scope helper function prototypes ***//
 static void setSpyDigit(LedDigit self, LedDigit_DisplayDigit value);
+static void setSpySelectPinState(LedDigit self, Pin state);
 
 
 //*** Spy's mocks of LedDigit functions ***//
@@ -73,10 +74,14 @@ BOOL LedDigit_IsDecimalShown(LedDigit self)
 }
 
 void LedDigit_UpdateLed(LedDigit self)
-{}
+{
+  setSpySelectPinState(self, PIN_ON);
+}
 
 void LedDigit_TurnLedOff(LedDigit self)
-{}
+{
+  setSpySelectPinState(self, PIN_OFF);
+}
 
 
 static void setSpyDigit(LedDigit self, LedDigit_DisplayDigit value)
@@ -84,4 +89,11 @@ static void setSpyDigit(LedDigit self, LedDigit_DisplayDigit value)
   CHECK_NULL(self);
   Spy_LedDigit ptrCast = (Spy_LedDigit)self;
   ptrCast->digitOnLed = value;
+}
+
+static void setSpySelectPinState(LedDigit self, Pin state)
+{
+  CHECK_NULL(self);
+  Spy_LedDigit ptrCast = (Spy_LedDigit)self;
+  ptrCast->selectPinState = state;
 }

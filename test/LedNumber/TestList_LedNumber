@@ -1,22 +1,23 @@
-I think this can be a single-instance module.
-Will we really have two displays? I guess we could easily have two readings... but we don't.
-
 Initialize:
-  !Number of digits
+  ~Number of digits
   !Location of decimal point
-  xPins of Darlington?
-  ~Pins for switching/selecting LEDs
 
-Display single digit
-Display two digit number
-Display n-digit number
+~Set nothing (clear)
+~Set single digit
+~Set n-digit number
 Blank leading zeros
 Set demical point location
-No LEDs?
+Turn on LedDigits sequentially
+
+Handle no LEDs?
 Test wiring
 
 Create creates digits
 Destroy destroys digits
+
+
+Multiple TurnOff calls
+TurnOn without all LEDs initialized.
 
 We're going to light up the LEDs sequentially.
 All LEDs use the same Darlington IC; we'll use transistors to select which LED we're going to light up. Then we just do it > 60 Hz and the human eye shouldn't notice. :)
@@ -26,5 +27,3 @@ Something like this:
   "Show" correct digit (set Darlington IC lines)
   Select LED (turn on transistor to supply voltage)
   (Delay for enough time to make the LED visible?)
-
-This module has a direct hardware dependency (the transistor pins) as well as a software dependency (LedDigit).

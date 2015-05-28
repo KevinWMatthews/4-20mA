@@ -17,3 +17,6 @@ Watch out for the assert in LedNumber...
 Need to replace with a null check that can actually continue to run
 
 Look at using LedNumber_DigitPlace in getDigitFromNumber()
+
+
+add a loop to the tests.
