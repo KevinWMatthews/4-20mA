@@ -9,7 +9,7 @@ typedef struct LedDigitStruct
 {
   LedDigit_DataPins * dataPins;
   PinAddress selectPin;
-  LedDigit_DisplayDigit currentDigit;
+  LedDigit_DisplayDigit digitToShow;
 } LedDigitStruct;
 
 //The user manual denotes sections of the LED with letters
@@ -51,7 +51,7 @@ LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress select
 
   showNothing(self->dataPins);
   *(self->selectPin) = PIN_OFF;
-  self->currentDigit = NOTHING;
+  self->digitToShow = NOTHING;
 
   return self;
 }
@@ -63,12 +63,18 @@ void LedDigit_Destroy(LedDigit * self)
   *self = NULL;
 }
 
-void LedDigit_ShowDigit(LedDigit self, LedDigit_DisplayDigit number)
+void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value)
 {
   CHECK_NULL(self);
-  self->currentDigit = number;
-  *(self->selectPin) = PIN_ON;
-  switch (self->currentDigit)
+  self->digitToShow = value;
+}
+
+void LedDigit_ShowDigit(LedDigit self)
+{
+  CHECK_NULL(self);
+  // CHECK_NULL(self->selectPin);
+  setPinState(self->selectPin, PIN_ON);
+  switch (self->digitToShow)
   {
   case NOTHING:
     showNothing(self->dataPins);
@@ -112,10 +118,10 @@ void LedDigit_ShowDecimal(LedDigit self)
   setPinState(self->dataPins->PIN_DP, PIN_ON);
 }
 
-LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self)
+LedDigit_DisplayDigit LedDigit_CurrentValue(LedDigit self)
 {
   CHECK_NULL(self);
-  return self->currentDigit;
+  return self->digitToShow;
 }
 
 void LedDigit_ClearDigit(LedDigit self)

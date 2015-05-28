@@ -67,7 +67,8 @@ void LedNumber_Show(LedNumber self, int16_t number)
   for (i = 0; i < self->numberOfDigits; i++)
   {
     digitToShow = getDigitFromNumber(number, i+1, self->numberOfDigits);
-    LedDigit_ShowDigit(self->ledDigits[i], digitToShow);
+    //TODO add SetDigit
+    // LedDigit_ShowDigit(self->ledDigits[i], digitToShow);
     setSelectPinState(self->ledSelectPins[i], PIN_ON);
   }
 }

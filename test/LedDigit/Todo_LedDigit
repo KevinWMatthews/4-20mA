@@ -20,3 +20,5 @@ Think about pointer destroy. What should we set to null?
 Do we need to manually clear the digit/pins on power-up?
 
 Default case in SetDigit()?
+
+Change how we initialize the struct of data pins. Want to try using calloc and copying struct members so that we aren't dependent on the scoping of the init function.
