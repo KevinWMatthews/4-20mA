@@ -1,29 +1,12 @@
+Add decimal support, but later; we'll have to figure out what kind of behavior that we want.
+
+  Overflow checks:
 Add return status to AddLedDigit() (what if we add too many digits?).
-
-Check on behavior of Null data pins for LedNumber creation.
-
-Change this into a multi-instance module.
-Then we can pass in a pointer and initialize it to a spy.
-We can spy in great detail, I think.
-We'll probably initialize the spy and then have a dummy LedDigit_Create() so that we don't need a static counter in the create function to figure out what memory to refer to.
-This spy will have the select pins and the array of digits, but we have flexibility because we can have the pointer refer to anything with typecasting; it will point to a set of DisplayDigits instead of the actual LedDigit structure.
-Single-instance is just too hard to test.
-
 What if we display a three-digit number with only two LEDs?
 
+  Null checks
+Check on behavior of Null data pins for LedNumber creation.
 
-
-//How to dynamically allocate an array pointers?
-Define PIN struct and make it global.
-That way we don't need **.
-
-Then figure out how to do the dead drop (or do that first).
-
-Figure out what to do with LedDigit wiring.
-Populate number Destroy() with all digit Destroy() calls.
-
-Test wiring - check that we don't wire too many pins (memory leak/array overflow)
-Will need/want return code for _WirePin()
 
 Revise destroy() to make it more robust, clear non-null self even if *self is null? Make the test check for NULLs, etc
 Test NULL select pins

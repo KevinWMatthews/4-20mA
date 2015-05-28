@@ -6,3 +6,23 @@ Send reading to display.
 ~Send part of reading to each digit.
 
 Might need to use a "sink driver" to provide enough power to the LEDs. Now that I think about it, I doubt that the chip can directly handle that much current.
+
+
+
+We will have a TimeService to perform periodic tasks.
+
+The TimeService will be responsible for getting readings from the AtoD converter, scale them, send them to the display, etc.
+
+The ADC will be sampled relatively infrequently, say, twice a second. We'll have to figure out how long to wait until the ADC returns a reading, etc. I don't remember if this is done directly or if AtoD can simple start things out. It's looking like we use AtoD, but we might want to redesign this now that I have more experience ;)
+
+Once we get a reading, we'll process it using LineFit.
+
+If LineFit returns a new reading (or perhaps if it doesn't), we'll send it to the display using LedNumber_Set().
+[LedNumber_Set() calls LedDigit_Set() for each LedDigit]
+
+The above logic will need some fleshing out. Anyhow, we'll relatively infrequently Set the number on the LedDigit display.
+
+
+The TimeService will also be responsible for updating the LedDigits. This will happen much more frequently (it will likely need to touch each LED at least 60 times per second, so it might need to run at 240 Hz).
+This will be done by calling LedNumber_Show(). It will display whatever number that we Set() earlier.
+[This calls LedDigit_Show() for each LedDigit].
