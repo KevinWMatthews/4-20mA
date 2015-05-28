@@ -10,6 +10,7 @@ typedef struct LedDigitStruct
   LedDigit_DataPins * dataPins;
   PinAddress selectPin;
   LedDigit_DisplayDigit digitToShow;
+  BOOL showDecimal;
 } LedDigitStruct;
 
 //The user manual denotes sections of the LED with letters
@@ -36,6 +37,7 @@ static void showSix(LedDigit_DataPins * pins);
 static void showSeven(LedDigit_DataPins * pins);
 static void showEight(LedDigit_DataPins * pins);
 static void showNine(LedDigit_DataPins * pins);
+static void showDecimal(LedDigit_DataPins * pins);
 
 
 //*** Public functions ***//
@@ -52,6 +54,7 @@ LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress select
   showNothing(self->dataPins);
   *(self->selectPin) = PIN_OFF;
   self->digitToShow = NOTHING;
+  self->showDecimal = FALSE;
 
   return self;
 }
@@ -69,10 +72,17 @@ void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value)
   self->digitToShow = value;
 }
 
+void LedDigit_SetDecimal(LedDigit self)
+{
+  // CHECK_NULL(self);
+  self->showDecimal = TRUE;
+}
+
 void LedDigit_ShowDigit(LedDigit self)
 {
   CHECK_NULL(self);
   // CHECK_NULL(self->selectPin);
+
   setPinState(self->selectPin, PIN_ON);
   switch (self->digitToShow)
   {
@@ -110,12 +120,11 @@ void LedDigit_ShowDigit(LedDigit self)
     showNine(self->dataPins);
     break;
   }
-}
 
-void LedDigit_ShowDecimal(LedDigit self)
-{
-  CHECK_NULL(self);
-  setPinState(self->dataPins->PIN_DP, PIN_ON);
+  if (self->showDecimal == TRUE)
+  {
+    showDecimal(self->dataPins);
+  }
 }
 
 LedDigit_DisplayDigit LedDigit_CurrentValue(LedDigit self)
@@ -124,28 +133,29 @@ LedDigit_DisplayDigit LedDigit_CurrentValue(LedDigit self)
   return self->digitToShow;
 }
 
+BOOL LedDigit_IsDecimalShown(LedDigit self)
+{
+  return self->showDecimal;
+}
+
 void LedDigit_ClearDigit(LedDigit self)
 {
   CHECK_NULL(self);
-  setPinState(self->dataPins->PIN_A, PIN_OFF);
-  setPinState(self->dataPins->PIN_B, PIN_OFF);
-  setPinState(self->dataPins->PIN_C, PIN_OFF);
-  setPinState(self->dataPins->PIN_D, PIN_OFF);
-  setPinState(self->dataPins->PIN_E, PIN_OFF);
-  setPinState(self->dataPins->PIN_F, PIN_OFF);
-  setPinState(self->dataPins->PIN_G, PIN_OFF);
+  self->digitToShow = NOTHING;
 }
 
 void LedDigit_ClearDecimal(LedDigit self)
 {
   CHECK_NULL(self);
   setPinState(self->dataPins->PIN_DP, PIN_OFF);
+  self->showDecimal = FALSE;
 }
 
 void LedDigit_ClearAll(LedDigit self)
 {
   CHECK_NULL(self);
-  showNothing(self->dataPins);
+  LedDigit_ClearDigit(self);
+  LedDigit_ClearDecimal(self);
 }
 
 
@@ -248,4 +258,9 @@ static void showNine(LedDigit_DataPins * pins)
   setPinState(pins->PIN_C, PIN_ON);
   setPinState(pins->PIN_F, PIN_ON);
   setPinState(pins->PIN_G, PIN_ON);
+}
+
+static void showDecimal(LedDigit_DataPins * pins)
+{
+  setPinState(pins->PIN_DP, PIN_ON);
 }
