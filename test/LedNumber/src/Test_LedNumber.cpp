@@ -34,6 +34,45 @@ TEST_GROUP(LedNumber)
   {
     LedNumber_Destroy(&number);
   }
+
+  void singleDigitShows(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
+  {
+    LedNumber_SetNumber(self, numberToShow);
+    LedNumber_ShowNumber(self);
+
+    for (int i = 0; i < numberOfDigits; i++)
+    {
+      if (i == 0)
+      {
+        LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
+      }
+      else
+      {
+        LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
+      }
+    }
+  }
+
+  void allDigitsShowSequentially(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
+  {
+    LedNumber_SetNumber(self, numberToShow);
+
+    for (int i = 0; i < numberOfDigits; i++)
+    {
+      LedNumber_ShowNumber(self);
+      for (int j = 0; j < numberOfDigits; j++)
+      {
+        if (j == i)
+        {
+          LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
+        }
+        else
+        {
+          LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
+        }
+      }
+    }
+  }
 };
 
 //*** Test initialization and response to NULL pointers ***//
@@ -105,69 +144,22 @@ TEST(LedNumber, ClearNumber)
   LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }
 
-TEST(LedNumber, ShowFirstOfFour)
+TEST(LedNumber, ShowFourDigitsWithFourInitialized)
 {
-  LedNumber_SetNumber(number, 2345);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
+  allDigitsShowSequentially(number, 2345, NUMBER_OF_DIGITS);
+  singleDigitShows(number, 2345, NUMBER_OF_DIGITS);
 }
 
-TEST(LedNumber, ShowSecondOfFour)
+TEST(LedNumber, ShowThreeDigitsWithFourInitialized)
 {
-  LedNumber_SetNumber(number, 2345);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
+  allDigitsShowSequentially(number, 987, NUMBER_OF_DIGITS);
+  singleDigitShows(number, 987, NUMBER_OF_DIGITS);
 }
 
-TEST(LedNumber, ShowThirdOfFour)
+TEST(LedNumber, ShowOneDigitWithFourInitialized)
 {
-  LedNumber_SetNumber(number, 2345);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-}
-
-TEST(LedNumber, ShowFourthOfFour)
-{
-  LedNumber_SetNumber(number, 2345);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-}
-
-TEST(LedNumber, ShowFirstAfterWraparoundOfFour)
-{
-  LedNumber_SetNumber(number, 2345);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
+  allDigitsShowSequentially(number, 0, NUMBER_OF_DIGITS);
+  singleDigitShows(number, 0, NUMBER_OF_DIGITS);
 }
 
 TEST(LedNumber, TurnOffLedNumber)
@@ -183,76 +175,6 @@ TEST(LedNumber, TurnOffLedNumber)
 
   LedNumber_ShowNumber(number);
 
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-}
-
-TEST(LedNumber, ShowLeadingZeroOfThree)
-{
-  LedNumber_SetNumber(number, 987);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(ZERO, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-}
-
-TEST(LedNumber, ShowFirstOfThree)
-{
-  LedNumber_SetNumber(number, 987);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(ZERO, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-}
-
-TEST(LedNumber, ShowSecondOfThree)
-{
-  LedNumber_SetNumber(number, 987);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(ZERO, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-}
-
-TEST(LedNumber, ShowThirdOfThree)
-{
-  LedNumber_SetNumber(number, 987);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(ZERO, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-}
-
-TEST(LedNumber, ShowLeadingZeroAfterWraparoundOfThree)
-{
-  LedNumber_SetNumber(number, 987);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-  LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(ZERO, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
   LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
   LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
   LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
