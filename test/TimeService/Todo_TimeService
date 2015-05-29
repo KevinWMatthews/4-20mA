@@ -1,0 +1,10 @@
+Todo_TimeService
+
+TimeService needs to call a function at a given time interval.
+It should support multiple functions.
+
+Create should simply create the TimeService structures.
+
+AddCallback should accept a function pointer for a callback and a time interval in milliseconds.
+
+We'll need to figure out how to get this embedded system to delay properly.

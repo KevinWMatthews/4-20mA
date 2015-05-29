@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=LedNumber
+TESTS_TO_RUN=TimeService
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
@@ -18,6 +18,8 @@ LINEFIT_DIR=LineFit
 LEDDIGIT_DIR=LedDigit
 
 LEDNUMBER_DIR=LedNumber
+
+TIMESERVICE_DIR=TimeService
 
 #Create a makefile target for each series of tests
 Default:
@@ -37,6 +39,9 @@ LedDigit:
 
 LedNumber:
 	$(MAKE_TESTS) $(LEDNUMBER_DIR) $(MAKECMDGOALS)
+
+TimeService:
+	$(MAKE_TESTS) $(TIMESERVICE_DIR) $(MAKECMDGOALS)
 
 ### Makefile targets ###
 .DEFAULT_GOAL:=all
