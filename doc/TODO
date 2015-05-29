@@ -17,3 +17,5 @@ Add documentation to header files
 Think hard about the ADC and AtoD task division.
 
 Move pin functions and data type to its own file?
+
+Want to document and streamline testing for NULL pointers for a generic multi-instance module.

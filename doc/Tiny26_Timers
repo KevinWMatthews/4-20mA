@@ -1,0 +1,163 @@
+Tiny26_Timers
+
+~~~ Timer 0 ~~~
+Can be sourced from system clock CK, prescaled, CK or an external pin.
+
+TIMER0, OVF0 (Timer/Counter0 Overflow)
+  Priority 7 (low number == high priority)
+  Program Address $006
+
+
+~TCCR0 - Timer/Counter0 Control Register
+  Bits 7..4 Reserved
+
+  Bit 3 - PSR0 (Prescaler Reset Timer/Counter0)
+    Set to 1 to reset the Timer/Counter prescaler
+    Bit will be cleared by hardware after the reset is finished.
+    Always reads zero
+
+  Bits 2..0 - CS02, CS01, CS00 (Clock Select0 Bits 2..0)
+    000: Stop the timer
+    See Table 31, pg 66 of the ATtiny26 datasheet
+    001   CK/( 2^(n-1) )
+    ..
+    101   CK/( 2^(n-1) )
+    110   External Pin T0, falling edge
+    111   External Pin T1, rising edge
+
+~TCNT0 (Timer/Counter0)
+  8-bit register contains the value of Timer/Counter1
+  Up-counter with read and write access
+  Bit   7   6   5   4   3   2   1   0
+      MSB                         LSB
+
+
+~~~ Timer 1 ~~~
+Timer/Counter1 has a larger prescaler, which makes it more useful for lower speed functions or those that require exact timing with infrequent actions.
+
+Timer1 has three interrupts:
+  Match A
+  Match B
+  Overflow
+
+Timer1 has three Output Compare Registers:
+  OCR1A
+  OCR1B
+  OCR1C
+
+OCR1A -> OC1A pin == PB1 pin -> Timer1 OC1A interrupt
+OCR1B -> OC1B pin == PB3 pin -> Timer1 OC1B interrupt
+OC41C -> overflow interrupt TOV1
+  (either FF to 00 of OCR1C to 0)
+
+
+Timer1 has three status flags (overflow and compare)
+  TIFR
+
+Timer has a PWM mode and Normal mode. PWM mode does what?
+
+~ TCCR1A (Timer/Counter1 Control Register A)
+Bits 7,6 - COM1A1, COM1A0 (Comparator A Output Mode)
+  Determine output pin action when Compare Register A in Timer/Counter 1 matches.
+  Affects Pin2/PB1 (OC1A).
+    00 - Disconnected from output pin
+    01 - Toggle output line
+    10 - Clear output line
+    11 - Set output line
+  Must set Pin2's direction control bit to 1 to control it as an output pin.
+  Different in PWM mode
+
+Bits 5,4 - COM1B1, COM1B0 (Comparator B Output Mode)
+  Determine output pin action when Compare Register B in Timer/Counter 1 matches.
+  Affects Pin4/PB3 (OC1B).
+    00 - Disconnected from output pin
+    01 - Toggle output line
+    10 - Clear output line
+    11 - Set output line
+  Must set Pin4's direction control bit to 1 to control it as an output pin.
+  Different in PWM mode
+
+Bit 3 - FOC1A (Force Output Compare Match 1A)
+  Forces a change in the Compare Match output pin (Pin2/PB1/OC1A)
+  Triggers a "match" regardless of the timer value.
+  No interrupt is generated
+
+Bit 2 - FOC1B (Force Output Compare Match 1B)
+  Forces a change in the Compare Match output pin (Pin4/PB3/OC1B)
+  Triggers a "match" regardless of the timer value.
+  No interrupt is generated
+
+Bit 1 - PWM1A (Pulse Width Modulator A Enable)
+  Enable PWM mode
+
+Bit 0 - PWM1B (Pulse Width Modulator B Enable)
+  Enable PWM mode
+
+
+~ TCCR1B (Timer/Counter1 Control Register B)
+Bit 7 - CTC1 (Clear Timer/Counter on Compare Match)
+  Set to 1 to reset Timer/Counter1 to $00 when a match occurs
+  Set to 0 to allow Timer/Counter1 to continue unaffected and roll over when it reaches its max value.
+
+Bit 6 - PSR1 (Prescaler Reset Timer/Counter1)
+  Set to 1 to reset the Timer/Counter prescaler
+  Bit will be cleared by hardware after the reset is finished.
+  Always reads zero
+
+Bit 5..4 Reserved
+
+Bits 3..0 - CS13, CS13, CS11, CS10 (Clock Select Bits 3, 2, 1, 0)
+  Define the prescaler:
+  0000: stopped (use this to disable the timer)
+  Clock will be set to (System Clock)/( 2^(n-1) )
+    where n is the decimal value of these four bits.
+  See Table 34 on pg 72 of the ATtiny26 datasheet
+
+
+~ TCNT1 (Timer/Counter1)
+  8-bit register contains the value of Timer/Counter1
+  Bit   7   6   5   4   3   2   1   0
+      MSB                         LSB
+
+~OCR1A (Timer/Counter1 Output Compare Register A)
+  8-bit value that will be continuously compared to Timer/Counter1
+  Timer/Counter1 must count up to the OCR1A value
+  A software write that sets TCNT1 and OCR1A to the same value does not generate a match!
+  Actions to be taken on a match are specified in TCCR1A
+
+~OCR1B (Timer/Counter1 Output Compare Register B)
+  8-bit value that will be continuously compared to Timer/Counter1
+  Timer/Counter1 must count up to the OCR1B value
+  A software write that sets TCNT1 and OCR1B to the same value does not generate a match!
+  Actions to be taken on a match are specified in TCCR1A
+
+~OCR1C (Timer/Counter1 Output Compare Register C)
+  8-bit value that will be continuously compared to Timer/Counter1
+  Timer/Counter1 must count up to the OCR1B value
+  A software write that sets TCNT1 and OCR1B to the same value does not generate a match!
+  If CTC1 in TCCR1B is set, a compare match clears TCNT1 and sets an Overflow Interrupt Flag (TOV1).
+
+~PLLCSR (PLL Control and Status Register)
+  Bits 7..3 Reserved
+
+  Bit 2 - PCKE (PCK Enable)
+    Set for asynchronous clock mode
+      Uses fast 64MHz PCK clock as Timer/Counter1 clock source
+    Clear for synchronous clock mode
+      System Clock CK is used as timer source
+
+  Bit 1 - PLLE (PLL Enable)
+    Set to start PLL
+      If system clock is the source this bit is always set to 1
+
+  Bit 0 - PLOCK (PLL Lock Detector)
+    Set PLOCK to lock PLL to the reference clock
+
+To start Timer/Counter 1 in asynchronous mode:
+  Enable PLL
+  Poll PLOCK bit until it is set
+  Set PCKE bit
+
+What about in synchronous mode?
+
+Which mode do we want?

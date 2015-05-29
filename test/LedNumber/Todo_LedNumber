@@ -18,5 +18,4 @@ Need to replace with a null check that can actually continue to run
 
 Look at using LedNumber_DigitPlace in getDigitFromNumber()
 
-
-add a loop to the tests.
+Add tests to spy.

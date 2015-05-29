@@ -1,0 +1,202 @@
+Tiny26_Interrupts
+
+To use interrupts, include <avr/interrupt.h>
+Look at it for more details!
+avr/include/avr/interrupt.h
+
+In AVR-GCC, vector table is predefined to point to interrupt routines with predefined names. Use the appropriate name to execute your code.
+
+Details of saving and restoring the appropriate CPU register can get messy, but it's automatically handled by the ISR macro.
+
+Sample interrupt handler:
+ISR(<look_in_table_for_chip-specific_vector_name>)
+{
+  //user code
+}
+
+Catch-all interrupt handler:
+ISR(BADISR_vect)
+{
+  //handle an unexpected interrupt
+  //often if an interrupt occurs but there is nohandler installed
+  //by default this restarts the application!!
+}
+
+Use the ISR_NOBLOCK attribute to create nested interrupts:
+ISR(***_vect, ISR_NOBLOCK)
+{
+
+}
+
+If two interrupt handlers share the same code, you can alias them
+ISR(PCINT0_vect)
+{
+  //handle event
+}
+ISR(PCINT1_vect, ISR_ALIASOF(PCINT0_vect));
+//Can also use ISR_ALIAS()
+
+In rare cases you don't want an interrupt handler to do anything at all.
+If you don't want it to trigger to the BADISR_vect handler, define it as empty
+EMPTY_INTERRUPT(<vector_name>);
+//For example, use this to get a controller out of sleep mode.
+
+Commands:
+  sei() - Enables interrupts by setting the global interrupt mask bit (SREG I-bit)
+  cli() - Disables all interrupts by clearing the global interrupt mask bit (SREG I-bit)
+  ISR(vector, [attributes]) - Introduces an interrupt service routine/handler function
+    vector names are specific to the chip
+  EMPTY_INTERRUPT(vector) - Defines an empty interrupt handler. Do not define a body
+  ISR_ALIAS(vector, target_vector) - Alias one interrupt vector to another (another's handler?)
+  reti() - Returns from an interrupt routing, reenabling global interrupts
+    Executed automatically if ISR is given the ISR_BLOCK attribute (the default if no attribute is given)
+    Should/must be last command if leaving an ISR with ISR_NAKED attribute
+    Not needed if ISR_NOBLOCK is used
+
+ISR vectors (had to find the exact names online/in iotn26.h)
+  0 (?)             Hardware Pin and Watchdog Reset
+  INT0_vect         External Interrupt Request 0
+  IO_PINS_vect      Pin Change Interrupt
+  TIMER1_CMPA_vect  Timer/Counter1 Compare Match 1A
+  TIMER1_CMPB_vect  Timer/Counter1 Compare Match 1B
+  TIMER1_OVF1_vect  Timer/Counter1 Overflow
+  TIMER0_OVF0_vect  Timer/Counter0 Overflow
+  USI_STRT_vect     USI Start
+  USI_OVF_vect      USI Overflow
+  EE_RDY_vect       EEPROM Ready
+  ANA_COMP_vect     Analog Comparator
+  ADC_vect          ADC Conversion Complete
+  BADISR_vect - Use when there is no ISR handler for the interrupt.
+    Aliased to __vector_default
+    Use with ISR() to create a catch-all for undefined but used ISRs:
+      Like this? ISR(BADISR_vect)
+
+ISR attributes
+  ISR_BLOCK - ISR executes with global interrupts initially DISabled
+    Identical to using no attribute
+  ISR_NOBLOCK - ISR executes with global interrupts initially ENabled
+    Can be used to create nested ISRs
+  ISR_NAKED - no prologue or epilogue code.
+    The user must preserve the machine state and place reti() at the end of the interrupt routine.
+  ISR_ALIASOF(target_vector) - Specify that the ISR is linked to another ISR
+
+
+
+
+Lowest number has highest priority
+1  RESET
+2  INT0
+3  I/O Pins
+4  TIMER1, CMPA
+5  TIMER2, CMPB
+6  TIMER1, OVF1
+7  TIMER0, OVF0
+...
+C  ADC Conversion Complete
+
+
+~SREG (Status Register)
+  Configures very low-level things such as Half Carry, sign bit, two's complement overflow, etc
+    Bit 7 – I: Global Interrupt Enable (GIE)
+      Set to allow interrupts
+      Clear to disallow all interrupts
+      I-bit is cleared by hardware after an interrupt occurs
+      (The user can set the I-bit to enable nested interrutps)
+      RETI (Return from Interrupt) instruction sets the I-bit (re-enabling interrupts)
+      Defaults to 0 on power-up
+
+The user must set the I-bit to 1!
+
+When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are disabled.
+The I-bit is set to one when a Return from Interrupt (RETI) instruction is executed.
+(The user can set the I-bit to enable nested interrutps)
+
+The interrupt handling routine clears the flag the generated the interrupt.
+Some interrupt flags can be cleard by wiring a logical 1 to the flag bit.
+
+If interrupts are disabled but an interrupt occurs, the flag will be set and remembered until:
+  interrupts are enabled again
+  the flag is cleared by software
+
+If multiple interrupt conditions occur, when GIE is cleared, interrupt flags are set, remembered, and executed by priority
+
+
+There are four interrupt registers:
+  GIMSK (General Interrupt Mask Register)
+  GIFR (General Interrupt Flag Register)
+  TIMSK (Timer/Counter Interrupt Mask Register)
+  TIFR (Timer/Counter Interrupt Flag Register)
+
+~GIMSK (General Interrupt Mask Register)
+  Use this to enable and disable general interrupts
+    Bit 7 - Reserved
+
+    Bit 6 - INT0 (External Interrupt Request 0 Enable)
+
+    Bit 5 - PCIE1 (Pin Change Interrupt Enable 1)
+
+    Bit 4 - PCIE0 (Pin Change Interrupt Enable 0)
+
+    Bits 3..0 - Reserved
+
+~GIFR (General Interrupt Flag Register)
+  Look here to find general interrupt flags
+    Bit 7 - Reserved
+
+    Bit 6 - INTF0 (External Interrupt Flag0)
+
+    Bit 5 - PCIF (Pin Change Interrupt Flag)
+      When either Interrupt1 or Interrupt 0 occurs?
+
+    Bits 4..0 - Reserved
+
+~TIMSK (Timer/Counter Interrupt Mask Register)
+  Use this to enable and disable timer/counter interrupts
+    Bit 7 - Reserved
+
+    Bit 6 - OCIE1A (Timer/Counter1 Output Compare Interrupt Enable)
+      Executes if Timer/Counter1 compare match A occurs
+      Set to 1 and set I-bit in Status Register to
+        execute interrupt vector
+        set Flag in Timer/Counter Interrupt Flag Register
+
+    Bit 5 – OCIE1B (Timer/Counter1 Output Compare Interrupt Enable)
+      Executes if Timer/Counter1 compare match B occurs
+      Set to 1 and set I-bit in Status Register to
+        execute interrupt vector
+        set Flag in Timer/Counter Interrupt Flag Register
+
+    Bits 4..3 - Reserved
+
+    Bit 2 – TOIE1 (Timer/Counter1 Overflow Interrupt Enable)
+
+    Bit 1 – TOIE0 (Timer/Counter0 Overflow Interrupt Enable)
+
+    Bit 0 - Reserved
+
+~TIFR (Timer/Counter Interrupt Flag Register)
+  Look here to find general interrupt flags
+    Bit 7 - Reserved
+
+    Bit 6 - OCIE1A (Timer/Counter1 Output Compare Flag)
+      Set when a Timer/Counter1 compare match A occurs
+      Cleared by hardware when executing the interrupt handling vector
+      Can be cleared by software
+
+    Bit 5 – OCIE1B (Timer/Counter1 Output Compare Flag)
+      Set when a Timer/Counter1 compare match B occurs
+      Cleared by hardware when executing the interrupt handling vector
+      Can be cleared by software
+
+    Bits 4..3 - Reserved
+
+    Bit 2 – TOIE1 (Timer/Counter1 Overflow Flag)
+      Set when Timer/Counter1 overflows
+      Cleared by hardware when executing the interrupt handling vector
+
+    Bit 1 – TOIE0 (Timer/Counter0 Overflow Flag)
+    Set when Timer/Counter0 overflows
+      Cleared by hardware when executing the interrupt handling vector
+
+    Bit 0 - Reserved
+
