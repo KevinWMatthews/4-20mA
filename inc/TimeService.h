@@ -15,7 +15,7 @@ void TimeService_Create(void);
 void TimeService_Destroy(void);
 
 PeriodicAlarm TimeService_CreatePeriodicAlarm(void);
-void TimeService_SetPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod);
+void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callbackFunction, int16_t alarmPeriod);
 void TimeService_ClearPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod);
 PeriodicCallback TimeService_GetCallbackFunction(PeriodicAlarm alarm);
 int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm);

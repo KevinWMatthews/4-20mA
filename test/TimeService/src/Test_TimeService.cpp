@@ -17,6 +17,7 @@ TEST_GROUP(TimeService)
   {
     interval = 42;
     TimeService_Create();
+    alarm = TimeService_CreatePeriodicAlarm();
   }
 
   void teardown()
@@ -48,13 +49,10 @@ TEST(TimeService, GetCallbackInfoFromNullAlarmPointer)
 
 TEST(TimeService, AlarmClearedAfterCreate)
 {
-  PeriodicAlarm alarm;
-  alarm = TimeService_CreatePeriodicAlarm();
-
   checkPeriodicAlarm(alarm, NULL, -1);
 }
 
-
+//?
 // TEST(TimeService, CallbackClearedAfterDestroy)
 // {
 //   TimeService_SetPeriodicAlarm(callback, interval);
@@ -63,12 +61,18 @@ TEST(TimeService, AlarmClearedAfterCreate)
 //   checkPeriodicAlarm(NULL, -1);
 // }
 
-// TEST(TimeService, SetPeriodicAlarm)
-// {
-//   TimeService_SetPeriodicAlarm(callback, interval);
+TEST(TimeService, SetNullPeriodicAlarm)
+{
+  TimeService_SetPeriodicAlarm(NULL, callback, interval);
+  checkPeriodicAlarm(NULL, NULL, 0);
+}
 
-//   checkPeriodicAlarm(callback, interval);
-// }
+TEST(TimeService, SetPeriodicAlarm)
+{
+  TimeService_SetPeriodicAlarm(alarm, callback, interval);
+
+  checkPeriodicAlarm(alarm, callback, interval);
+}
 
 // TEST(TimeService, CancelPeriodicAlarm)
 // {

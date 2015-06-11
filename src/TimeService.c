@@ -38,11 +38,12 @@ PeriodicAlarm TimeService_CreatePeriodicAlarm(void)
   return &alarms[0];
 }
 
-// void TimeService_SetPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod)
-// {
-//   callback = callbackFunction;
-//   period = alarmPeriod;
-// }
+void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callbackFunction, int16_t alarmPeriod)
+{
+  CHECK_NULL(alarm);
+  alarm->callback = callbackFunction;
+  alarm->period = alarmPeriod;
+}
 
 // void TimeService_ClearPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod)
 // {

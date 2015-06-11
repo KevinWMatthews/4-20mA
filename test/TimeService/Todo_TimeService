@@ -11,4 +11,8 @@ We'll need to figure out how to get this embedded system to delay properly.
 
 Rename PeriodicCallback to PeriodicAlarmCallback?
 
+This is important: remove duplication
 What value should we use for checking callback values from a NULL PeriodicAlarm?
+
+Should we clear out data after destroy?
+Will we prevent users from getting back in to the array?
