@@ -48,11 +48,17 @@ TEST(TimeService, CallbackClearedAfterDestroy)
   checkPeriodicAlarm(NULL, -1);
 }
 
-TEST(TimeService, SetCallbackFunction)
+TEST(TimeService, SetPeriodicAlarm)
 {
-  PeriodicCallback callback;
-
   TimeService_SetPeriodicAlarm(callback, interval);
 
   checkPeriodicAlarm(callback, interval);
+}
+
+TEST(TimeService, CancelPeriodicAlarm)
+{
+  TimeService_SetPeriodicAlarm(callback, interval);
+  TimeService_ClearPeriodicAlarm(callback, interval);
+
+  checkPeriodicAlarm(NULL, -1);
 }

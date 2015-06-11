@@ -25,6 +25,11 @@ void TimeService_SetPeriodicAlarm(PeriodicCallback callbackFunction, int16_t ala
   period = alarmPeriod;
 }
 
+void TimeService_ClearPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod)
+{
+  clearPeriodicAlarm();
+}
+
 PeriodicCallback TimeService_GetCallbackFunction(void)
 {
   return callback;
