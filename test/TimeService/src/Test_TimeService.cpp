@@ -9,8 +9,12 @@ extern "C"
 
 TEST_GROUP(TimeService)
 {
+  PeriodicCallback callback;
+  int16_t interval;
+
   void setup()
   {
+    interval = 42;
     TimeService_Create();
   }
 
@@ -18,11 +22,17 @@ TEST_GROUP(TimeService)
   {
     TimeService_Destroy();
   }
+
+  void checkPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod)
+  {
+    POINTERS_EQUAL(callbackFunction, TimeService_GetCallbackFunction());
+    LONGS_EQUAL(alarmPeriod, TimeService_GetCallbackInterval());
+  }
 };
 
 TEST(TimeService, Create)
 {
-  POINTERS_EQUAL(NULL, TimeService_GetCallback());
+  checkPeriodicAlarm(NULL, -1);
 }
 
 TEST(TimeService, DestroySupportsMultipleCalls)
@@ -32,17 +42,17 @@ TEST(TimeService, DestroySupportsMultipleCalls)
 
 TEST(TimeService, CallbackClearedAfterDestroy)
 {
-  PeriodicCallback callback;
-
-  TimeService_SetPeriodicAlarm(callback);
+  TimeService_SetPeriodicAlarm(callback, interval);
   TimeService_Destroy();
-  POINTERS_EQUAL(NULL, TimeService_GetCallback());
+
+  checkPeriodicAlarm(NULL, -1);
 }
 
 TEST(TimeService, SetCallbackFunction)
 {
   PeriodicCallback callback;
 
-  TimeService_SetPeriodicAlarm(callback);
-  POINTERS_EQUAL(callback, TimeService_GetCallback());
+  TimeService_SetPeriodicAlarm(callback, interval);
+
+  checkPeriodicAlarm(callback, interval);
 }

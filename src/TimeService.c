@@ -1,30 +1,36 @@
 #include "TimeService.h"
-#include "DataTypes.h"
 
 static PeriodicCallback callback;
+static int16_t period;
 
-
-static void clearCallback(void)
+static void clearPeriodicAlarm(void)
 {
   callback = NULL;
+  period = -1;
 }
 
 void TimeService_Create(void)
 {
-  clearCallback();
+  clearPeriodicAlarm();
 }
 
 void TimeService_Destroy(void)
 {
-  clearCallback();
+  clearPeriodicAlarm();
 }
 
-void TimeService_SetPeriodicAlarm(PeriodicCallback callbackFunction)
+void TimeService_SetPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod)
 {
   callback = callbackFunction;
+  period = alarmPeriod;
 }
 
-PeriodicCallback TimeService_GetCallback(void)
+PeriodicCallback TimeService_GetCallbackFunction(void)
 {
   return callback;
+}
+
+int16_t TimeService_GetCallbackInterval(void)
+{
+  return period;
 }
