@@ -8,3 +8,7 @@ Create should simply create the TimeService structures.
 AddCallback should accept a function pointer for a callback and a time interval in milliseconds.
 
 We'll need to figure out how to get this embedded system to delay properly.
+
+Rename PeriodicCallback to PeriodicAlarmCallback?
+
+What value should we use for checking callback values from a NULL PeriodicAlarm?

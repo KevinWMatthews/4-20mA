@@ -9,6 +9,7 @@ extern "C"
 
 TEST_GROUP(TimeService)
 {
+  PeriodicAlarm alarm;
   PeriodicCallback callback;
   int16_t interval;
 
@@ -23,16 +24,16 @@ TEST_GROUP(TimeService)
     TimeService_Destroy();
   }
 
-  void checkPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod)
+  void checkPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callbackFunction, int16_t alarmPeriod)
   {
-    POINTERS_EQUAL(callbackFunction, TimeService_GetCallbackFunction());
-    LONGS_EQUAL(alarmPeriod, TimeService_GetCallbackInterval());
+    POINTERS_EQUAL(callbackFunction, TimeService_GetCallbackFunction(alarm));
+    LONGS_EQUAL(alarmPeriod, TimeService_GetCallbackInterval(alarm));
   }
 };
 
 TEST(TimeService, Create)
 {
-  checkPeriodicAlarm(NULL, -1);
+  //Can we test that things are null?
 }
 
 TEST(TimeService, DestroySupportsMultipleCalls)
@@ -40,25 +41,39 @@ TEST(TimeService, DestroySupportsMultipleCalls)
   TimeService_Destroy();
 }
 
-TEST(TimeService, CallbackClearedAfterDestroy)
+TEST(TimeService, GetCallbackInfoFromNullAlarmPointer)
 {
-  TimeService_SetPeriodicAlarm(callback, interval);
-  TimeService_Destroy();
-
-  checkPeriodicAlarm(NULL, -1);
+  checkPeriodicAlarm(NULL, NULL, 0);  //What value should we use?
 }
 
-TEST(TimeService, SetPeriodicAlarm)
+TEST(TimeService, AlarmClearedAfterCreate)
 {
-  TimeService_SetPeriodicAlarm(callback, interval);
+  PeriodicAlarm alarm;
+  alarm = TimeService_CreatePeriodicAlarm();
 
-  checkPeriodicAlarm(callback, interval);
+  checkPeriodicAlarm(alarm, NULL, -1);
 }
 
-TEST(TimeService, CancelPeriodicAlarm)
-{
-  TimeService_SetPeriodicAlarm(callback, interval);
-  TimeService_ClearPeriodicAlarm(callback, interval);
 
-  checkPeriodicAlarm(NULL, -1);
-}
+// TEST(TimeService, CallbackClearedAfterDestroy)
+// {
+//   TimeService_SetPeriodicAlarm(callback, interval);
+//   TimeService_Destroy();
+
+//   checkPeriodicAlarm(NULL, -1);
+// }
+
+// TEST(TimeService, SetPeriodicAlarm)
+// {
+//   TimeService_SetPeriodicAlarm(callback, interval);
+
+//   checkPeriodicAlarm(callback, interval);
+// }
+
+// TEST(TimeService, CancelPeriodicAlarm)
+// {
+//   TimeService_SetPeriodicAlarm(callback, interval);
+//   TimeService_ClearPeriodicAlarm(callback, interval);
+
+//   checkPeriodicAlarm(NULL, -1);
+// }
