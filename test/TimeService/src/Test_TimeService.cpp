@@ -11,14 +11,38 @@ TEST_GROUP(TimeService)
 {
   void setup()
   {
+    TimeService_Create();
   }
 
   void teardown()
   {
+    TimeService_Destroy();
   }
 };
 
-TEST(TimeService, WiringCheck)
+TEST(TimeService, Create)
 {
-  FAIL("Start here!");
+  POINTERS_EQUAL(NULL, TimeService_GetCallback());
+}
+
+TEST(TimeService, DestroySupportsMultipleCalls)
+{
+  TimeService_Destroy();
+}
+
+TEST(TimeService, CallbackClearedAfterDestroy)
+{
+  PeriodicCallback callback;
+
+  TimeService_SetPeriodicAlarm(callback);
+  TimeService_Destroy();
+  POINTERS_EQUAL(NULL, TimeService_GetCallback());
+}
+
+TEST(TimeService, SetCallbackFunction)
+{
+  PeriodicCallback callback;
+
+  TimeService_SetPeriodicAlarm(callback);
+  POINTERS_EQUAL(callback, TimeService_GetCallback());
 }
