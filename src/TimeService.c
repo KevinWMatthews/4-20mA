@@ -18,9 +18,7 @@ static void clearPeriodicAlarm(PeriodicAlarm alarm)
   alarm->period = -1;
 }
 
-
-//*** Public functions ***//
-void TimeService_Create(void)
+static void clearAllPeriodicAlarms(void)
 {
   int i;
   for (i = 0; i < MAX_PERIODIC_ALARMS; i++)
@@ -29,8 +27,16 @@ void TimeService_Create(void)
   }
 }
 
+
+//*** Public functions ***//
+void TimeService_Create(void)
+{
+  clearAllPeriodicAlarms();
+}
+
 void TimeService_Destroy(void)
 {
+  clearAllPeriodicAlarms();
 }
 
 PeriodicAlarm TimeService_CreatePeriodicAlarm(void)
@@ -45,10 +51,11 @@ void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callback
   alarm->period = alarmPeriod;
 }
 
-// void TimeService_ClearPeriodicAlarm(PeriodicCallback callbackFunction, int16_t alarmPeriod)
-// {
-//   clearPeriodicAlarm();
-// }
+void TimeService_ClearPeriodicAlarm(PeriodicAlarm alarm)
+{
+  CHECK_NULL(alarm);
+  clearPeriodicAlarm(alarm);
+}
 
 PeriodicCallback TimeService_GetCallbackFunction(PeriodicAlarm alarm)
 {

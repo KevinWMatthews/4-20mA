@@ -56,3 +56,13 @@ If we set our 8-bit counter to match at 125, we'll get interrupts at 1 Hz.
 
 We have options!
 
+
+
+TimeService_Create() initializes/clears all alarms.
+It could dynamically allocate memory if needed.
+
+Destroy would free the memory if we had allocated it.
+It should probably clear the array of alarms because the user could still access them (we won't require the user to pass in all of their pointers to the Destroy function).
+
+Perhaps CreatePeriodicAlarm() should be Add()
+Perhaps we should implement a Remove() as well. This could clear alarm as well as the user's pointer.

@@ -16,3 +16,10 @@ What value should we use for checking callback values from a NULL PeriodicAlarm?
 
 Should we clear out data after destroy?
 Will we prevent users from getting back in to the array?
+
+Change CreatePeriodicAlarm to Add?
+       Destroy to Remove?
+
+Do we want a remove or just a clear? We do have an add...
+Also gets back to how we use memory.
+Maybe we can just fool the user and clear out their pointer.

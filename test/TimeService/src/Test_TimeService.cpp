@@ -52,19 +52,17 @@ TEST(TimeService, AlarmClearedAfterCreate)
   checkPeriodicAlarm(alarm, NULL, -1);
 }
 
-//?
-// TEST(TimeService, CallbackClearedAfterDestroy)
-// {
-//   TimeService_SetPeriodicAlarm(callback, interval);
-//   TimeService_Destroy();
+TEST(TimeService, CallbackClearedAfterDestroy)
+{
+  TimeService_SetPeriodicAlarm(alarm, callback, interval);
+  TimeService_Destroy();
 
-//   checkPeriodicAlarm(NULL, -1);
-// }
+  checkPeriodicAlarm(alarm, NULL, -1);
+}
 
 TEST(TimeService, SetNullPeriodicAlarm)
 {
   TimeService_SetPeriodicAlarm(NULL, callback, interval);
-  checkPeriodicAlarm(NULL, NULL, 0);
 }
 
 TEST(TimeService, SetPeriodicAlarm)
@@ -74,10 +72,15 @@ TEST(TimeService, SetPeriodicAlarm)
   checkPeriodicAlarm(alarm, callback, interval);
 }
 
-// TEST(TimeService, CancelPeriodicAlarm)
-// {
-//   TimeService_SetPeriodicAlarm(callback, interval);
-//   TimeService_ClearPeriodicAlarm(callback, interval);
+TEST(TimeService, ClearNullPeriodicAlarm)
+{
+  TimeService_ClearPeriodicAlarm(NULL);
+}
 
-//   checkPeriodicAlarm(NULL, -1);
-// }
+TEST(TimeService, ClearPeriodicAlarm)
+{
+  TimeService_SetPeriodicAlarm(alarm, callback, interval);
+  TimeService_ClearPeriodicAlarm(alarm);
+
+  checkPeriodicAlarm(alarm, NULL, -1);
+}
