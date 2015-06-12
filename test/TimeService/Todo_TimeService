@@ -10,16 +10,3 @@ AddCallback should accept a function pointer for a callback and a time interval 
 We'll need to figure out how to get this embedded system to delay properly.
 
 Rename PeriodicCallback to PeriodicAlarmCallback?
-
-This is important: remove duplication
-What value should we use for checking callback values from a NULL PeriodicAlarm?
-
-Should we clear out data after destroy?
-Will we prevent users from getting back in to the array?
-
-Change CreatePeriodicAlarm to Add?
-       Destroy to Remove?
-
-Do we want a remove or just a clear? We do have an add...
-Also gets back to how we use memory.
-Maybe we can just fool the user and clear out their pointer.

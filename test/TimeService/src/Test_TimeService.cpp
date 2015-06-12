@@ -17,7 +17,7 @@ TEST_GROUP(TimeService)
   {
     interval = 42;
     TimeService_Create();
-    alarm = TimeService_CreatePeriodicAlarm();
+    alarm = TimeService_AddPeriodicAlarm();
   }
 
   void teardown()
@@ -34,7 +34,6 @@ TEST_GROUP(TimeService)
 
 TEST(TimeService, Create)
 {
-  //Can we test that things are null?
 }
 
 TEST(TimeService, DestroySupportsMultipleCalls)
@@ -42,27 +41,41 @@ TEST(TimeService, DestroySupportsMultipleCalls)
   TimeService_Destroy();
 }
 
-TEST(TimeService, GetCallbackInfoFromNullAlarmPointer)
+TEST(TimeService, NullPointerToAnyFunctionWontCrash)
 {
-  checkPeriodicAlarm(NULL, NULL, 0);  //What value should we use?
+  TimeService_SetPeriodicAlarm(NULL, callback, interval);
+  TimeService_RemovePeriodicAlarm(NULL);
+  TimeService_GetCallbackFunction(NULL);
+  TimeService_GetCallbackInterval(NULL);
 }
 
-TEST(TimeService, AlarmClearedAfterCreate)
+TEST(TimeService, AddPeriodicAlarm)
 {
-  checkPeriodicAlarm(alarm, NULL, -1);
+  //Added in setup()
+  checkPeriodicAlarm(alarm, NULL, 0);
 }
 
 TEST(TimeService, CallbackClearedAfterDestroy)
 {
-  TimeService_SetPeriodicAlarm(alarm, callback, interval);
   TimeService_Destroy();
 
-  checkPeriodicAlarm(alarm, NULL, -1);
+  checkPeriodicAlarm(alarm, NULL, PA_UNUSED);
 }
 
-TEST(TimeService, SetNullPeriodicAlarm)
+TEST(TimeService, ExceedMaxPeriodicAlarms)
 {
-  TimeService_SetPeriodicAlarm(NULL, callback, interval);
+  //One alarm is created in setup(), so start the loop at 1
+  for (int i = 1; i < MAX_PERIODIC_ALARMS; i++)
+  {
+    CHECK_TRUE(TimeService_AddPeriodicAlarm());
+  }
+  POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm());
+}
+
+TEST(TimeService, RemovePeriodicAlarm)
+{
+  TimeService_RemovePeriodicAlarm(alarm);
+  checkPeriodicAlarm(alarm, NULL, PA_UNUSED);
 }
 
 TEST(TimeService, SetPeriodicAlarm)
@@ -70,17 +83,4 @@ TEST(TimeService, SetPeriodicAlarm)
   TimeService_SetPeriodicAlarm(alarm, callback, interval);
 
   checkPeriodicAlarm(alarm, callback, interval);
-}
-
-TEST(TimeService, ClearNullPeriodicAlarm)
-{
-  TimeService_ClearPeriodicAlarm(NULL);
-}
-
-TEST(TimeService, ClearPeriodicAlarm)
-{
-  TimeService_SetPeriodicAlarm(alarm, callback, interval);
-  TimeService_ClearPeriodicAlarm(alarm);
-
-  checkPeriodicAlarm(alarm, NULL, -1);
 }
