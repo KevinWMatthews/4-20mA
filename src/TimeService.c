@@ -1,12 +1,5 @@
 #include "TimeService.h"
 
-//*** Data types ***//
-typedef struct PeriodicAlarmStruct
-{
-  PeriodicCallback callback;
-  int16_t period;
-} PeriodicAlarmStruct;
-
 
 //*** File-scope variables ***//
 static PeriodicAlarmStruct alarms[MAX_PERIODIC_ALARMS];
@@ -19,7 +12,7 @@ static void markAlarmAsUnused(PeriodicAlarm alarm)
   alarm->period = PA_UNUSED;
 }
 
-static void markAllAlarmAsUnused(void)
+static void markAllAlarmsAsUnused(void)
 {
   int i;
   for (i = 0; i < MAX_PERIODIC_ALARMS; i++)
@@ -32,12 +25,13 @@ static void markAllAlarmAsUnused(void)
 //*** Public functions ***//
 void TimeService_Create(void)
 {
-  markAllAlarmAsUnused();
+  markAllAlarmsAsUnused();
+  alarms[0].counter = 0;
 }
 
 void TimeService_Destroy(void)
 {
-  markAllAlarmAsUnused();
+  markAllAlarmsAsUnused();
 }
 
 PeriodicAlarm TimeService_AddPeriodicAlarm(void)
@@ -78,4 +72,14 @@ int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm)
 {
   CHECK_NULL_RETURN_VALUE(alarm, 0);
   return alarm->period;
+}
+
+void TimeService_ServiceAllCallbacks(void)
+{
+
+}
+
+int16_t TimeServiceInterrupt_GetCounter(void)
+{
+  return alarms[0].counter;
 }

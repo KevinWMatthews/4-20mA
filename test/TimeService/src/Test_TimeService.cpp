@@ -5,6 +5,7 @@ extern "C"
 
 //CppUTest includes should be after your and system includes
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
 #include "Test_TimeService.h"
 
 TEST_GROUP(TimeService)
@@ -28,6 +29,26 @@ TEST_GROUP(TimeService)
   {
     POINTERS_EQUAL(callbackFunction, TimeService_GetCallbackFunction(alarm));
     LONGS_EQUAL(alarmPeriod, TimeService_GetCallbackInterval(alarm));
+  }
+};
+
+TEST_GROUP(TimeService_ServiceCallbacks)
+{
+  PeriodicAlarm alarm;
+  PeriodicCallback callback;
+  int16_t interval;
+
+  void setup()
+  {
+    interval = 1000;
+    TimeService_Create();
+  }
+
+  void teardown()
+  {
+    TimeService_Destroy();
+    mock().checkExpectations();
+    mock().clear();
   }
 };
 
@@ -172,3 +193,25 @@ TEST(TimeService, PutHolesInArray)
 
   POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm());
 }
+
+
+//*** Test Group: TimeService_ServiceCallbacks ***//
+TEST(TimeService_ServiceCallbacks, DoNothingIfNoAlarmsCreated)
+{
+  TimeService_Create();
+  TimeService_ServiceAllCallbacks();
+}
+
+TEST(TimeService_ServiceCallbacks, DoNothingIfNoAlarmsUnset)
+{
+  TimeService_Create();
+  TimeService_AddPeriodicAlarm();
+  TimeService_ServiceAllCallbacks();
+}
+
+// TEST(TimeService_ServiceCallbacks, DoNothingIfNoAlarmsUnset)
+// {
+//   TimeService_Create();
+//   TimeService_AddPeriodicAlarm();
+//   TimeService_ServiceAllCallbacks();
+// }

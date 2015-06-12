@@ -31,4 +31,8 @@ void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callback
 PeriodicCallback TimeService_GetCallbackFunction(PeriodicAlarm alarm);
 int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm);
 
+void TimeService_ServiceAllCallbacks(void);
+
+#include "TimeService_Private.h"
+
 #endif

@@ -1,2 +1,8 @@
 TestList_TimeService
 
+If timer is unused, do nothing
+If timer is disabled, do nothing
+If timer doesn't match, do nothing
+If timer matches, execute callback!
+
+Expand to support all timers.
