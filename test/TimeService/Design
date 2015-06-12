@@ -1,20 +1,14 @@
-The TimeService implementation is hardware dependent. It depeneds on which chip you use.
-Initially, I'm only going to support two callbacks. I'll rig one up to each Tiny26 timer and use the Compare Match interrupt to set a flag.
-This flag will be picked up by the main loop, which will execute the callback.
+TimeService_Create() initializes all periodic alarms to unused
+(It would allocate dynamic memory if we decide to do so)
 
-When the tests use TimeService, we need to implement a spy because we don't want the tests to be hardware dependent.
+Destroy()sets all alarms to unused
+(It would free dynamically allocated memory if need be)
 
-We'll need to think through the timing very thoroughly to see if it actually works.
+AddPeridicAlarm() marks the next alarm as used and returns a pointer to this alarm.
 
-Main:
-  if flag1, execute callback1 and clear flag1
-  if flag2, execute callback2 and clear flag2
+SetPeriodicAlarm() allows the user to set the callback function and the interval at which it will be called
 
-Timer1 Compare Match Interrupt:
-  Set flag1
-
-Timer2 Compare Match Interrupt:
-  Set flag2
+GetCallbackFunction() and GetCallbackInterval() are used to query the alarm for its details.
 
 
 
@@ -37,12 +31,10 @@ Main:
 
 For testing this method, we'll need a fake HW timer interrupt. Maybe we just need a fake flag counter? Or just a fake flag?
 
-Ok, what am I actually going to write? I want to write the execute bit.
-Does our struct need to be volatile? I think the flag does... I wonder if you can do that.
-
-
 
     Clock frequencies:
+Can we set up a timer to increment at 1ms? Yes!!
+
 Clock0 has a prescaler up to 1024.
 System clock can be set to 1, 2, 4, or 8 mHz in its default mode.
 
@@ -55,14 +47,3 @@ If we set our 8-bit counter to match at 250, we will have
 If we set our 8-bit counter to match at 125, we'll get interrupts at 1 Hz.
 
 We have options!
-
-
-
-TimeService_Create() initializes/clears all alarms.
-It could dynamically allocate memory if needed.
-
-Destroy would free the memory if we had allocated it.
-It should probably clear the array of alarms because the user could still access them (we won't require the user to pass in all of their pointers to the Destroy function).
-
-Perhaps CreatePeriodicAlarm() should be Add()
-Perhaps we should implement a Remove() as well. This could clear alarm as well as the user's pointer.
