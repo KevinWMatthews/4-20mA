@@ -45,8 +45,8 @@ TEST_GROUP(TimeService)
 
   void checkPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callbackFunction, int16_t alarmPeriod)
   {
-    POINTERS_EQUAL(callbackFunction, TimeService_GetCallbackFunction(alarm));
-    LONGS_EQUAL(alarmPeriod, TimeService_GetCallbackInterval(alarm));
+    POINTERS_EQUAL(callbackFunction, TimeService_Private_GetCallbackFunction(alarm));
+    LONGS_EQUAL(alarmPeriod, TimeService_Private_GetCallbackInterval(alarm));
   }
 };
 
@@ -63,16 +63,14 @@ TEST(TimeService, NullPointerToAnyFunctionWontCrash)
 {
   TimeService_SetPeriodicAlarm(NULL, callback, interval);
   TimeService_RemovePeriodicAlarm(NULL);
-  POINTERS_EQUAL(NULL, TimeService_GetCallbackFunction(NULL));
-  LONGS_EQUAL(PA_NULL_POINTER, TimeService_GetCallbackInterval(NULL));
+  POINTERS_EQUAL(NULL, TimeService_Private_GetCallbackFunction(NULL));
+  LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetCallbackInterval(NULL));
 
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetCounter(NULL));
   TimeService_Private_SetCounter(NULL, 666);
   TimeService_Private_IncrementCounter(NULL);
-  TimeService_Private_ResetCounter(NULL);
 
   LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(NULL));
-  TimeService_Private_SetExecuteNowFlag(NULL);
 }
 
 TEST(TimeService, AddSingleAlarm)

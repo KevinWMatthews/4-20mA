@@ -2,7 +2,13 @@
 #define TimeService_Private_H_
 
 #include "DataTypes.h"
-#include "TimeService.h"    //Wait, what? Can I do this?
+#include "TimeService.h"    //Wait, what? I can do this? Whoa!
+
+//*** These header file is for test code only!! ***//
+//It was created solely to make it easier to spy on and test this module
+//Please be object-oriented, my friend.
+//In other words, mess up your own code.
+
 
 typedef struct PeriodicAlarmStruct
 {
@@ -14,11 +20,13 @@ typedef struct PeriodicAlarmStruct
 
 enum {PA_COUNTER_RESET_VALUE = 0};
 
-int16_t TimeService_Private_GetCounter(PeriodicAlarm self);
+//GO AWAY!
+//Read a book about object-oriented design before you use these
+PeriodicCallback TimeService_Private_GetCallbackFunction(PeriodicAlarm alarm);
+int16_t TimeService_Private_GetCallbackInterval(PeriodicAlarm alarm);
 void TimeService_Private_SetCounter(PeriodicAlarm self, int16_t value);
-BOOL TimeService_Private_IsCallbackTime(PeriodicAlarm self);
+int16_t TimeService_Private_GetCounter(PeriodicAlarm self);
 void TimeService_Private_IncrementCounter(PeriodicAlarm self);
-void TimeService_Private_ResetCounter(PeriodicAlarm self);
-void TimeService_Private_SetExecuteNowFlag(PeriodicAlarm self);
+BOOL TimeService_Private_IsCallbackTime(PeriodicAlarm self);
 
 #endif

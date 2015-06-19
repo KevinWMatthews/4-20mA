@@ -29,3 +29,5 @@ change alarm to self in function argument lists
 change interrupt routine to handle all alarms
 
 LOTS of NULL checks are missing...
+
+Make sure that the executeNow flag is cleard by the service routine!!
