@@ -14,11 +14,11 @@ typedef struct PeriodicAlarmStruct
 
 enum {PA_COUNTER_RESET_VALUE = 0};
 
-int16_t TimeService_GetCounter(PeriodicAlarm self);
-void TimeService_SetCounter(PeriodicAlarm self, int16_t value);
-BOOL TimeService_IsCallbackTime(PeriodicAlarm self);
-void TimeService_IncrementCounter(PeriodicAlarm self);
-void TimeService_ResetCounter(PeriodicAlarm self);
-void TimeService_SetExecuteNowFlag(PeriodicAlarm self);
+int16_t TimeService_Private_GetCounter(PeriodicAlarm self);
+void TimeService_Private_SetCounter(PeriodicAlarm self, int16_t value);
+BOOL TimeService_Private_IsCallbackTime(PeriodicAlarm self);
+void TimeService_Private_IncrementCounter(PeriodicAlarm self);
+void TimeService_Private_ResetCounter(PeriodicAlarm self);
+void TimeService_Private_SetExecuteNowFlag(PeriodicAlarm self);
 
 #endif
