@@ -82,11 +82,14 @@ int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm)
 // }
 
 //*** Interrupt ***//
-int16_t TimeService_GetCounter(PeriodicAlarm self)
+int16_t TimeService_GetCounter_Impl(PeriodicAlarm self)
 {
   CHECK_NULL_RETURN_VALUE(self, PA_NULL_POINTER);
   return self->counter;
 }
+
+//Point function pointer to the standard implementation
+int16_t (*TimeService_GetCounter)(PeriodicAlarm self) = TimeService_GetCounter_Impl;
 
 BOOL TimeService_IsCallbackTime(PeriodicAlarm self)
 {
