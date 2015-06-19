@@ -6,10 +6,12 @@ static PeriodicAlarmStruct alarms[MAX_PERIODIC_ALARMS];
 
 
 //*** File-scope functions ***//
-static void markAlarmAsUnused(PeriodicAlarm alarm)
+static void markSingleAlarmAsUnused(PeriodicAlarm alarm)
 {
   alarm->callback = NULL;
   alarm->period = PA_UNUSED;
+  alarm->counter = PA_UNUSED;
+  alarm->executeNow = FALSE;
 }
 
 static void markAllAlarmsAsUnused(void)
@@ -17,7 +19,7 @@ static void markAllAlarmsAsUnused(void)
   int i;
   for (i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    markAlarmAsUnused(&alarms[i]);
+    markSingleAlarmAsUnused(&alarms[i]);
   }
 }
 
@@ -26,7 +28,6 @@ static void markAllAlarmsAsUnused(void)
 void TimeService_Create(void)
 {
   markAllAlarmsAsUnused();
-  alarms[0].counter = 0;
 }
 
 void TimeService_Destroy(void)
@@ -42,7 +43,8 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(void)
   {
     if (alarms[i].period == PA_UNUSED)
     {
-      alarms[i].period = 0;
+      alarms[i].period = PA_INACTIVE;
+      alarms[i].counter = 0;
       return &alarms[i];
     }
   }
@@ -52,7 +54,7 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(void)
 void TimeService_RemovePeriodicAlarm(PeriodicAlarm alarm)
 {
   CHECK_NULL(alarm);
-  markAlarmAsUnused(alarm);
+  markSingleAlarmAsUnused(alarm);
 }
 
 void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callbackFunction, int16_t alarmPeriod)
@@ -70,16 +72,24 @@ PeriodicCallback TimeService_GetCallbackFunction(PeriodicAlarm alarm)
 
 int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm)
 {
-  CHECK_NULL_RETURN_VALUE(alarm, 0);
+  CHECK_NULL_RETURN_VALUE(alarm, PA_NULL_POINTER);
   return alarm->period;
 }
 
-void TimeService_ServiceAllCallbacks(void)
-{
+// void TimeService_ServiceAllCallbacks(void)
+// {
 
+// }
+
+//*** Interrupt ***//
+int16_t TimeService_GetCounter(PeriodicAlarm self)
+{
+  CHECK_NULL_RETURN_VALUE(self, PA_NULL_POINTER);
+  return self->counter;
 }
 
-int16_t TimeServiceInterrupt_GetCounter(void)
+BOOL TimeService_IsCallbackTime(PeriodicAlarm self)
 {
-  return alarms[0].counter;
+  CHECK_NULL_RETURN_VALUE(self, FALSE);
+  return self->executeNow;
 }

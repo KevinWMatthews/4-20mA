@@ -2,8 +2,6 @@ Todo_TimeService
 
 Rename PeriodicCallback to PeriodicAlarmCallback?
 
-Figure out how to service the callbacks.
-
 Ok, I think I want the counters to be in the same structs as their periods. Perhaps they don't have to be, but it will be MUCH more convenient.
 
 We need to allow the interrupt to increment this counter.
@@ -22,3 +20,8 @@ I think.
 The struct will need to be public in a TimeService_Private header file
 
 We'll create the Main and Timer files too (probably TimeSerice and TimeServiceInterrupt).
+
+Figure out how to service the callbacks.
+
+
+change alarm to self in function argument lists

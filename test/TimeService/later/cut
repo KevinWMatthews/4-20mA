@@ -1,0 +1,42 @@
+
+
+// TEST_GROUP(TimeService_ServiceCallbacks)
+// {
+//   PeriodicAlarm alarm;
+//   PeriodicCallback callback;
+//   int16_t interval;
+
+//   void setup()
+//   {
+//     interval = 1000;
+//     TimeService_Create();
+//   }
+
+//   void teardown()
+//   {
+//     TimeService_Destroy();
+//     mock().checkExpectations();
+//     mock().clear();
+//   }
+// };
+
+//*** Test Group: TimeService_ServiceCallbacks ***//
+// TEST(TimeService_ServiceCallbacks, DoNothingIfNoAlarmsCreated)
+// {
+//   TimeService_Create();
+//   TimeService_ServiceAllCallbacks();
+// }
+
+// TEST(TimeService_ServiceCallbacks, DoNothingIfNoAlarmsUnset)
+// {
+//   TimeService_Create();
+//   TimeService_AddPeriodicAlarm();
+//   TimeService_ServiceAllCallbacks();
+// }
+
+// TEST(TimeService_ServiceCallbacks, DoNothingIfNoAlarmsUnset)
+// {
+//   TimeService_Create();
+//   TimeService_AddPeriodicAlarm();
+//   TimeService_ServiceAllCallbacks();
+// }
