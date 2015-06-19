@@ -50,7 +50,7 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(void)
     if (alarms[i].period == PA_UNUSED)
     {
       alarms[i].period = PA_INACTIVE;
-      TimeService_ResetCounter(&alarms[i]);
+      alarms[i].counter = PA_INACTIVE;
       return &alarms[i];
     }
   }
@@ -68,6 +68,7 @@ void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callback
   CHECK_NULL(alarm);
   alarm->callback = callbackFunction;
   alarm->period = alarmPeriod;
+  alarm->counter = PA_COUNTER_RESET_VALUE;
 }
 
 PeriodicCallback TimeService_GetCallbackFunction(PeriodicAlarm alarm)
@@ -89,12 +90,18 @@ int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm)
 
 void TimeService_ServiceAllCallbacks(void)
 {
-  CHECK_NULL(&alarms[0]);
-  CHECK_NULL(alarms[0].callback);
+  int i;
 
-  if (TimeService_IsCallbackTime(&alarms[0]) == TRUE)
+  for (i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    alarms[0].callback();
+    if (&alarms[i] == NULL || alarms[i].callback == NULL)
+    {
+      continue;
+    }
+    if (TimeService_IsCallbackTime(&alarms[i]) == TRUE)
+    {
+      alarms[i].callback();
+    }
   }
 }
 
@@ -136,10 +143,19 @@ void TimeService_ResetCounter(PeriodicAlarm self)
 
 void TimeService_InterruptRoutine(void)
 {
-  TimeService_IncrementCounter(&alarms[0]);
-  if (TimeService_GetCounter(&alarms[0]) >= TimeService_GetCallbackInterval(&alarms[0]))
+  int i;
+
+  for (i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    TimeService_SetExecuteNowFlag(&alarms[0]);
-    TimeService_ResetCounter(&alarms[0]);
+    if (TimeService_GetCounter(&alarms[i]) == PA_UNUSED || TimeService_GetCounter(&alarms[i]) == PA_INACTIVE)
+    {
+      continue;
+    }
+    TimeService_IncrementCounter(&alarms[i]);
+    if (TimeService_GetCounter(&alarms[i]) >= TimeService_GetCallbackInterval(&alarms[i]))
+    {
+      TimeService_SetExecuteNowFlag(&alarms[i]);
+      TimeService_ResetCounter(&alarms[i]);
+    }
   }
 }

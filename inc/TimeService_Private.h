@@ -12,6 +12,7 @@ typedef struct PeriodicAlarmStruct
   BOOL executeCallbackNow;
 } PeriodicAlarmStruct;
 
+enum {PA_COUNTER_RESET_VALUE = 0};
 
 int16_t TimeService_GetCounter(PeriodicAlarm self);
 void TimeService_SetCounter(PeriodicAlarm self, int16_t value);

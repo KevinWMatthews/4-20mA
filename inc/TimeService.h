@@ -7,7 +7,7 @@ typedef struct PeriodicAlarmStruct * PeriodicAlarm;
 
 #define MAX_PERIODIC_ALARMS 10
 
-enum {PA_INACTIVE = 0, PA_UNUSED = -1, PA_NULL_POINTER = -2};
+enum {PA_INACTIVE = -1, PA_UNUSED = -2, PA_NULL_POINTER = -3};
 
 //Define a function pointer type.
 //Compiler magic!
