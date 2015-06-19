@@ -6,7 +6,14 @@ extern "C"
 
 //CppUTest includes should be after your system includes
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
 #include "Test_Fake_TimeService.h"
+
+
+void callbackFunction(void)
+{
+  mock().actualCall("callbackFunction");
+}
 
 TEST_GROUP(Fake_TimeService)
 {
@@ -15,6 +22,7 @@ TEST_GROUP(Fake_TimeService)
 
   void setup()
   {
+    callback = callbackFunction;
     //Substitute our fake functions for the real ones
     //Rather than manually saving and restoring the pointer,
     //use CppUTest's built-in macro (it automatically restores the pointer!)
@@ -31,6 +39,8 @@ TEST_GROUP(Fake_TimeService)
   {
     TimeService_Destroy();
     Fake_TimeService_Destroy();
+    mock().checkExpectations();
+    mock().clear();
   }
 };
 
@@ -68,4 +78,23 @@ TEST(Fake_TimeService, IsCallbackTimeWhenCounterEqualsPeriod)
 
   LONGS_EQUAL(0, TimeService_GetCounter(alarm));
   LONGS_EQUAL(TRUE, TimeService_IsCallbackTime(alarm));
+}
+
+TEST(Fake_TimeService, NoCallbackExecutedIfIsntTime)
+{
+  TimeService_SetPeriodicAlarm(alarm, callback, 42);
+  Fake_TimeService_SetCounter(alarm, 0);
+  TimeService_InterruptRoutine(alarm);
+
+  TimeService_ServiceAllCallbacks();
+}
+
+TEST(Fake_TimeService, CallbackExecutedWhenItsTime)
+{
+  TimeService_SetPeriodicAlarm(alarm, callback, 42);
+  Fake_TimeService_SetCounter(alarm, 41);
+  TimeService_InterruptRoutine(alarm);
+
+  mock().expectOneCall("callbackFunction");
+  TimeService_ServiceAllCallbacks();
 }

@@ -25,3 +25,7 @@ Figure out how to service the callbacks.
 
 
 change alarm to self in function argument lists
+
+change interrupt routine to handle all alarms
+
+LOTS of NULL checks are missing...

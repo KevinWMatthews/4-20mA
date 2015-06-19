@@ -13,6 +13,11 @@ enum {PA_INACTIVE = 0, PA_UNUSED = -1, PA_NULL_POINTER = -2};
 //Compiler magic!
 typedef void (*PeriodicCallback)(void);
 
+
+//***********************//
+//*** Setup Functions ***//
+//***********************//
+
 //Creates the time service as a whole
 //All alarms are unused
 void TimeService_Create(void);
@@ -41,11 +46,19 @@ void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callback
 PeriodicCallback TimeService_GetCallbackFunction(PeriodicAlarm alarm);
 int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm);
 
-// void TimeService_ServiceAllCallbacks(void);
+
+//*************************//
+//*** Control Functions ***//
+//*************************//
+
+//This function executes any callback functions whose alarm period has expired
+//It should NOT be called from within an interrupt routine since there is no guarantee that the callbacks execute quickly
+//Instead, it should be executed from within a task
+void TimeService_ServiceAllCallbacks(void);
 
 
-//This interrupt routine should be called once per millisecond
-//It shold be called once for each alarm
+//This should be called from within a hardware timer's interrupt routine once per millisecond
+//It must be called for each alarm
 //It controls the timer that is used to determine when the callback will be executed
 void TimeService_InterruptRoutine(PeriodicAlarm self);
 

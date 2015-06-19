@@ -25,6 +25,12 @@ static void markAllAlarmsAsUnused(void)
 
 
 //*** Public functions ***//
+
+
+//***********************//
+//*** Setup Functions ***//
+//***********************//
+
 void TimeService_Create(void)
 {
   markAllAlarmsAsUnused();
@@ -76,12 +82,20 @@ int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm)
   return alarm->period;
 }
 
-// void TimeService_ServiceAllCallbacks(void)
-// {
 
-// }
+//*************************//
+//*** Control Functions ***//
+//*************************//
 
-//*** Interrupt ***//
+void TimeService_ServiceAllCallbacks(void)
+{
+  //TODO NULL checks
+  if (alarms[0].executeCallbackNow == TRUE)
+  {
+    alarms[0].callback();
+  }
+}
+
 int16_t TimeService_GetCounter_Impl(PeriodicAlarm self)
 {
   CHECK_NULL_RETURN_VALUE(self, PA_NULL_POINTER);
