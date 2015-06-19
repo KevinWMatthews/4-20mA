@@ -26,3 +26,8 @@ void Fake_TimeService_IncrementCounter(PeriodicAlarm self)
 {
   fakeCounter++;
 }
+
+void Fake_TimeService_ResetCounter(PeriodicAlarm self)
+{
+  fakeCounter = 0;
+}

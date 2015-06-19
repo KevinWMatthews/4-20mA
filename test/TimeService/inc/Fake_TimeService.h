@@ -11,5 +11,6 @@ void Fake_TimeService_Destroy(void);
 int16_t Fake_TimeService_GetCounter(PeriodicAlarm self);
 void Fake_TimeService_SetCounter(PeriodicAlarm self, int16_t value);
 void Fake_TimeService_IncrementCounter(PeriodicAlarm self);
+void Fake_TimeService_ResetCounter(PeriodicAlarm self);
 
 #endif

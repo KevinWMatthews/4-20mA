@@ -41,14 +41,13 @@ void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callback
 PeriodicCallback TimeService_GetCallbackFunction(PeriodicAlarm alarm);
 int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm);
 
-void TimeService_ServiceAllCallbacks(void);
+// void TimeService_ServiceAllCallbacks(void);
 
 
-//*** Interrupt ***//
-//Declare as function pointer so we can point it to our fake during testing
-extern int16_t (*TimeService_GetCounter)(PeriodicAlarm self);
-BOOL TimeService_IsCallbackTime(PeriodicAlarm self);
-extern void (*TimeService_IncrementCounter)(PeriodicAlarm self);
+//This interrupt routine should be called once per millisecond
+//It shold be called once for each alarm
+//It controls the timer that is used to determine when the callback will be executed
+void TimeService_InterruptRoutine(PeriodicAlarm self);
 
 #include "TimeService_Private.h"
 

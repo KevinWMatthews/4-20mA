@@ -11,7 +11,7 @@ static void markSingleAlarmAsUnused(PeriodicAlarm alarm)
   alarm->callback = NULL;
   alarm->period = PA_UNUSED;
   alarm->counter = PA_UNUSED;
-  alarm->executeNow = FALSE;
+  alarm->executeCallbackNow = FALSE;
 }
 
 static void markAllAlarmsAsUnused(void)
@@ -44,7 +44,7 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(void)
     if (alarms[i].period == PA_UNUSED)
     {
       alarms[i].period = PA_INACTIVE;
-      alarms[i].counter = 0;
+      TimeService_ResetCounter(&alarms[i]);
       return &alarms[i];
     }
   }
@@ -94,7 +94,7 @@ int16_t (*TimeService_GetCounter)(PeriodicAlarm self) = TimeService_GetCounter_I
 BOOL TimeService_IsCallbackTime(PeriodicAlarm self)
 {
   CHECK_NULL_RETURN_VALUE(self, FALSE);
-  return self->executeNow;
+  return self->executeCallbackNow;
 }
 
 void TimeService_IncrementCounter_Impl(PeriodicAlarm self)
@@ -102,3 +102,22 @@ void TimeService_IncrementCounter_Impl(PeriodicAlarm self)
 }
 
 void (*TimeService_IncrementCounter)(PeriodicAlarm self) = TimeService_IncrementCounter_Impl;
+
+void TimeService_ResetCounter_Impl(PeriodicAlarm self)
+{
+  //TODO NULL check
+  self->counter = 0;
+}
+
+void (*TimeService_ResetCounter)(PeriodicAlarm self) = TimeService_ResetCounter_Impl;
+
+void TimeService_InterruptRoutine(PeriodicAlarm self)
+{
+  //TODO NULL check
+  TimeService_IncrementCounter(self);
+  if (TimeService_GetCounter(self) >= self->period)
+  {
+    self->executeCallbackNow = TRUE;
+    TimeService_ResetCounter(self);
+  }
+}
