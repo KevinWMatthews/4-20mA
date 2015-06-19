@@ -1,11 +1,18 @@
 extern "C"
 {
   #include "TimeService.h"
+  #include <stdio.h>
 }
 
 //CppUTest includes should be after your and system includes
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
 #include "Test_TimeService.h"
+
+void callbackFunction(void)
+{
+  mock().actualCall("callbackFunction");
+}
 
 TEST_GROUP(TimeService)
 {
@@ -22,6 +29,8 @@ TEST_GROUP(TimeService)
   void teardown()
   {
     TimeService_Destroy();
+    mock().checkExpectations();
+    mock().clear();
   }
 
   void checkPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callbackFunction, int16_t alarmPeriod)
@@ -48,7 +57,12 @@ TEST(TimeService, NullPointerToAnyFunctionWontCrash)
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_GetCallbackInterval(NULL));
 
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_GetCounter(NULL));
+  TimeService_SetCounter(NULL, 666);
+  TimeService_IncrementCounter(NULL);
+  TimeService_ResetCounter(NULL);
+
   LONGS_EQUAL(FALSE, TimeService_IsCallbackTime(NULL));
+  TimeService_SetExecuteNowFlag(NULL);
 }
 
 TEST(TimeService, AddSingleAlarm)
@@ -217,4 +231,71 @@ TEST(TimeService, PutHolesInAlarmArray)
 
   //TimeService should be maxed out
   POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm());
+}
+
+TEST(TimeService, CounterZeroAfterAdd)
+{
+  alarm = TimeService_AddPeriodicAlarm();
+
+  LONGS_EQUAL(0, TimeService_GetCounter(alarm));
+}
+
+TEST(TimeService, SetCounter)
+{
+  int16_t testValue = 42;
+  alarm = TimeService_AddPeriodicAlarm();
+  TimeService_SetCounter(alarm, testValue);
+
+  LONGS_EQUAL(testValue, TimeService_GetCounter(alarm));
+}
+
+TEST(TimeService, IncrementFakeCounter)
+{
+  alarm = TimeService_AddPeriodicAlarm();
+  TimeService_IncrementCounter(alarm);
+
+  LONGS_EQUAL(1, TimeService_GetCounter(alarm));
+}
+
+TEST(TimeService, NotCallbackTimeWhenCounterLessThanPeriod)
+{
+  alarm = TimeService_AddPeriodicAlarm();
+  TimeService_SetPeriodicAlarm(alarm, callback, 42);
+  TimeService_InterruptRoutine();
+
+  LONGS_EQUAL(FALSE, TimeService_IsCallbackTime(alarm));
+}
+
+TEST(TimeService, IsCallbackTimeWhenCounterEqualsPeriod)
+{
+  alarm = TimeService_AddPeriodicAlarm();
+  TimeService_SetPeriodicAlarm(alarm, callback, 42);
+  TimeService_SetCounter(alarm, 41);
+  TimeService_InterruptRoutine();
+
+  LONGS_EQUAL(0, TimeService_GetCounter(alarm));
+  LONGS_EQUAL(TRUE, TimeService_IsCallbackTime(alarm));
+}
+
+TEST(TimeService, NoCallbackExecutedIfIsntTime)
+{
+  alarm = TimeService_AddPeriodicAlarm();
+  TimeService_SetPeriodicAlarm(alarm, callback, 42);
+  TimeService_SetCounter(alarm, 0);
+  TimeService_InterruptRoutine();
+
+  TimeService_ServiceAllCallbacks();
+}
+
+TEST(TimeService, CallbackExecutedWhenItsTime)
+{
+  alarm = TimeService_AddPeriodicAlarm();
+  callback = callbackFunction;
+
+  TimeService_SetPeriodicAlarm(alarm, callback, 42);
+  TimeService_SetCounter(alarm, 41);
+  TimeService_InterruptRoutine();
+
+  mock().expectOneCall("callbackFunction");
+  TimeService_ServiceAllCallbacks();
 }

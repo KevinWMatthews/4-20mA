@@ -13,10 +13,11 @@ typedef struct PeriodicAlarmStruct
 } PeriodicAlarmStruct;
 
 
-//Declare as function pointer so we can point it to our fake during testing
-extern int16_t (*TimeService_GetCounter)(PeriodicAlarm self);
+int16_t TimeService_GetCounter(PeriodicAlarm self);
+void TimeService_SetCounter(PeriodicAlarm self, int16_t value);
 BOOL TimeService_IsCallbackTime(PeriodicAlarm self);
-extern void (*TimeService_IncrementCounter)(PeriodicAlarm self);
-extern void (*TimeService_ResetCounter)(PeriodicAlarm self);
+void TimeService_IncrementCounter(PeriodicAlarm self);
+void TimeService_ResetCounter(PeriodicAlarm self);
+void TimeService_SetExecuteNowFlag(PeriodicAlarm self);
 
 #endif

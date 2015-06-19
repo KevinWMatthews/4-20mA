@@ -89,21 +89,20 @@ int16_t TimeService_GetCallbackInterval(PeriodicAlarm alarm)
 
 void TimeService_ServiceAllCallbacks(void)
 {
-  //TODO NULL checks
-  if (alarms[0].executeCallbackNow == TRUE)
+  CHECK_NULL(&alarms[0]);
+  CHECK_NULL(alarms[0].callback);
+
+  if (TimeService_IsCallbackTime(&alarms[0]) == TRUE)
   {
     alarms[0].callback();
   }
 }
 
-int16_t TimeService_GetCounter_Impl(PeriodicAlarm self)
+int16_t TimeService_GetCounter(PeriodicAlarm self)
 {
   CHECK_NULL_RETURN_VALUE(self, PA_NULL_POINTER);
   return self->counter;
 }
-
-//Point function pointer to the standard implementation
-int16_t (*TimeService_GetCounter)(PeriodicAlarm self) = TimeService_GetCounter_Impl;
 
 BOOL TimeService_IsCallbackTime(PeriodicAlarm self)
 {
@@ -111,27 +110,36 @@ BOOL TimeService_IsCallbackTime(PeriodicAlarm self)
   return self->executeCallbackNow;
 }
 
-void TimeService_IncrementCounter_Impl(PeriodicAlarm self)
+void TimeService_SetExecuteNowFlag(PeriodicAlarm self)
 {
+  CHECK_NULL(self);
+  self->executeCallbackNow = TRUE;
 }
 
-void (*TimeService_IncrementCounter)(PeriodicAlarm self) = TimeService_IncrementCounter_Impl;
-
-void TimeService_ResetCounter_Impl(PeriodicAlarm self)
+void TimeService_IncrementCounter(PeriodicAlarm self)
 {
-  //TODO NULL check
+  CHECK_NULL(self);
+  self->counter++;
+}
+
+void TimeService_SetCounter(PeriodicAlarm self, int16_t value)
+{
+  CHECK_NULL(self);
+  self->counter = value;
+}
+
+void TimeService_ResetCounter(PeriodicAlarm self)
+{
+  CHECK_NULL(self);
   self->counter = 0;
 }
 
-void (*TimeService_ResetCounter)(PeriodicAlarm self) = TimeService_ResetCounter_Impl;
-
-void TimeService_InterruptRoutine(PeriodicAlarm self)
+void TimeService_InterruptRoutine(void)
 {
-  //TODO NULL check
-  TimeService_IncrementCounter(self);
-  if (TimeService_GetCounter(self) >= self->period)
+  TimeService_IncrementCounter(&alarms[0]);
+  if (TimeService_GetCounter(&alarms[0]) >= TimeService_GetCallbackInterval(&alarms[0]))
   {
-    self->executeCallbackNow = TRUE;
-    TimeService_ResetCounter(self);
+    TimeService_SetExecuteNowFlag(&alarms[0]);
+    TimeService_ResetCounter(&alarms[0]);
   }
 }

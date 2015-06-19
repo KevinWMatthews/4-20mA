@@ -58,9 +58,8 @@ void TimeService_ServiceAllCallbacks(void);
 
 
 //This should be called from within a hardware timer's interrupt routine once per millisecond
-//It must be called for each alarm
-//It controls the timer that is used to determine when the callback will be executed
-void TimeService_InterruptRoutine(PeriodicAlarm self);
+//It controls the timer that is used to determine when a callback will be executed
+void TimeService_InterruptRoutine(void);
 
 #include "TimeService_Private.h"
 
