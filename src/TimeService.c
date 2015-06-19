@@ -96,3 +96,9 @@ BOOL TimeService_IsCallbackTime(PeriodicAlarm self)
   CHECK_NULL_RETURN_VALUE(self, FALSE);
   return self->executeNow;
 }
+
+void TimeService_IncrementCounter_Impl(PeriodicAlarm self)
+{
+}
+
+void (*TimeService_IncrementCounter)(PeriodicAlarm self) = TimeService_IncrementCounter_Impl;

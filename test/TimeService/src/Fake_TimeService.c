@@ -21,3 +21,8 @@ void Fake_TimeService_SetCounter(PeriodicAlarm self, int16_t value)
 {
   fakeCounter = value;
 }
+
+void Fake_TimeService_IncrementCounter(PeriodicAlarm self)
+{
+  fakeCounter++;
+}

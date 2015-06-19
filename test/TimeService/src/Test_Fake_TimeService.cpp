@@ -17,11 +17,13 @@ TEST_GROUP(Fake_TimeService)
     TimeService_Create();
     Fake_TimeService_Create();
     alarm = TimeService_AddPeriodicAlarm();
+    Fake_TimeService_SetCounter(alarm, 0);  //This should be done by Add(), but I don't want to convert that one to a function pointer too
 
-    //Substitute our fake Get() function for the real one
-    //Rather than manuall saving and restoring the pointer,
+    //Substitute our fake functions for the real ones
+    //Rather than manually saving and restoring the pointer,
     //use CppUTest's built-in macro (it automatically restores the pointer!)
-    UT_PTR_SET(TimeService_GetCounter,Fake_TimeService_GetCounter);
+    UT_PTR_SET(TimeService_GetCounter, Fake_TimeService_GetCounter);
+    UT_PTR_SET(TimeService_IncrementCounter, Fake_TimeService_IncrementCounter);
   }
 
   void teardown()
@@ -33,7 +35,7 @@ TEST_GROUP(Fake_TimeService)
 
 TEST(Fake_TimeService, FakeCounterUnusedAfterAdd)
 {
-  LONGS_EQUAL(PA_UNUSED, TimeService_GetCounter(alarm));
+  LONGS_EQUAL(0, TimeService_GetCounter(alarm));
 }
 
 TEST(Fake_TimeService, SetFakeCounter)
@@ -41,4 +43,10 @@ TEST(Fake_TimeService, SetFakeCounter)
   int16_t testValue = 42;
   Fake_TimeService_SetCounter(alarm, testValue);
   LONGS_EQUAL(testValue, TimeService_GetCounter(alarm));
+}
+
+TEST(Fake_TimeService, IncrementFakeCounter)
+{
+  TimeService_IncrementCounter(alarm);
+  LONGS_EQUAL(1, TimeService_GetCounter(alarm));
 }

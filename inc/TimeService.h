@@ -48,6 +48,7 @@ void TimeService_ServiceAllCallbacks(void);
 //Declare as function pointer so we can point it to our fake during testing
 extern int16_t (*TimeService_GetCounter)(PeriodicAlarm self);
 BOOL TimeService_IsCallbackTime(PeriodicAlarm self);
+extern void (*TimeService_IncrementCounter)(PeriodicAlarm self);
 
 #include "TimeService_Private.h"
 
