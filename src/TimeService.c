@@ -196,6 +196,7 @@ void TimeService_ServiceAllCallbacks(void)
     if (getExecuteCallbackNowFlag(thisAlarm) == TRUE)
     {
       executeCallback(thisAlarm);
+      setExecuteCallbackNowFlag(thisAlarm, FALSE);
     }
   }
 }

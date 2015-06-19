@@ -330,3 +330,18 @@ TEST(TimeService, ExecuteMultipleCallbacks)
   mock().expectOneCall("callbackFunction2");
   TimeService_ServiceAllCallbacks();
 }
+
+TEST(TimeService, CallbackFlagClearedAfterExecution)
+{
+  alarm = TimeService_AddPeriodicAlarm();
+  callback = callbackFunction;
+
+  TimeService_SetPeriodicAlarm(alarm, callback, 42);
+  TimeService_Private_SetCounter(alarm, 41);
+  TimeService_InterruptRoutine();
+
+  mock().expectOneCall("callbackFunction");
+  TimeService_ServiceAllCallbacks();
+  TimeService_InterruptRoutine();
+  TimeService_ServiceAllCallbacks();
+}
