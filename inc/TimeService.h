@@ -9,53 +9,54 @@ typedef struct PeriodicAlarmStruct * PeriodicAlarm;
 
 enum {PA_INACTIVE = -1, PA_UNUSED = -2, PA_NULL_POINTER = -3};
 
-//Define a function pointer type.
+//Define a function pointer type for the callback.
 //Compiler magic!
-typedef void (*PeriodicCallback)(void);
+typedef void (*PeriodicAlarmCallback)(void);
+
 
 
 //***********************//
 //*** Setup Functions ***//
 //***********************//
-
-//Creates the time service as a whole
-//All alarms are unused
+//Creates and initializes the TimeService as a whole.
+//No alarms are created; they must be added individually by the user.
 void TimeService_Create(void);
 
-//Resets the time service as a whole
-//All alarms are unused
+//Resets the time service as a whole, destroying all alarms.
+//It is the user's responsibility to discard all PeriodicAlarm pointers
+//after the TimeService is destroyed,
+//although the program shouldn't crash if you do.
 void TimeService_Destroy(void);
 
-//Returns a pointer to the periodic alarm
-//This alarm will be marked as in use but inactive:
-//  callback = NULL
-//  period = PA_INACTIVE
+//Creates and returns a pointer to a new periodic alarm.
+//This alarm will be marked as inactive until it is set.
 PeriodicAlarm TimeService_AddPeriodicAlarm(void);
 
-//Removes the given alarm from the TimeService
-//  callback = NULL
-//  period = PA_UNUSED
-//It is the user's responsibility to discard pointer after the alarm is removed
-void TimeService_RemovePeriodicAlarm(PeriodicAlarm alarm);
+//Removes the given alarm from the TimeService.
+//It is the user's responsibility to discard the pointer after the alarm is removed,
+//although the program shouldn't crash if you do.
+void TimeService_RemovePeriodicAlarm(PeriodicAlarm self);
 
-//Once set, the periodic alarm always serviced
-//To stop a periodic alarm from executing, set its period to PA_INACTIVE
-void TimeService_SetPeriodicAlarm(PeriodicAlarm alarm, PeriodicCallback callbackFunction, int16_t alarmPeriod);
+//Once set, the periodic alarm always serviced.
+//To stop a periodic alarm from executing, set its period to PA_INACTIVE.
+void TimeService_SetPeriodicAlarm(PeriodicAlarm self, PeriodicAlarmCallback callbackFunction, int16_t alarmPeriod);
+
 
 
 //*************************//
 //*** Control Functions ***//
 //*************************//
-
-//This function executes any callback functions whose alarm period has expired
-//It should NOT be called from within an interrupt routine since there is no guarantee that the callbacks execute quickly
-//Instead, it should be executed from within a task
+//Execute any callback functions whose alarm period has expired.
+//This function should NOT be called from within an interrupt routine
+//because there is no guarantee that callbacks will execute quickly.
+//Instead, it should be executed from within a task or the main loop.
 void TimeService_ServiceAllCallbacks(void);
 
 
-//This should be called from within a hardware timer's interrupt routine once per millisecond
-//It controls the timer that is used to determine when a callback will be executed
-void TimeService_InterruptRoutine(void);
+//Increment and check alarm timers.
+//This function should be called once per millisecond.
+//It is designed to be executed from within an interrupt routine.
+void TimeService_TimerTick(void);
 
 #include "TimeService_Private.h"
 

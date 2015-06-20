@@ -8,13 +8,13 @@ static PeriodicAlarmStruct alarms[MAX_PERIODIC_ALARMS];
 //****************************//
 //*** File-scope functions ***//
 //****************************//
-static void setCallback(PeriodicAlarm self, PeriodicCallback callback)
+static void setCallback(PeriodicAlarm self, PeriodicAlarmCallback callback)
 {
   CHECK_NULL(self);
   self->callback = callback;
 }
 
-static PeriodicCallback getCallback(PeriodicAlarm self)
+static PeriodicAlarmCallback getCallback(PeriodicAlarm self)
 {
   CHECK_NULL_RETURN_VALUE(self, NULL);
   return self->callback;
@@ -104,7 +104,7 @@ static void executeCallback(PeriodicAlarm self)
 //I added an extra layer of abstraction to make it easier to modify (hopefully)
 //Maybe I'll discover a better way to test the module, in which case I'll modify these Private functions
 //while leaving the file's static functions alone.
-PeriodicCallback TimeService_Private_GetCallbackFunction(PeriodicAlarm self)
+PeriodicAlarmCallback TimeService_Private_GetCallbackFunction(PeriodicAlarm self)
 {
   return getCallback(self);
 }
@@ -166,13 +166,13 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(void)
   return NULL;
 }
 
-void TimeService_RemovePeriodicAlarm(PeriodicAlarm alarm)
+void TimeService_RemovePeriodicAlarm(PeriodicAlarm self)
 {
-  CHECK_NULL(alarm);
-  markSingleAlarmAsUnused(alarm);
+  CHECK_NULL(self);
+  markSingleAlarmAsUnused(self);
 }
 
-void TimeService_SetPeriodicAlarm(PeriodicAlarm self, PeriodicCallback callbackFunction, int16_t alarmPeriod)
+void TimeService_SetPeriodicAlarm(PeriodicAlarm self, PeriodicAlarmCallback callbackFunction, int16_t alarmPeriod)
 {
   CHECK_NULL(self);
   setCallback(self, callbackFunction);
@@ -201,7 +201,7 @@ void TimeService_ServiceAllCallbacks(void)
   }
 }
 
-void TimeService_InterruptRoutine(void)
+void TimeService_TimerTick(void)
 {
   PeriodicAlarm thisAlarm;
   int i;

@@ -12,7 +12,7 @@
 
 typedef struct PeriodicAlarmStruct
 {
-  PeriodicCallback callback;
+  PeriodicAlarmCallback callback;
   int16_t period;
   int16_t counter;
   BOOL executeCallbackNow;
@@ -22,8 +22,8 @@ enum {PA_COUNTER_RESET_VALUE = 0};
 
 //GO AWAY!
 //Read a book about object-oriented design before you use these
-PeriodicCallback TimeService_Private_GetCallbackFunction(PeriodicAlarm alarm);
-int16_t TimeService_Private_GetCallbackInterval(PeriodicAlarm alarm);
+PeriodicAlarmCallback TimeService_Private_GetCallbackFunction(PeriodicAlarm self);
+int16_t TimeService_Private_GetCallbackInterval(PeriodicAlarm self);
 void TimeService_Private_SetCounter(PeriodicAlarm self, int16_t value);
 int16_t TimeService_Private_GetCounter(PeriodicAlarm self);
 void TimeService_Private_IncrementCounter(PeriodicAlarm self);
