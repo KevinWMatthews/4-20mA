@@ -8,7 +8,7 @@ AddPeridicAlarm() marks the next alarm as used and returns a pointer to this ala
 
 SetPeriodicAlarm() allows the user to set the callback function and the interval at which it will be called
 
-GetCallbackFunction() and GetCallbackInterval() are used to query the alarm for its details.
+GetCallback() and GetPeriod() are used to query the alarm for its details.
 
 
 

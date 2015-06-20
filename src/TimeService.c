@@ -104,12 +104,12 @@ static void executeCallback(PeriodicAlarm self)
 //I added an extra layer of abstraction to make it easier to modify (hopefully)
 //Maybe I'll discover a better way to test the module, in which case I'll modify these Private functions
 //while leaving the file's static functions alone.
-PeriodicAlarmCallback TimeService_Private_GetCallbackFunction(PeriodicAlarm self)
+PeriodicAlarmCallback TimeService_Private_GetCallback(PeriodicAlarm self)
 {
   return getCallback(self);
 }
 
-int16_t TimeService_Private_GetCallbackInterval(PeriodicAlarm self)
+int16_t TimeService_Private_GetPeriod(PeriodicAlarm self)
 {
   getPeriod(self);
 }

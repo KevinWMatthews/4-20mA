@@ -28,11 +28,11 @@ TEST_GROUP(TimeService)
 {
   PeriodicAlarm alarm;
   PeriodicAlarmCallback callback;
-  int16_t interval;
+  int16_t period;
 
   void setup()
   {
-    interval = 42;
+    period = 42;
     TimeService_Create();
   }
 
@@ -45,8 +45,8 @@ TEST_GROUP(TimeService)
 
   void checkPeriodicAlarm(PeriodicAlarm alarm, PeriodicAlarmCallback callbackFunction, int16_t alarmPeriod)
   {
-    POINTERS_EQUAL(callbackFunction, TimeService_Private_GetCallbackFunction(alarm));
-    LONGS_EQUAL(alarmPeriod, TimeService_Private_GetCallbackInterval(alarm));
+    POINTERS_EQUAL(callbackFunction, TimeService_Private_GetCallback(alarm));
+    LONGS_EQUAL(alarmPeriod, TimeService_Private_GetPeriod(alarm));
   }
 };
 
@@ -61,10 +61,10 @@ TEST(TimeService, DestroySupportsMultipleCalls)
 
 TEST(TimeService, NullPointerToAnyFunctionWontCrash)
 {
-  TimeService_SetPeriodicAlarm(NULL, callback, interval);
+  TimeService_SetPeriodicAlarm(NULL, callback, period);
   TimeService_RemovePeriodicAlarm(NULL);
-  POINTERS_EQUAL(NULL, TimeService_Private_GetCallbackFunction(NULL));
-  LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetCallbackInterval(NULL));
+  POINTERS_EQUAL(NULL, TimeService_Private_GetCallback(NULL));
+  LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetPeriod(NULL));
 
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetCounter(NULL));
   TimeService_Private_SetCounter(NULL, 666);
@@ -171,9 +171,9 @@ TEST(TimeService, DestroyMaxAlarm)
 TEST(TimeService, SetSinglePeriodicAlarm)
 {
   alarm = TimeService_AddPeriodicAlarm();
-  TimeService_SetPeriodicAlarm(alarm, callback, interval);
+  TimeService_SetPeriodicAlarm(alarm, callback, period);
 
-  checkPeriodicAlarm(alarm, callback, interval);
+  checkPeriodicAlarm(alarm, callback, period);
   LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeService_Private_GetCounter(alarm));
   LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(alarm));
 }
@@ -190,12 +190,12 @@ TEST(TimeService, SetMaxAlarms)
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    TimeService_SetPeriodicAlarm(alarmArray[i], callbackArray[i], i*100+interval);
+    TimeService_SetPeriodicAlarm(alarmArray[i], callbackArray[i], i*100+period);
   }
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    checkPeriodicAlarm(alarmArray[i], callbackArray[i], i*100+interval);
+    checkPeriodicAlarm(alarmArray[i], callbackArray[i], i*100+period);
     LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeService_Private_GetCounter(alarmArray[i]));
     LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(alarmArray[i]));
   }
