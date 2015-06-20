@@ -69,12 +69,12 @@ TEST(TimeService, NullPointerToAnyFunctionWontCrash)
 {
   TimeService_RemovePeriodicAlarm(NULL);
   TimeService_ActivatePeriodicAlarm(NULL);
+  TimeService_DeactivatePeriodicAlarm(NULL);
 
   POINTERS_EQUAL(NULL, TimeService_Private_GetCallback(NULL));
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetPeriod(NULL));
   TimeService_Private_SetCounter(NULL, 666);
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetCounter(NULL));
-  TimeService_Private_IncrementCounter(NULL);
   LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(NULL));
 }
 
@@ -263,6 +263,15 @@ TEST(TimeService, ActivateNonconsecutiveAlarms)
   }
 }
 
+TEST(TimeService, DeactivateSinglePeriodicAlarm)
+{
+  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  TimeService_ActivatePeriodicAlarm(alarm);
+  TimeService_DeactivatePeriodicAlarm(alarm);
+  checkCallbackAndPeriod(alarm, callback, period);
+  checkCounterAndFlag(alarm, PA_INACTIVE, FALSE);
+}
+
 TEST(TimeService, SetCounter)
 {
   int16_t testValue = 42;
@@ -275,19 +284,30 @@ TEST(TimeService, SetCounter)
 TEST(TimeService, IncrementCounter)
 {
   alarm = TimeService_AddPeriodicAlarm(callback, period);
-  //TODO activate
-  TimeService_Private_SetCounter(alarm, 0);
-  TimeService_Private_IncrementCounter(alarm);
+  TimeService_ActivatePeriodicAlarm(alarm);
+
+  TimeService_TimerTick();
 
   LONGS_EQUAL(1, TimeService_Private_GetCounter(alarm));
 }
 
-TEST(TimeService, CountersWontIncrementIfAlarmIsNotSet)
+TEST(TimeService, CountersWontIncrementIfAlarmIsNotActivated)
 {
   alarm = TimeService_AddPeriodicAlarm(callback, period);
-  TimeService_Private_IncrementCounter(alarm);
+  TimeService_TimerTick();
 
-  LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeService_Private_GetCounter(alarm));
+  LONGS_EQUAL(PA_INACTIVE, TimeService_Private_GetCounter(alarm));
+}
+
+TEST(TimeService, CountersWontIncrementIfAlarmIsDeactivated)
+{
+  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  TimeService_ActivatePeriodicAlarm(alarm);
+  TimeService_DeactivatePeriodicAlarm(alarm);
+
+  TimeService_TimerTick();
+
+  LONGS_EQUAL(PA_INACTIVE, TimeService_Private_GetCounter(alarm));
 }
 
 TEST(TimeService, NotCallbackTimeWhenCounterLessThanPeriod)

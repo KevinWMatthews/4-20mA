@@ -124,20 +124,14 @@ int16_t TimeService_Private_GetCounter(PeriodicAlarm self)
   return getCounter(self);
 }
 
-void TimeService_Private_IncrementCounter(PeriodicAlarm self)
-{
-  incrementCounter(self);
-}
-
 BOOL TimeService_Private_IsCallbackTime(PeriodicAlarm self)
 {
   return getExecuteCallbackNowFlag(self);
 }
 
-//******************************//
-//*** Public Setup Functions ***//
-//******************************//
-//Used by the user to set up periodic alarms
+//************************//
+//*** Public Functions ***//
+//************************//
 void TimeService_Create(void)
 {
   markAllAlarmsAsUnused();
@@ -178,12 +172,11 @@ void TimeService_ActivatePeriodicAlarm(PeriodicAlarm self)
   setCounter(self, PA_COUNTER_RESET_VALUE);
 }
 
+void TimeService_DeactivatePeriodicAlarm(PeriodicAlarm self)
+{
+  setCounter(self, PA_INACTIVE);
+}
 
-
-//********************************//
-//*** Public Control Functions ***//
-//********************************//
-//Used by the user to service periodic alarms
 void TimeService_ServiceAllCallbacks(void)
 {
   PeriodicAlarm thisAlarm;
