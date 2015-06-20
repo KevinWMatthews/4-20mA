@@ -14,32 +14,38 @@ static uint8_t * adclPtr;
 //**************************//
 BOOL Adc_IsAdcBusy(void)
 {
+  CHECK_NULL_RETURN_VALUE(adcsrPtr, FALSE);
   return IFBIT(*adcsrPtr, ADSC);
 }
 
 void Adc_StartConversion(void)
 {
+  CHECK_NULL(adcsrPtr);
   *adcsrPtr = 1 << ADSC;
 }
 
 BOOL Adc_IsInterruptFlagSet(void)
 {
+  CHECK_NULL_RETURN_VALUE(adcsrPtr, FALSE);
   return IFBIT(*adcsrPtr, ADIF);
 }
 
 uint8_t Adc_ReadDataRegister_High(void)
 {
   //HW only puts values in the lowest two bits of the high register
+  CHECK_NULL_RETURN_VALUE(adchPtr, 0);
   return (*adchPtr & 0b11);
 }
 
 uint8_t Adc_ReadDataRegister_Low(void)
 {
+  CHECK_NULL_RETURN_VALUE(adclPtr, 0);
   return *adclPtr;
 }
 
 void Adc_ClearInterruptFlag(void)
 {
+  CHECK_NULL(adcsrPtr);
   *adcsrPtr = 1 << ADIF;
 }
 
@@ -65,34 +71,40 @@ void Adc_Init(void)
 
 void Adc_Private_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
 {
+  CHECK_NULL(admuxPtr);
   *admuxPtr &= ~(0x03 << REFS0);
   *admuxPtr |= (voltageSource & 0x03) << REFS0;
 }
 
 void Adc_Private_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
 {
+  CHECK_NULL(admuxPtr);
   *admuxPtr &= ~(0x01 << ADLAR);
   *admuxPtr |= (resultAdjust & 0x01) << ADLAR;
 }
 
 void Adc_Private_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
 {
+  CHECK_NULL(admuxPtr);
   *admuxPtr &= ~(0x1f << MUX0);
   *admuxPtr |= (inputAndGain & 0x1f) << MUX0;
 }
 
 void Adc_Private_SelectPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
 {
+  CHECK_NULL(adcsrPtr);
   *adcsrPtr &= ~(0x07 << ADPS0);
   *adcsrPtr |= (prescaleFactor & 0x07) << ADPS0;
 }
 
 void Adc_Enable(void)
 {
+  CHECK_NULL(adcsrPtr);
   *adcsrPtr = ADC_ENABLED << ADEN;
 }
 
 void Adc_FirstConversion(void)
 {
+  CHECK_NULL(adcsrPtr);
   *adcsrPtr = 1 << ADSC;
 }

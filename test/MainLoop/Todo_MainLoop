@@ -1,1 +1,16 @@
 Todo_Main
+
+Initialize everything
+
+  Loop:
+if conversion start (delay too?)
+  Get AtoD reading
+  Convert into 4-20 reading (LineFit)
+
+
+ServiceAllAlarms:
+  Once per second:
+    Start AtoD conversion.
+
+  240 times per second:
+    Send Reading to Display

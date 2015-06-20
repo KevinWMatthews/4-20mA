@@ -1,3 +1,5 @@
 TODO_AtoD
 
 I think we might want to move the ADC setup after all.
+
+Rename Setup() to Init()

@@ -5,3 +5,5 @@ See if you can find any AVR demo code to demonstrate:
 Look up SREG, I-bit
 
 Refactor select() functions. Can add something to BitManip.h
+
+I threw in null checks with no testing. Go rething them!
