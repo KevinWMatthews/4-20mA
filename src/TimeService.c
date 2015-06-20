@@ -1,8 +1,12 @@
 #include "TimeService.h"
 
 
+
+//****************************//
 //*** File-scope variables ***//
+//****************************//
 static PeriodicAlarmStruct alarms[MAX_PERIODIC_ALARMS];
+
 
 
 //****************************//
@@ -97,6 +101,8 @@ static void executeCallback(PeriodicAlarm self)
   self->callback();
 }
 
+
+
 //*************************//
 //*** Private functions ***//
 //*************************//
@@ -128,6 +134,8 @@ BOOL TimeService_Private_IsCallbackTime(PeriodicAlarm self)
 {
   return getExecuteCallbackNowFlag(self);
 }
+
+
 
 //************************//
 //*** Public Functions ***//
@@ -163,7 +171,6 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(PeriodicAlarmCallback callback, int16
 
 void TimeService_RemovePeriodicAlarm(PeriodicAlarm self)
 {
-  CHECK_NULL(self);
   markSingleAlarmAsUnused(self);
 }
 

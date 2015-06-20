@@ -3,6 +3,4 @@ Todo_TimeService
 Think about splitting counter and period enums for clarity.
 Perhaps we should add devoted activate anddeactivate functions.
 
-update markSingleAlarm
-
 Test deactivate() with nonconsecutive alarms?
