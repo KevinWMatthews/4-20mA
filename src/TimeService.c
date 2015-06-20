@@ -148,7 +148,7 @@ void TimeService_Destroy(void)
   markAllAlarmsAsUnused();
 }
 
-PeriodicAlarm TimeService_AddPeriodicAlarm(void)
+PeriodicAlarm TimeService_AddPeriodicAlarm(PeriodicAlarmCallback callback, int16_t period)
 {
   PeriodicAlarm thisAlarm;
   int i;
@@ -158,7 +158,8 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(void)
     thisAlarm = &alarms[i];
     if (getPeriod(thisAlarm) == PA_UNUSED)
     {
-      setPeriod(thisAlarm, PA_INACTIVE);
+      setCallback(thisAlarm, callback);
+      setPeriod(thisAlarm, period);
       setCounter(thisAlarm, PA_INACTIVE);
       return thisAlarm;
     }
