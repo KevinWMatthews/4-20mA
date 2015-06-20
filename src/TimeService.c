@@ -173,13 +173,11 @@ void TimeService_RemovePeriodicAlarm(PeriodicAlarm self)
   markSingleAlarmAsUnused(self);
 }
 
-void TimeService_SetPeriodicAlarm(PeriodicAlarm self, PeriodicAlarmCallback callbackFunction, int16_t alarmPeriod)
+void TimeService_ActivatePeriodicAlarm(PeriodicAlarm self)
 {
-  CHECK_NULL(self);
-  setCallback(self, callbackFunction);
-  setPeriod(self, alarmPeriod);
   setCounter(self, PA_COUNTER_RESET_VALUE);
 }
+
 
 
 //********************************//

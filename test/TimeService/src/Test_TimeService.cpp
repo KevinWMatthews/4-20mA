@@ -68,6 +68,7 @@ TEST(TimeService, DestroySupportsMultipleCalls)
 TEST(TimeService, NullPointerToAnyFunctionWontCrash)
 {
   TimeService_RemovePeriodicAlarm(NULL);
+  TimeService_ActivatePeriodicAlarm(NULL);
 
   POINTERS_EQUAL(NULL, TimeService_Private_GetCallback(NULL));
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetPeriod(NULL));
@@ -166,39 +167,7 @@ TEST(TimeService, DestroyMaxAlarm)
   }
 }
 
-TEST(TimeService, SetSinglePeriodicAlarm)
-{
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
-  //TODO activate
-  TimeService_Private_SetCounter(alarm, 0);
-  checkCallbackAndPeriod(alarm, callback, period);
-  LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeService_Private_GetCounter(alarm));
-  LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(alarm));
-}
-
-TEST(TimeService, SetMaxAlarms)
-{
-  PeriodicAlarm alarmArray[MAX_PERIODIC_ALARMS];
-  PeriodicAlarmCallback callbackArray[MAX_PERIODIC_ALARMS];
-
-  for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
-  {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callbackArray[i], i*100+period);
-  }
-
-  // for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
-  // {
-  //   TimeService_SetPeriodicAlarm(alarmArray[i], callbackArray[i], i*100+period);
-  // }
-
-  for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
-  {
-    checkCallbackAndPeriod(alarmArray[i], callbackArray[i], i*100+period);
-    checkCounterAndFlag(alarmArray[i], PA_INACTIVE, FALSE);
-  }
-}
-
-TEST(TimeService, PutHolesInAlarmArray)
+TEST(TimeService, AddRemove_PutHolesInAlarmArray)
 {
   PeriodicAlarm alarmArray[MAX_PERIODIC_ALARMS];
   PeriodicAlarmCallback callbackArray[MAX_PERIODIC_ALARMS];
@@ -233,6 +202,65 @@ TEST(TimeService, PutHolesInAlarmArray)
 
   //TimeService should be maxed out
   POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm(callback, period));
+}
+
+TEST(TimeService, ActivateSinglePeriodicAlarm)
+{
+  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  TimeService_ActivatePeriodicAlarm(alarm);
+  checkCallbackAndPeriod(alarm, callback, period);
+  checkCounterAndFlag(alarm, PA_COUNTER_RESET_VALUE, FALSE);
+}
+
+TEST(TimeService, ActivateMaxAlarms)
+{
+  PeriodicAlarm alarmArray[MAX_PERIODIC_ALARMS];
+  PeriodicAlarmCallback callbackArray[MAX_PERIODIC_ALARMS];
+
+  for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
+  {
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callbackArray[i], i*100+period);
+  }
+
+  for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
+  {
+    TimeService_ActivatePeriodicAlarm(alarmArray[i]);
+  }
+
+  for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
+  {
+    checkCallbackAndPeriod(alarmArray[i], callbackArray[i], i*100+period);
+    checkCounterAndFlag(alarmArray[i], PA_COUNTER_RESET_VALUE, FALSE);
+  }
+}
+
+TEST(TimeService, ActivateNonconsecutiveAlarms)
+{
+  PeriodicAlarm alarmArray[MAX_PERIODIC_ALARMS];
+  PeriodicAlarmCallback callbackArray[MAX_PERIODIC_ALARMS];
+
+  for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
+  {
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callbackArray[i], i*100+period);
+  }
+
+  for (int i = 0; i < MAX_PERIODIC_ALARMS; i += 2)
+  {
+    TimeService_ActivatePeriodicAlarm(alarmArray[i]);
+  }
+
+  for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
+  {
+    checkCallbackAndPeriod(alarmArray[i], callbackArray[i], i*100+period);
+    if (i % 2 == 0)
+    {
+      checkCounterAndFlag(alarmArray[i], PA_COUNTER_RESET_VALUE, FALSE);
+    }
+    else
+    {
+      checkCounterAndFlag(alarmArray[i], PA_INACTIVE, FALSE);
+    }
+  }
 }
 
 TEST(TimeService, SetCounter)

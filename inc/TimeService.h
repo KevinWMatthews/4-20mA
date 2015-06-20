@@ -39,8 +39,7 @@ void TimeService_RemovePeriodicAlarm(PeriodicAlarm self);
 
 //Once set, the periodic alarm always serviced.
 //To stop a periodic alarm from executing, set its period to PA_INACTIVE.
-void TimeService_SetPeriodicAlarm(PeriodicAlarm self, PeriodicAlarmCallback callbackFunction, int16_t alarmPeriod);
-
+void TimeService_ActivatePeriodicAlarm(PeriodicAlarm self);
 
 
 //*************************//
