@@ -36,8 +36,9 @@ TEST_GROUP(AtoD)
   }
 };
 
-
-//*** Function mocks ***//
+//**************************//
+//*** ADC function mocks ***//
+//**************************//
 BOOL Adc_IsAdcBusy(void)
 {
   mock().actualCall("Adc_IsAdcBusy");
@@ -74,29 +75,10 @@ void Adc_ClearInterruptFlag(void)
   return;
 }
 
-//Setup functions mocks
-void Adc_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
+//Mock ADC setup functions
+void Adc_Init(void)
 {
-  mock().actualCall("Adc_SelectReferenceVoltage")
-        .withParameter("voltageSource", voltageSource);
-}
-
-void Adc_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
-{
-  mock().actualCall("Adc_SelectResultAdjust")
-        .withParameter("resultAdjust", resultAdjust);
-}
-
-void Adc_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
-{
-  mock().actualCall("Adc_SelectInputAndGain")
-        .withParameter("inputAndGain", inputAndGain);
-}
-
-void Adc_SetPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
-{
-  mock().actualCall("Adc_SetPrescaleFactor")
-        .withParameter("prescaleFactor", prescaleFactor);
+  mock().actualCall("Adc_Init");
 }
 
 void Adc_Enable(void)
@@ -229,14 +211,7 @@ TEST(AtoD, Read_FilterBadValuesInHighDataRegister)
 //Setup test
 TEST(AtoDSetup, test)
 {
-  mock().expectOneCall("Adc_SelectReferenceVoltage")
-        .withParameter("voltageSource", ADC_AVCC);
-  mock().expectOneCall("Adc_SelectResultAdjust")
-        .withParameter("resultAdjust", ADC_RIGHT_ADJUST);
-  mock().expectOneCall("Adc_SelectInputAndGain")
-        .withParameter("inputAndGain", ADC_SINGLE_ENDED_ADC0);
-  mock().expectOneCall("Adc_SetPrescaleFactor")
-        .withParameter("prescaleFactor", ADC_PRESCALE_FACTOR_2);
+  mock().expectOneCall("Adc_Init");
   mock().expectOneCall("Adc_Enable");
   mock().expectOneCall("Adc_FirstConversion");
   AtoD_Setup();

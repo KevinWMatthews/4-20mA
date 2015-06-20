@@ -8,14 +8,10 @@ static uint8_t * admuxPtr;
 static uint8_t * adchPtr;
 static uint8_t * adclPtr;
 
-void Adc_Init(uint8_t * adcsr, uint8_t * admux, uint8_t * adch, uint8_t * adcl)
-{
-  adcsrPtr = adcsr;
-  admuxPtr = admux;
-  adchPtr = adch;
-  adclPtr = adcl;
-}
 
+//**************************//
+//*** Standard Functions ***//
+//**************************//
 BOOL Adc_IsAdcBusy(void)
 {
   return IFBIT(*adcsrPtr, ADSC);
@@ -47,25 +43,48 @@ void Adc_ClearInterruptFlag(void)
   *adcsrPtr = 1 << ADIF;
 }
 
-//Setup functions
-void Adc_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
+
+//***********************//
+//*** Setup functions ***//
+//***********************//
+void Adc_MapMemory(uint8_t * adcsr, uint8_t * admux, uint8_t * adch, uint8_t * adcl)
 {
-  *admuxPtr = voltageSource << REFS0;
+  adcsrPtr = adcsr;
+  admuxPtr = admux;
+  adchPtr = adch;
+  adclPtr = adcl;
 }
 
-void Adc_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
+void Adc_Init(void)
 {
-  *admuxPtr = resultAdjust << ADLAR;
+  Adc_Private_SelectReferenceVoltage(ADC_AVCC);
+  Adc_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
+  Adc_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
+  Adc_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_2);
 }
 
-void Adc_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
+void Adc_Private_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
 {
-  *admuxPtr = inputAndGain << MUX0;
+  *admuxPtr &= ~(0x03 << REFS0);
+  *admuxPtr |= (voltageSource & 0x03) << REFS0;
 }
 
-void Adc_SetPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
+void Adc_Private_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
 {
-  *adcsrPtr = prescaleFactor << ADPS0;
+  *admuxPtr &= ~(0x01 << ADLAR);
+  *admuxPtr |= (resultAdjust & 0x01) << ADLAR;
+}
+
+void Adc_Private_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
+{
+  *admuxPtr &= ~(0x1f << MUX0);
+  *admuxPtr |= (inputAndGain & 0x1f) << MUX0;
+}
+
+void Adc_Private_SelectPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
+{
+  *adcsrPtr &= ~(0x07 << ADPS0);
+  *adcsrPtr |= (prescaleFactor & 0x07) << ADPS0;
 }
 
 void Adc_Enable(void)

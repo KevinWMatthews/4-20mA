@@ -22,7 +22,7 @@ TEST_GROUP(Adc)
     admux = 0;
     adch = 0;
     adcl = 0;
-    Adc_Init(&adcsr, &admux, &adch, &adcl);
+    Adc_MapMemory(&adcsr, &admux, &adch, &adcl);
   }
 
   void teardown()
@@ -41,42 +41,67 @@ TEST(Adc, RegistersZeroAfterInit)
 
 TEST(Adc, SelectReferenceVoltage)
 {
-  uint8_t bitmask;
-  SBI(bitmask, REFS1);
-  SBI(bitmask, REFS0);
-  Adc_SelectReferenceVoltage(ADC_AVCC);
-  CHECK_TRUE(IFBITMASK(admux, ADC_AVCC<<REFS0, bitmask));
+  uint8_t expected = 0xff;
+  admux = 0xff;
+  //ADC_AVCC = 0b00, so clear its bits
+  CBI(expected, REFS1);
+  CBI(expected, REFS0);
+  Adc_Private_SelectReferenceVoltage(ADC_AVCC);
+  CHECK_TRUE(IFBITMASK(expected, admux, 0xff));
 }
 
 TEST(Adc, SelectResultAdjust)
 {
-  SBI(admux, ADLAR);
-  Adc_SelectResultAdjust(ADC_RIGHT_ADJUST);
-  CHECK_FALSE(IFBIT(admux, ADLAR));
+  uint8_t expected = 0xff;
+  admux = 0xff;
+  //ADC_RIGHT_ADJUST= 0b0, so clear its bit
+  CBI(expected, ADLAR);
+  Adc_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
+  CHECK_TRUE(IFBITMASK(expected, admux, 0xff));
 }
 
 TEST(Adc, SelectInputAndGain)
 {
-  uint8_t bitmask;
-  SBI(bitmask, MUX4);
-  SBI(bitmask, MUX3);
-  SBI(bitmask, MUX2);
-  SBI(bitmask, MUX1);
-  SBI(bitmask, MUX0);
-  admux = bitmask;
-  Adc_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
-  CHECK_TRUE(IFBITMASK(admux, ADC_SINGLE_ENDED_ADC0<<MUX0, bitmask));
+  uint8_t expected = 0xff;
+  admux = 0xff;
+  //ADC_SINGLE_ENDED_ADC0 = 0b00000, so clear its bits
+  CBI(expected, MUX4);
+  CBI(expected, MUX3);
+  CBI(expected, MUX2);
+  CBI(expected, MUX1);
+  CBI(expected, MUX0);
+  Adc_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
+  CHECK_TRUE(IFBITMASK(expected, admux, 0xff));
 }
 
 TEST(Adc, SetPrescaleFactor)
 {
-  uint8_t bitmask;
-  SBI(bitmask, ADPS2);
-  SBI(bitmask, ADPS1);
-  SBI(bitmask, ADPS0);
-  adcsr = bitmask;
-  Adc_SetPrescaleFactor(ADC_PRESCALE_FACTOR_2);
-  CHECK_TRUE(IFBITMASK(adcsr, ADC_PRESCALE_FACTOR_2<<ADPS0, bitmask));
+  uint8_t expected = 0xff;
+  adcsr = 0xff;
+  CBI(expected, ADPS2);
+  CBI(expected, ADPS1);
+  CBI(expected, ADPS0);
+  Adc_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_0);
+  CHECK_TRUE(IFBITMASK(expected, adcsr, 0xff));
+}
+
+TEST(Adc, Init)
+{
+  uint8_t expected_admux = 0, expected_adcsr = 0;
+  CBI(expected_admux, REFS1);
+  CBI(expected_admux, REFS0);
+  CBI(expected_admux, ADLAR);
+  CBI(expected_admux, MUX4);
+  CBI(expected_admux, MUX3);
+  CBI(expected_admux, MUX2);
+  CBI(expected_admux, MUX1);
+  CBI(expected_admux, MUX0);
+  CBI(expected_adcsr, ADPS2);
+  CBI(expected_adcsr, ADPS1);
+  SBI(expected_adcsr, ADPS0);
+  Adc_Init();
+  CHECK_TRUE(IFBITMASK(expected_admux, admux, 0xff));
+  CHECK_TRUE(IFBITMASK(expected_adcsr, adcsr, 0x07));
 }
 
 TEST(Adc, Enable)

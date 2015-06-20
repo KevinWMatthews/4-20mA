@@ -19,3 +19,5 @@ Think hard about the ADC and AtoD task division.
 Move pin functions and data type to its own file?
 
 Want to document and streamline testing for NULL pointers for a generic multi-instance module.
+
+Should we have a HardwareInit() function that calls all the HW Inits? We'll see how it all pans out....

@@ -3,3 +3,5 @@ See if you can find any AVR demo code to demonstrate:
   How to set the input clock frequency correctly using a prescaler.
 
 Look up SREG, I-bit
+
+Refactor select() functions. Can add something to BitManip.h
