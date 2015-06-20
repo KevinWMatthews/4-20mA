@@ -47,7 +47,7 @@ TimeService:
 .DEFAULT_GOAL:=all
 
 .PHONY: $(TESTS_TO_RUN)
-.PHONY: all test clean rebuild rebuildt
+.PHONY: all test clean rebuild rtest
 .PHONY: filelist dirlist flags colortest help
 
 all: $(TESTS_TO_RUN)
@@ -58,7 +58,7 @@ clean: $(TESTS_TO_RUN)
 
 rebuild: clean all
 
-rebuildt: clean test
+rtest: clean test
 
 # Compile and run production code
 # run: $(TESTS_TO_RUN)

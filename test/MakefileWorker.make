@@ -98,7 +98,7 @@ techo=$(ECHO) "${BoldPurple}  $1:${NoColor}"; echo $2; echo;
 
 ### Makefile targets ###
 .PHONY: all rebuild run compile clean cleanp
-.PHONY: test rebuildt cleant
+.PHONY: test rtest cleant
 .PHONY: dirlist filelist flags vars colortest help
 
 
@@ -146,7 +146,7 @@ test: $(TEST_TARGET)
 	$(SILENCE)$(TEST_TARGET)
 	$(ECHO) "\n${BoldGreen}...Tests executed!${NoColor}\n"
 
-rebuildt: clean test
+rtest: clean test
 
 # Be SURE to link the test objects before the source code library!!
 # This is what enables link-time substitution
@@ -266,7 +266,7 @@ help:
 	$(ECHO)
 	$(ECHO) "${BoldCyan}Test code options:${NoColor}"
 	$(ECHO) "test:\t\tCompile all updated test code and run all tests"
-	$(ECHO) "rebuildt:\tClean and recompile all test code, run all tests"
+	$(ECHO) "rtest:\tClean and recompile all test code, run all tests"
 	$(ECHO) "clean:\t\tClean all test and production code"
 	$(ECHO)
 	$(ECHO) "${BoldCyan}Makefile debugging options:${NoColor}"
