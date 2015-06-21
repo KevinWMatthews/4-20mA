@@ -26,14 +26,21 @@ void MainLoop_AtodConversion(void)
   atodConversionStatus = AtoD_StartConversion();
 }
 
-void MainLoop_ReadAtodValue(int16_t * atodValue)
+void MainLoop_GetReading(LineFit outputModel, float * reading)
 {
-  int8_t readResult;
+  int8_t atodReturnCode;
+  int16_t atodReading;
+
   if (getConversionStatus() == ATOD_CONVERSION_BUSY)
   {
     return;
   }
-  readResult = AtoD_Read(atodValue);
+  atodReturnCode = AtoD_Read(&atodReading);
+  if (atodReturnCode != ATOD_READ_SUCCESS)
+  {
+    return;
+  }
+  *reading = LineFit_GetOutput(outputModel, atodReading);
 }
 
 

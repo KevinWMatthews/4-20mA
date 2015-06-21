@@ -28,7 +28,7 @@ int16_t create10BitFromTwo8Bit(uint8_t highByte, uint8_t lowByte)
   return (highByte << 8) + lowByte;
 }
 
-int8_t AtoD_Read(int16_t * reading)
+int8_t AtoD_Read(int16_t * adcReading)
 {
   uint8_t high_register, low_register;
 
@@ -43,7 +43,7 @@ int8_t AtoD_Read(int16_t * reading)
 
   low_register = Adc_ReadDataRegister_Low();
   high_register = Adc_ReadDataRegister_High();
-  *reading = create10BitFromTwo8Bit(high_register, low_register);
+  *adcReading = create10BitFromTwo8Bit(high_register, low_register);
   Adc_ClearInterruptFlag();
   return ATOD_READ_SUCCESS;
 }

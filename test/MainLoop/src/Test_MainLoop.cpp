@@ -3,6 +3,7 @@ extern "C"
   #include "MainLoop.h"
   #include "TimeService.h"
   #include "AtoD.h"
+  #include "LineFit.h"
 }
 
 //CppUTest includes should be after your system includes
@@ -10,19 +11,28 @@ extern "C"
 #include "CppUTestExt/MockSupport.h"
 #include "Test_MainLoop.h"
 
-#define ATOD_INITIAL_VALUE 42
+#define ADC_INITIAL_VALUE 12
+#define FOURTOTWENTY_INITIAL_VALUE 12
 
 TEST_GROUP(MainLoop)
 {
   PeriodicAlarm AtodConversion;
-  int16_t atodValue;
+  LineFit fourToTwentyLine;
+  int16_t adcReading;
+  float reading;
 
   void setup()
   {
     TimeService_Create();
     AtodConversion = TimeService_AddPeriodicAlarm(MainLoop_AtodConversion, 1000);
     TimeService_ActivatePeriodicAlarm(AtodConversion);
-    atodValue = ATOD_INITIAL_VALUE;
+    adcReading = ADC_INITIAL_VALUE;
+    reading = FOURTOTWENTY_INITIAL_VALUE;
+
+    fourToTwentyLine = LineFit_Create();
+    LineFit_SetPoint1(fourToTwentyLine, 4, 4);
+    LineFit_SetPoint2(fourToTwentyLine, 20, 20);
+    LineFit_CalculateEquation(fourToTwentyLine);
   }
 
   void teardown()
@@ -39,10 +49,10 @@ int8_t AtoD_StartConversion(void)
   return mock().intReturnValue();
 }
 
-int8_t AtoD_Read(int16_t * reading)
+int8_t AtoD_Read(int16_t * adcReading)
 {
   mock().actualCall("AtoD_Read")
-        .withOutputParameter("reading", reading);
+        .withOutputParameter("adcReading", adcReading);
   return mock().intReturnValue();
 }
 
@@ -66,8 +76,8 @@ TEST(MainLoop, ReadAtodExitsImmediatelyIfConversionWasBusy)
 {
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_BUSY);
 
-  MainLoop_ReadAtodValue(&atodValue);
-  LONGS_EQUAL(ATOD_INITIAL_VALUE, atodValue);
+  MainLoop_GetReading(fourToTwentyLine, &reading);
+  LONGS_EQUAL(ADC_INITIAL_VALUE, reading);
 }
 
 TEST(MainLoop, ReadAtodExitsIfReadBusy)
@@ -75,20 +85,21 @@ TEST(MainLoop, ReadAtodExitsIfReadBusy)
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_STARTED);
 
   mock().expectOneCall("AtoD_Read")
-        .withOutputParameterReturning("reading", &atodValue, sizeof(int16_t))
+        .withOutputParameterReturning("adcReading", &adcReading, sizeof(int16_t))
         .andReturnValue(ATOD_READ_BUSY);
-  MainLoop_ReadAtodValue(&atodValue);
-  LONGS_EQUAL(ATOD_INITIAL_VALUE, atodValue);
+  MainLoop_GetReading(fourToTwentyLine, &reading);
+  LONGS_EQUAL(ADC_INITIAL_VALUE, reading);
 }
 
 TEST(MainLoop, ReadAtodSuccess)
 {
-  int16_t outputValue = ATOD_INITIAL_VALUE*2;
+  adcReading = 14;
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_STARTED);
 
   mock().expectOneCall("AtoD_Read")
-        .withOutputParameterReturning("reading", &outputValue, sizeof(int16_t))
+        .withOutputParameterReturning("adcReading", &adcReading, sizeof(int16_t))
         .andReturnValue(ATOD_READ_SUCCESS);
-  MainLoop_ReadAtodValue(&atodValue);
-  LONGS_EQUAL(ATOD_INITIAL_VALUE*2, atodValue);
+  MainLoop_GetReading(fourToTwentyLine, &reading);
+
+  LONGS_EQUAL(adcReading, reading);
 }

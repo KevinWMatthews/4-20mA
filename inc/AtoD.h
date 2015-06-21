@@ -19,6 +19,6 @@ enum
 
 void AtoD_Setup(void);
 int8_t AtoD_StartConversion(void);
-int8_t AtoD_Read(int16_t * reading);
+int8_t AtoD_Read(int16_t * adcReading);
 
 #endif
