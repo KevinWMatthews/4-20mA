@@ -1,0 +1,9 @@
+TestList_NumericFunctions
+
+Positive numbers:
+  .5 and greater round up
+  .4 and below round down
+
+Negative numbers:
+  .5 and greater round up
+  .4 and below round down

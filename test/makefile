@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=MainLoop
+TESTS_TO_RUN=NumericFunctions
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
@@ -23,6 +23,7 @@ TIMESERVICE_DIR=TimeService
 
 MAINLOOP_DIR=MainLoop
 
+NUMERICFUNCTIONS_DIR=NumericFunctions
 
 #Create a makefile target for each series of tests
 Default:
@@ -49,6 +50,8 @@ TimeService:
 MainLoop:
 	$(MAKE_TESTS) $(MAINLOOP_DIR) $(MAKECMDGOALS)
 
+NumericFunctions:
+	$(MAKE_TESTS) $(NUMERICFUNCTIONS_DIR) $(MAKECMDGOALS)
 
 ### Makefile targets ###
 .DEFAULT_GOAL:=all
