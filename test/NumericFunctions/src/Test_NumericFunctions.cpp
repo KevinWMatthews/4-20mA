@@ -18,7 +18,23 @@ TEST_GROUP(NumericFunctions)
   }
 };
 
-TEST(NumericFunctions, WiringCheck)
+TEST(NumericFunctions, PositiveNumberRoundingUp)
 {
-  FAIL("Start here!");
+  LONGS_EQUAL(5, round_int16(4.5));
+}
+
+TEST(NumericFunctions, PositiveNumberRoundingDown)
+{
+  LONGS_EQUAL(4, round_int16(4.4));
+}
+
+
+TEST(NumericFunctions, NegativeNumberRoundingUp)
+{
+  LONGS_EQUAL(-5, round_int16(-4.5));
+}
+
+TEST(NumericFunctions, NegativeNumberRoundingDown)
+{
+  LONGS_EQUAL(-4, round_int16(-4.4));
 }
