@@ -26,10 +26,11 @@ void MainLoop_AtodConversion(void)
   atodConversionStatus = AtoD_StartConversion();
 }
 
-void MainLoop_GetReading(LineFit outputModel, float * reading)
+void MainLoop_GetReading(LedNumber ledDisplay, LineFit outputModel)
 {
   int8_t atodReturnCode;
   int16_t atodReading;
+  float reading;
 
   if (getConversionStatus() == ATOD_CONVERSION_BUSY)
   {
@@ -40,9 +41,13 @@ void MainLoop_GetReading(LineFit outputModel, float * reading)
   {
     return;
   }
-  *reading = LineFit_GetOutput(outputModel, atodReading);
+  reading = LineFit_GetOutput(outputModel, atodReading);
+    //TODO round reading
+  LedNumber_SetNumber(ledDisplay, (int16_t)(reading));
 }
 
+void MainLoop_UpdateDisplay(void)
+{}
 
 //*** Private functions ***//
 void MainLoop_Private_SetAtodConversionStatus(int8_t status)

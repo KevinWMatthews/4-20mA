@@ -8,7 +8,7 @@ if conversion start (delay too?)
   Convert into 4-20 reading (LineFit)
 
 
-ServiceAllAlarms:
+ServiceAllCallbacks:
   Once per second:
     Start AtoD conversion.
 
@@ -17,3 +17,8 @@ ServiceAllAlarms:
 
 
 Should ReadAtodValue() reset the conversion status if it's busy, i.e. should we force the program to wait until the next AtoD conversion is started?
+
+
+Update the .h file's documentation.
+
+Figure out how to round reading before updating the display

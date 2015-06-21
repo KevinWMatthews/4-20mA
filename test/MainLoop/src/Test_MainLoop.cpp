@@ -4,6 +4,7 @@ extern "C"
   #include "TimeService.h"
   #include "AtoD.h"
   #include "LineFit.h"
+  #include "LedNumber.h"
 }
 
 //CppUTest includes should be after your system includes
@@ -14,25 +15,32 @@ extern "C"
 #define ADC_INITIAL_VALUE 12
 #define FOURTOTWENTY_INITIAL_VALUE 12
 
+static int16_t ledNumberDeadDrop;
+
 TEST_GROUP(MainLoop)
 {
-  PeriodicAlarm AtodConversion;
+  PeriodicAlarm AtodConversion, displayUpdate;
   LineFit fourToTwentyLine;
-  int16_t adcReading;
-  float reading;
+  LedNumber ledDisplay;
+
+  void setupAtodCallback(void)
+  {
+    AtodConversion = TimeService_AddPeriodicAlarm(MainLoop_AtodConversion, 1000);
+    TimeService_ActivatePeriodicAlarm(AtodConversion);
+  }
+
+  void setupDisplayCallback(void)
+  {
+    displayUpdate = TimeService_AddPeriodicAlarm(MainLoop_UpdateDisplay, 250);
+    TimeService_ActivatePeriodicAlarm(displayUpdate);
+  }
 
   void setup()
   {
     TimeService_Create();
-    AtodConversion = TimeService_AddPeriodicAlarm(MainLoop_AtodConversion, 1000);
-    TimeService_ActivatePeriodicAlarm(AtodConversion);
-    adcReading = ADC_INITIAL_VALUE;
-    reading = FOURTOTWENTY_INITIAL_VALUE;
-
-    fourToTwentyLine = LineFit_Create();
-    LineFit_SetPoint1(fourToTwentyLine, 4, 4);
-    LineFit_SetPoint2(fourToTwentyLine, 20, 20);
-    LineFit_CalculateEquation(fourToTwentyLine);
+    setupAtodCallback();
+    setupDisplayCallback();
+    ledNumberDeadDrop = 0;
   }
 
   void teardown()
@@ -56,6 +64,21 @@ int8_t AtoD_Read(int16_t * adcReading)
   return mock().intReturnValue();
 }
 
+float LineFit_GetOutput(LineFit self, int16_t x)
+{
+  mock().actualCall("LineFit_GetOutput");
+  return mock().intReturnValue();
+}
+
+void LedNumber_SetNumber(LedNumber self, int16_t number)
+{
+  mock().actualCall("LedNumber_SetNumber")
+        .withParameter("self", self)
+        .withParameter("number", number);
+  ledNumberDeadDrop = number;
+}
+
+
 TEST(MainLoop, NoCallbacksIfIsntTime)
 {
   TimeService_TimerTick();
@@ -76,30 +99,35 @@ TEST(MainLoop, ReadAtodExitsImmediatelyIfConversionWasBusy)
 {
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_BUSY);
 
-  MainLoop_GetReading(fourToTwentyLine, &reading);
-  LONGS_EQUAL(ADC_INITIAL_VALUE, reading);
+  MainLoop_GetReading(ledDisplay, fourToTwentyLine);
+  LONGS_EQUAL(0, ledNumberDeadDrop);
 }
 
 TEST(MainLoop, ReadAtodExitsIfReadBusy)
 {
+  int16_t adcOutput = 14;
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_STARTED);
 
   mock().expectOneCall("AtoD_Read")
-        .withOutputParameterReturning("adcReading", &adcReading, sizeof(int16_t))
+        .withOutputParameterReturning("adcReading", &adcOutput, sizeof(int16_t))
         .andReturnValue(ATOD_READ_BUSY);
-  MainLoop_GetReading(fourToTwentyLine, &reading);
-  LONGS_EQUAL(ADC_INITIAL_VALUE, reading);
+  MainLoop_GetReading(ledDisplay, fourToTwentyLine);
+  LONGS_EQUAL(0, ledNumberDeadDrop);
 }
 
 TEST(MainLoop, ReadAtodSuccess)
 {
-  adcReading = 14;
+  int16_t adcOutput = 1000;
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_STARTED);
 
   mock().expectOneCall("AtoD_Read")
-        .withOutputParameterReturning("adcReading", &adcReading, sizeof(int16_t))
+        .withOutputParameterReturning("adcReading", &adcOutput, sizeof(int16_t))
         .andReturnValue(ATOD_READ_SUCCESS);
-  MainLoop_GetReading(fourToTwentyLine, &reading);
-
-  LONGS_EQUAL(adcReading, reading);
+  mock().expectOneCall("LineFit_GetOutput")
+        .andReturnValue(20);
+  mock().expectOneCall("LedNumber_SetNumber")
+        .withParameter("self", ledDisplay)
+        .withParameter("number", 20);
+  MainLoop_GetReading(ledDisplay, fourToTwentyLine);
+  LONGS_EQUAL(20, ledNumberDeadDrop);
 }
