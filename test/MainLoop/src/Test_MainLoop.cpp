@@ -19,13 +19,14 @@ static int16_t ledNumberDeadDrop;
 
 TEST_GROUP(MainLoop)
 {
-  PeriodicAlarm AtodConversion, displayUpdate;
+  PeriodicAlarm AtodConversion, getReading, displayUpdate;
   LineFit fourToTwentyLine;
   LedNumber ledDisplay;
 
   void setupAtodCallback(void)
   {
     AtodConversion = TimeService_AddPeriodicAlarm(MainLoop_AtodConversion, 1000);
+    getReading = TimeService_AddPeriodicAlarm(MainLoop_GetReading, 10); //What amount of time should we use?
     TimeService_ActivatePeriodicAlarm(AtodConversion);
   }
 
@@ -37,10 +38,10 @@ TEST_GROUP(MainLoop)
 
   void setup()
   {
-    MainLoop_Init(ledDisplay);
     TimeService_Create();
     setupAtodCallback();
     setupDisplayCallback();
+    MainLoop_Init(getReading, ledDisplay, fourToTwentyLine);
     ledNumberDeadDrop = 0;
   }
 
@@ -87,6 +88,7 @@ void LedNumber_ShowNumber(LedNumber self)
 
 TEST(MainLoop, NoCallbacksIfIsntTime)
 {
+  TimeService_ActivatePeriodicAlarm(getReading);
   TimeService_TimerTick();
   TimeService_ServiceAllCallbacks();
 }
@@ -98,32 +100,44 @@ TEST(MainLoop, AtodConversionExecutesIfTime)
   mock().expectOneCall("AtoD_StartConversion")
         .andReturnValue(ATOD_CONVERSION_STARTED);
   TimeService_ServiceAllCallbacks();
+  LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeService_Private_GetCounter(getReading));
 }
 
 TEST(MainLoop, ReadAtodExitsImmediatelyIfConversionWasBusy)
 {
+  TimeService_ActivatePeriodicAlarm(getReading);
+  TimeService_Private_SetCounter(getReading, 9);
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_BUSY);
+  TimeService_TimerTick();
 
-  MainLoop_GetReading(ledDisplay, fourToTwentyLine);
+  TimeService_ServiceAllCallbacks();
   LONGS_EQUAL(0, ledNumberDeadDrop);
 }
 
 TEST(MainLoop, ReadAtodExitsIfReadBusy)
 {
   int16_t adcOutput = 14;
+
+  TimeService_ActivatePeriodicAlarm(getReading);
+  TimeService_Private_SetCounter(getReading, 9);
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_STARTED);
+  TimeService_TimerTick();
 
   mock().expectOneCall("AtoD_Read")
         .withOutputParameterReturning("adcReading", &adcOutput, sizeof(int16_t))
         .andReturnValue(ATOD_READ_BUSY);
-  MainLoop_GetReading(ledDisplay, fourToTwentyLine);
+
+  TimeService_ServiceAllCallbacks();
   LONGS_EQUAL(0, ledNumberDeadDrop);
 }
 
 TEST(MainLoop, ReadAtodSuccess)
 {
   int16_t adcOutput = 1000;
+  TimeService_ActivatePeriodicAlarm(getReading);
+  TimeService_Private_SetCounter(getReading, 9);
   MainLoop_Private_SetAtodConversionStatus(ATOD_CONVERSION_STARTED);
+  TimeService_TimerTick();
 
   mock().expectOneCall("AtoD_Read")
         .withOutputParameterReturning("adcReading", &adcOutput, sizeof(int16_t))
@@ -133,8 +147,10 @@ TEST(MainLoop, ReadAtodSuccess)
   mock().expectOneCall("LedNumber_SetNumber")
         .withParameter("self", ledDisplay)
         .withParameter("number", 20);
-  MainLoop_GetReading(ledDisplay, fourToTwentyLine);
+
+  TimeService_ServiceAllCallbacks();
   LONGS_EQUAL(20, ledNumberDeadDrop);
+  LONGS_EQUAL(PA_INACTIVE, TimeService_Private_GetCounter(getReading));
 }
 
 TEST(MainLoop, UpdateDisplayExecutesIfItsTime)

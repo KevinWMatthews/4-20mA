@@ -27,3 +27,5 @@ Probably want to split MainLoop_GetReading() into several descriptive functions.
   get raw counts from ADC
   Convert raw counts into reading
   Send reading to display
+
+What amount of time should we use for the GetReading callback?

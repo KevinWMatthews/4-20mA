@@ -1,9 +1,12 @@
 #include "MainLoop.h"
-#include "TimeService.h"
 #include "AtoD.h"
 
+
 static int8_t atodConversionStatus;
-static LedNumber number;
+static PeriodicAlarm atodReadAlarm;
+static LedNumber ledDisplay;
+static LineFit outputModel;
+
 
 //*** File-scope functions ***//
 static int8_t getConversionStatus(void)
@@ -17,26 +20,28 @@ static void setConversionStatus(int8_t status)
 }
 
 //*** Public functions ***//
-void MainLoop_Init(LedNumber ledDisplay)
+void MainLoop_Init(PeriodicAlarm atodRead, LedNumber number, LineFit line)
 {
-  number = ledDisplay;
+  atodReadAlarm = atodRead;
+  ledDisplay = number;
+  outputModel = line;
 }
 
 //Wrappers for interrupts
 void MainLoop_AtodConversion(void)
 {
   atodConversionStatus = AtoD_StartConversion();
+  TimeService_ActivatePeriodicAlarm(atodReadAlarm);
 }
 
 
 void MainLoop_UpdateDisplay(void)
 {
-  LedNumber_ShowNumber(number);
+  LedNumber_ShowNumber(ledDisplay);
 }
 
 
-//We probably don't want all of this in one function
-void MainLoop_GetReading(LedNumber ledDisplay, LineFit outputModel)
+void MainLoop_GetReading(void)
 {
   int8_t atodReturnCode;
   int16_t atodReading;
@@ -54,6 +59,7 @@ void MainLoop_GetReading(LedNumber ledDisplay, LineFit outputModel)
   reading = LineFit_GetOutput(outputModel, atodReading);
     //TODO round reading
   LedNumber_SetNumber(ledDisplay, (int16_t)(reading));
+  TimeService_DeactivatePeriodicAlarm(atodReadAlarm);
 }
 
 
