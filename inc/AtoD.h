@@ -6,14 +6,15 @@
 
 enum
 {
-  ATOD_BUSY               = -1,
+  ATOD_CONVERSION_BUSY    = -1,
   ATOD_CONVERSION_STARTED = 1
 };
 
 enum
 {
-  ATOD_INTERRUPT_FLAG_NOT_SET = -1,
-  ATOD_READ_SUCCESS           = 1
+  // ATOD_INTERRUPT_FLAG_NOT_SET = -2,
+  ATOD_READ_BUSY    = -1,
+  ATOD_READ_SUCCESS = 1
 };
 
 void AtoD_Setup(void);

@@ -14,3 +14,6 @@ ServiceAllAlarms:
 
   240 times per second:
     Send Reading to Display
+
+
+Should ReadAtodValue() reset the conversion status if it's busy, i.e. should we force the program to wait until the next AtoD conversion is started?

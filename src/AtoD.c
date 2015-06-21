@@ -12,7 +12,7 @@ int8_t AtoD_StartConversion(void)
 {
   if (Adc_IsAdcBusy())
   {
-    return ATOD_BUSY;
+    return ATOD_CONVERSION_BUSY;
   }
 
   Adc_StartConversion();
@@ -34,12 +34,12 @@ int8_t AtoD_Read(int16_t * reading)
 
   if (Adc_IsAdcBusy())
   {
-    return ATOD_BUSY;
+    return ATOD_READ_BUSY;
   }
-  if (!Adc_IsInterruptFlagSet())
-  {
-    return ATOD_INTERRUPT_FLAG_NOT_SET;
-  }
+  // if (!Adc_IsInterruptFlagSet())
+  // {
+  //   return ATOD_INTERRUPT_FLAG_NOT_SET;
+  // }
 
   low_register = Adc_ReadDataRegister_Low();
   high_register = Adc_ReadDataRegister_High();
