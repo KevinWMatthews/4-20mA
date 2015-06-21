@@ -9,6 +9,10 @@
 void MainLoop_AtodConversion(void);
 void MainLoop_UpdateDisplay(void);
 
+
+//A hack so that we can "pass data" to a callback.
+void MainLoop_Init(LedNumber ledDisplay);
+
 int8_t MainLoop_GetAtodConversionStatus(void);
 
 void MainLoop_GetReading(LedNumber ledDisplay, LineFit outputModel);

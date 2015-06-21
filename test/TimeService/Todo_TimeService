@@ -4,3 +4,6 @@ Think about splitting counter and period enums for clarity.
 Perhaps we should add devoted activate anddeactivate functions.
 
 Test deactivate() with nonconsecutive alarms?
+
+Consider redesigning TimeService so that the callbacks can take a void pointer as an argument.
+We'd have to service alarms individually but it makes them much more powerful.

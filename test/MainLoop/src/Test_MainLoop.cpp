@@ -37,6 +37,7 @@ TEST_GROUP(MainLoop)
 
   void setup()
   {
+    MainLoop_Init(ledDisplay);
     TimeService_Create();
     setupAtodCallback();
     setupDisplayCallback();
@@ -76,6 +77,11 @@ void LedNumber_SetNumber(LedNumber self, int16_t number)
         .withParameter("self", self)
         .withParameter("number", number);
   ledNumberDeadDrop = number;
+}
+
+void LedNumber_ShowNumber(LedNumber self)
+{
+  mock().actualCall("LedNumber_ShowNumber");
 }
 
 
@@ -130,4 +136,12 @@ TEST(MainLoop, ReadAtodSuccess)
         .withParameter("number", 20);
   MainLoop_GetReading(ledDisplay, fourToTwentyLine);
   LONGS_EQUAL(20, ledNumberDeadDrop);
+}
+
+TEST(MainLoop, UpdateDisplayExecutesIfItsTime)
+{
+  TimeService_Private_SetCounter(displayUpdate, 249);
+  TimeService_TimerTick();
+  mock().expectOneCall("LedNumber_ShowNumber");
+  TimeService_ServiceAllCallbacks();
 }

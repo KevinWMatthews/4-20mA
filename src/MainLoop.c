@@ -3,6 +3,7 @@
 #include "AtoD.h"
 
 static int8_t atodConversionStatus;
+static LedNumber number;
 
 //*** File-scope functions ***//
 static int8_t getConversionStatus(void)
@@ -16,16 +17,25 @@ static void setConversionStatus(int8_t status)
 }
 
 //*** Public functions ***//
-int8_t MainLoop_GetAtodConversionStatus(void)
+void MainLoop_Init(LedNumber ledDisplay)
 {
-  return atodConversionStatus;
+  number = ledDisplay;
 }
 
+//Wrappers for interrupts
 void MainLoop_AtodConversion(void)
 {
   atodConversionStatus = AtoD_StartConversion();
 }
 
+
+void MainLoop_UpdateDisplay(void)
+{
+  LedNumber_ShowNumber(number);
+}
+
+
+//We probably don't want all of this in one function
 void MainLoop_GetReading(LedNumber ledDisplay, LineFit outputModel)
 {
   int8_t atodReturnCode;
@@ -46,8 +56,11 @@ void MainLoop_GetReading(LedNumber ledDisplay, LineFit outputModel)
   LedNumber_SetNumber(ledDisplay, (int16_t)(reading));
 }
 
-void MainLoop_UpdateDisplay(void)
-{}
+int8_t MainLoop_GetAtodConversionStatus(void)
+{
+  return atodConversionStatus;
+}
+
 
 //*** Private functions ***//
 void MainLoop_Private_SetAtodConversionStatus(int8_t status)
