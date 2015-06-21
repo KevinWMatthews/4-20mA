@@ -56,11 +56,6 @@ void MainLoop_GetReading(LedNumber ledDisplay, LineFit outputModel)
   LedNumber_SetNumber(ledDisplay, (int16_t)(reading));
 }
 
-int8_t MainLoop_GetAtodConversionStatus(void)
-{
-  return atodConversionStatus;
-}
-
 
 //*** Private functions ***//
 void MainLoop_Private_SetAtodConversionStatus(int8_t status)

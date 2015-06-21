@@ -98,7 +98,6 @@ TEST(MainLoop, AtodConversionExecutesIfTime)
   mock().expectOneCall("AtoD_StartConversion")
         .andReturnValue(ATOD_CONVERSION_STARTED);
   TimeService_ServiceAllCallbacks();
-  LONGS_EQUAL(ATOD_CONVERSION_STARTED, MainLoop_GetAtodConversionStatus());
 }
 
 TEST(MainLoop, ReadAtodExitsImmediatelyIfConversionWasBusy)
