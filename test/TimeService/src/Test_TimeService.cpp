@@ -8,7 +8,13 @@ extern "C"
 #include "CppUTestExt/MockSupport.h"
 #include "Test_TimeService.h"
 
+typedef struct callbackParameter
+{
+  int anInteger;
+  float aFloat;
+} callbackParameter;
 
+static callbackParameter structCallbackParameter;
 static int integerCallbackParameter;
 
 void doubleIntegerParamemeter(void * params)
@@ -22,6 +28,19 @@ void doubleIntegerParamemeter(void * params)
   }
   iptr = (int*)params;
   *iptr *= 2;
+}
+
+void useStructParameter(void * params)
+{
+  callbackParameter * sptr;
+
+  if ( params == NULL )
+  {
+    return;
+  }
+  sptr = (callbackParameter *)params;
+  sptr->anInteger *= 2;
+  sptr->aFloat *= 2.0;
 }
 
 void callbackFunction(void * params)
@@ -431,5 +450,13 @@ TEST(TimeService, CallbackWithIntegerParameter)
 
 TEST(TimeService, CallbackWithStructParameter)
 {
-  FAIL("Do this");
+  callback = useStructParameter;
+  structCallbackParameter.anInteger = 42;
+  structCallbackParameter.aFloat = 5.5;
+  alarm = TimeService_AddPeriodicAlarm(callback, 1);
+  TimeService_ActivatePeriodicAlarm(alarm);
+  TimeService_TimerTick();
+  TimeService_ServiceSingleCallback(alarm, (void*)&structCallbackParameter);
+  LONGS_EQUAL(84, structCallbackParameter.anInteger);
+  DOUBLES_EQUAL(11.0, structCallbackParameter.aFloat, 0.1);
 }
