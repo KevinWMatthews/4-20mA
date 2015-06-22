@@ -1,7 +1,6 @@
 extern "C"
 {
   #include "TimeService.h"
-  #include <stdio.h>
 }
 
 //CppUTest includes should be after your and system includes
@@ -9,19 +8,38 @@ extern "C"
 #include "CppUTestExt/MockSupport.h"
 #include "Test_TimeService.h"
 
-void callbackFunction(void)
+
+static int integerCallbackParameter;
+
+void doubleIntegerParamemeter(void * params)
 {
-  mock().actualCall("callbackFunction");
+  int * iptr;
+
+  if ( params == NULL )
+  {
+    integerCallbackParameter = 0; //kloodgy demonstration
+    return;
+  }
+  iptr = (int*)params;
+  *iptr *= 2;
 }
 
-void callbackFunction2(void)
+void callbackFunction(void * params)
 {
-  mock().actualCall("callbackFunction2");
+  mock().actualCall("callbackFunction")
+        .withParameter("params", params);
 }
 
-void callbackFunction3(void)
+void callbackFunction2(void * params)
 {
-  mock().actualCall("callbackFunction3");
+  mock().actualCall("callbackFunction2")
+        .withParameter("params", params);
+}
+
+void callbackFunction3(void * params)
+{
+  mock().actualCall("callbackFunction3")
+        .withParameter("params", params);
 }
 
 TEST_GROUP(TimeService)
@@ -29,11 +47,13 @@ TEST_GROUP(TimeService)
   PeriodicAlarm alarm;
   PeriodicAlarmCallback callback;
   int16_t period;
+  void * nullPointer;
 
   void setup()
   {
     period = 42;
     TimeService_Create();
+    nullPointer = NULL;
   }
 
   void teardown()
@@ -70,6 +90,7 @@ TEST(TimeService, NullPointerToAnyFunctionWontCrash)
   TimeService_RemovePeriodicAlarm(NULL);
   TimeService_ActivatePeriodicAlarm(NULL);
   TimeService_DeactivatePeriodicAlarm(NULL);
+  TimeService_ServiceSingleCallback(NULL, NULL);
 
   POINTERS_EQUAL(NULL, TimeService_Private_GetCallback(NULL));
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetPeriod(NULL));
@@ -316,7 +337,7 @@ TEST(TimeService, NoCallbackExecutedIfIsntTime)
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeService_TimerTick();
 
-  TimeService_ServiceAllCallbacks();
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
 }
 
 TEST(TimeService, CallbackExecutedWhenItsTime)
@@ -326,10 +347,11 @@ TEST(TimeService, CallbackExecutedWhenItsTime)
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeService_Private_SetCounter(alarm, period-1);
 
-  mock().expectOneCall("callbackFunction");
+  mock().expectOneCall("callbackFunction")
+        .withParameter("params", nullPointer);
 
   TimeService_TimerTick();
-  TimeService_ServiceAllCallbacks();
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
 }
 
 TEST(TimeService, ExecuteMultipleCallbacks)
@@ -352,24 +374,62 @@ TEST(TimeService, ExecuteMultipleCallbacks)
   TimeService_Private_SetCounter(alarm2, period-1);
   TimeService_Private_SetCounter(alarm3, period-1);
 
-  mock().expectOneCall("callbackFunction");
-  mock().expectOneCall("callbackFunction2");
+  mock().expectOneCall("callbackFunction")
+        .withParameter("params", nullPointer);
+  mock().expectOneCall("callbackFunction2")
+        .withParameter("params", nullPointer);
 
   TimeService_TimerTick();
-  TimeService_ServiceAllCallbacks();
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
+  TimeService_ServiceSingleCallback(alarm2, nullPointer);
+  TimeService_ServiceSingleCallback(alarm3, nullPointer);
 }
 
 TEST(TimeService, CallbackFlagClearedAfterExecution)
 {
   callback = callbackFunction;
   alarm = TimeService_AddPeriodicAlarm(callback, period);
-  alarm  = TimeService_AddPeriodicAlarm(callback,  period);
+  TimeService_ActivatePeriodicAlarm(alarm);
   TimeService_Private_SetCounter(alarm, period-1);
 
-  mock().expectOneCall("callbackFunction");
+  mock().expectOneCall("callbackFunction")
+        .withParameter("params", nullPointer);
 
   TimeService_TimerTick();
-  TimeService_ServiceAllCallbacks();
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
   TimeService_TimerTick();
-  TimeService_ServiceAllCallbacks();
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
+}
+
+//Maybe this isn't the best test, but I'm just learning
+//We should test the callback function separately
+//This is to demonstrate that NULL will actually reach the callback
+TEST(TimeService, CallbackMustHandleNullParameter)
+{
+  callback = doubleIntegerParamemeter;
+  alarm = TimeService_AddPeriodicAlarm(callback, 50);
+  TimeService_ActivatePeriodicAlarm(alarm);
+  TimeService_Private_SetCounter(alarm, 49);
+  TimeService_TimerTick();
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
+  LONGS_EQUAL(0, integerCallbackParameter);
+}
+
+TEST(TimeService, CallbackWithIntegerParameter)
+{
+  callback = doubleIntegerParamemeter;
+  integerCallbackParameter = 42;
+
+  alarm = TimeService_AddPeriodicAlarm(callback, 50);
+  TimeService_ActivatePeriodicAlarm(alarm);
+  TimeService_Private_SetCounter(alarm, 49);
+  TimeService_TimerTick();
+  TimeService_ServiceSingleCallback(alarm, (void*)&integerCallbackParameter);
+  LONGS_EQUAL(84, integerCallbackParameter);
+}
+
+
+TEST(TimeService, CallbackWithStructParameter)
+{
+  FAIL("Do this");
 }

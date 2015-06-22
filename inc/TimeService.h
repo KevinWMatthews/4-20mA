@@ -11,7 +11,7 @@ enum {PA_INACTIVE = -1, PA_UNUSED = -2, PA_NULL_POINTER = -3};
 
 //Define a function pointer type for the callback.
 //Compiler magic!
-typedef void (*PeriodicAlarmCallback)(void);
+typedef void (*PeriodicAlarmCallback)(void *);
 
 
 
@@ -45,6 +45,8 @@ void TimeService_DeactivatePeriodicAlarm(PeriodicAlarm self);
 //because there is no guarantee that callbacks will execute quickly.
 //Instead, it should be executed from within a task or the main loop.
 void TimeService_ServiceAllCallbacks(void);
+
+void TimeService_ServiceSingleCallback(PeriodicAlarm self, void * params);
 
 //Increment and check alarm timers.
 //This function should be called once per millisecond.

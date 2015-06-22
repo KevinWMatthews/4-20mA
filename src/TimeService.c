@@ -94,13 +94,12 @@ static BOOL isCounterEnabled(PeriodicAlarm self)
          !(getCounter(self) == PA_INACTIVE);
 }
 
-static void executeCallback(PeriodicAlarm self)
+static void executeCallback(PeriodicAlarm self, void * params)
 {
   CHECK_NULL(self);
   CHECK_NULL(self->callback);
-  self->callback();
+  self->callback(params);
 }
-
 
 
 //*************************//
@@ -184,21 +183,15 @@ void TimeService_DeactivatePeriodicAlarm(PeriodicAlarm self)
   setCounter(self, PA_INACTIVE);
 }
 
-void TimeService_ServiceAllCallbacks(void)
+void TimeService_ServiceSingleCallback(PeriodicAlarm self, void * params)
 {
-  PeriodicAlarm thisAlarm;
-  int i;
-
-  for (i = 0; i < MAX_PERIODIC_ALARMS; i++)
+  if (getExecuteCallbackNowFlag(self) == TRUE)
   {
-    thisAlarm = &alarms[i];
-    if (getExecuteCallbackNowFlag(thisAlarm) == TRUE)
-    {
-      executeCallback(thisAlarm);
-      setExecuteCallbackNowFlag(thisAlarm, FALSE);
-    }
+    executeCallback(self, params);
+    setExecuteCallbackNowFlag(self, FALSE);
   }
 }
+
 
 void TimeService_TimerTick(void)
 {
