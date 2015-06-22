@@ -7,10 +7,15 @@
 #include "DataTypes.h"
 
 //Prototypes for callbacks
-void MainLoop_AtodConversion(void);
-void MainLoop_UpdateDisplay(void);
-void MainLoop_GetReading(void);
+void MainLoop_AtodConversion(void * param);
+void MainLoop_GetReading(void * param);
+void MainLoop_UpdateDisplay(void * param);
 
+typedef struct getReadingParameterStruct
+{
+  LineFit outputModel;            //Map ADC raw counts to desired output
+  PeriodicAlarm getReadingAlarm;  //The alarm for this callback function
+} getReadingParameterStruct;
 
 //A hack so that we can "pass data" to a callback.
 void MainLoop_Init(PeriodicAlarm atodRead, LedNumber number, LineFit line);

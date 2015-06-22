@@ -20,6 +20,8 @@ static void setConversionStatus(int8_t status)
   atodConversionStatus = status;
 }
 
+
+
 //*** Public functions ***//
 void MainLoop_Init(PeriodicAlarm atodRead, LedNumber number, LineFit line)
 {
@@ -29,24 +31,25 @@ void MainLoop_Init(PeriodicAlarm atodRead, LedNumber number, LineFit line)
 }
 
 //Wrappers for interrupts
-void MainLoop_AtodConversion(void)
+void MainLoop_AtodConversion(void * param)
 {
+  CHECK_NULL(param);
+  PeriodicAlarm * atodReadAlarmPointer = (PeriodicAlarm *)param;
   atodConversionStatus = AtoD_StartConversion();
-  TimeService_ActivatePeriodicAlarm(atodReadAlarm);
+  TimeService_ActivatePeriodicAlarm(*atodReadAlarmPointer);
 }
 
-
-void MainLoop_UpdateDisplay(void)
+void MainLoop_GetReading(void * param)
 {
-  LedNumber_ShowNumber(ledDisplay);
-}
-
-
-void MainLoop_GetReading(void)
-{
+  getReadingParameterStruct * parameterStruct;
   int8_t atodReturnCode;
   int16_t atodReading;
   float reading;
+
+  CHECK_NULL(param);
+  parameterStruct = (getReadingParameterStruct *)param;
+  CHECK_NULL(parameterStruct->outputModel);
+  CHECK_NULL(parameterStruct->getReadingAlarm);
 
   if (getConversionStatus() == ATOD_CONVERSION_BUSY)
   {
@@ -57,10 +60,16 @@ void MainLoop_GetReading(void)
   {
     return;
   }
-  reading = LineFit_GetOutput(outputModel, atodReading);
+  reading = LineFit_GetOutput(parameterStruct->outputModel, atodReading);
   LedNumber_SetNumber(ledDisplay, round_int16(reading));
-  TimeService_DeactivatePeriodicAlarm(atodReadAlarm);
+  TimeService_DeactivatePeriodicAlarm(parameterStruct->getReadingAlarm);
 }
+
+void MainLoop_UpdateDisplay(void * param)
+{
+  LedNumber_ShowNumber(ledDisplay);
+}
+
 
 
 //*** Private functions ***//
