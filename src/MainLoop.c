@@ -1,5 +1,6 @@
 #include "MainLoop.h"
 #include "AtoD.h"
+#include "NumericFunctions.h"
 
 
 static int8_t atodConversionStatus;
@@ -57,8 +58,7 @@ void MainLoop_GetReading(void)
     return;
   }
   reading = LineFit_GetOutput(outputModel, atodReading);
-    //TODO round reading
-  LedNumber_SetNumber(ledDisplay, (int16_t)(reading));
+  LedNumber_SetNumber(ledDisplay, round_int16(reading));
   TimeService_DeactivatePeriodicAlarm(atodReadAlarm);
 }
 

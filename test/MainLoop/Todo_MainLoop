@@ -21,11 +21,5 @@ Should ReadAtodValue() reset the conversion status if it's busy, i.e. should we 
 
 Update the .h file's documentation.
 
-Figure out how to round reading before updating the display
-
-Probably want to split MainLoop_GetReading() into several descriptive functions. It seems to have multiple responsibilities:
-  get raw counts from ADC
-  Convert raw counts into reading
-  Send reading to display
 
 What amount of time should we use for the GetReading callback?
