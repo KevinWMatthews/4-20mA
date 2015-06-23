@@ -27,4 +27,29 @@ typedef Pin * PinAddress;
 
 void setPinState(PinAddress pin, Pin state);
 
+//*********************//
+//Function return values
+typedef enum
+{
+  _PIN_NULL_POINTER = -66,
+  _PIN_UNDEFINED = -1,
+  _PIN_LOW = 0,
+  _PIN_HIGH  = 1
+} _PinState;
+
+#define NULL_POINTER -66
+
+
+typedef struct _PinStruct * _Pin;
+
+//This data type is designed for pins that will be in existence for the duration
+//of the program!
+_Pin Pin_Create(int8_t * address, int8_t bitmask);
+void Pin_Destroy(_Pin * self);
+
+int8_t * Pin_GetAddress(_Pin self);
+int8_t Pin_GetBitmask(_Pin self);
+_PinState Pin_GetState(_Pin self);
+void Pin_SetState(_Pin self, _PinState state);
+
 #endif
