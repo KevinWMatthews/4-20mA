@@ -1,6 +1,5 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/delay.h>
 #include "TimeService.h"
 #include "DataTypes.h"
 #include "BitManip.h"

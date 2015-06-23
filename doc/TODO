@@ -24,3 +24,5 @@ Should we have a HardwareInit() function that calls all the HW Inits? We'll see 
 
 Find a way to execute all of the unit tests.
 We'll either need to navigate the subdirectories with a script (probably the best idea) or copy the test executables into another folder and run all of these.
+
+Clean up avr-gcc compiler warnings (warnings with -Wall)!

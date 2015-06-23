@@ -14,12 +14,15 @@ MCU=attiny26
 #Root directory of the project as a whole, which may not be the current directory
 ROOT_DIR=../..
 SRC_DIRS=src
-INC_DIRS=inc
+INC_DIRS=inc $(ROOT_DIR)/inc
 #TODO LIB_DIRS=
 #Static lirary names without 'lib' prefix and .a suffix
 #TODO LIBS_LIST=
 OBJ_DIR=obj
 TARGET_DIR=build
+
+#Specify specific source files that aren't in the above directories (hopefully a temporary situation)
+SRC_FILES=$(ROOT_DIR)/src/TimeService.c
 
 #Optimization level
 #use s (size opt), 1, 2, 3, 0 (off), fast, g (debugging)
@@ -98,7 +101,7 @@ DUMP_TARGET=$(TARGET_NAME).s
 HEX_ROM_TARGET=$(TARGET_DIR)/$(TARGET_NAME).hex
 HEX_TARGET=$(HEX_ROM_TARGET)
 
-SRC=$(call get_src,$(SRC_DIRS))
+SRC=$(call get_src,$(SRC_DIRS)) $(call clean_path,$(SRC_FILES))
 OBJ=$(call clean_path,$(addprefix $(OBJ_DIR)/,$(call src_to_o,$(SRC))))
 INC=$(call get_inc,$(INC_DIRS))
 LIBS=$(addprefix lib,$(addsuffix .a,$(LIB_LIST)))
