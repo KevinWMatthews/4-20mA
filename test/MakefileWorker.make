@@ -83,7 +83,8 @@ get_inc_from_dir = $(wildcard $1/*.h)
 get_inc_from_dir_list = $(foreach dir, $1, $(call get_inc_from_dir,$(dir)))
 remove_dotdot=$(patsubst ../%,%,$1)
 remove_dot=$(patsubst ./%,%,$1)
-#Hahaha, need to loop this ;)
+#Hahaha, need to loop this for as many subdirectories as we're going to support
+#There must be a better way ;)
 clean_path=$(call remove_dot,$(call remove_dotdot,$(call remove_dotdot,$(call remove_dotdot,$1))))
 #nest calls so we don't get a repetition of .c and .cpp files
 src_to=$(patsubst %.c,%$1,$(patsubst %.cpp,%$1,$2))

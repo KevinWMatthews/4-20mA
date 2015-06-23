@@ -14,6 +14,7 @@ void MainLoop_UpdateDisplay(void * param);
 typedef struct getReadingParameterStruct
 {
   LineFit outputModel;            //Map ADC raw counts to desired output
+  LedNumber ledDisplay;
   PeriodicAlarm getReadingAlarm;  //The alarm for this callback function
 } getReadingParameterStruct;
 
