@@ -73,8 +73,8 @@ TEST_GROUP(LedDigit)
     LedDigit_ClearDigit(self);
     LedDigit_ClearDecimal(self);
     LedDigit_ClearAll(self);
-    LedDigit_CurrentDigit(self);
-    LedDigit_IsDecimalShown(self);
+    LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(self));
+    CHECK_FALSE(LedDigit_IsDecimalShown(self));
     LedDigit_UpdateLed(self);
     LedDigit_TurnLedOff(self);
   }

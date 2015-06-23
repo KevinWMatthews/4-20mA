@@ -100,13 +100,13 @@ void LedDigit_ClearAll(LedDigit self)
 
 LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self)
 {
-  CHECK_NULL(self);
+  CHECK_NULL_RETURN_VALUE(self, NOTHING);
   return self->digitToShow;
 }
 
 BOOL LedDigit_IsDecimalShown(LedDigit self)
 {
-  CHECK_NULL(self);
+  CHECK_NULL_RETURN_VALUE(self, FALSE);
   return self->showDecimal;
 }
 

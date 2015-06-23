@@ -116,7 +116,7 @@ PeriodicAlarmCallback TimeService_Private_GetCallback(PeriodicAlarm self)
 
 int16_t TimeService_Private_GetPeriod(PeriodicAlarm self)
 {
-  getPeriod(self);
+  return getPeriod(self);
 }
 
 void TimeService_Private_SetCounter(PeriodicAlarm self, int16_t value)
@@ -191,7 +191,6 @@ void TimeService_ServiceSingleCallback(PeriodicAlarm self, void * params)
     setExecuteCallbackNowFlag(self, FALSE);
   }
 }
-
 
 void TimeService_TimerTick(void)
 {

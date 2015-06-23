@@ -22,7 +22,6 @@ static BOOL isValidDigit(LedNumber_DigitPlace place);
 LedNumber LedNumber_Create(int8_t numberOfDigits)
 {
   LedNumber self = NULL;
-  int i;
 
   self = calloc(1, sizeof(LedNumberStruct));
   self->numberOfDigits = numberOfDigits;
@@ -83,8 +82,6 @@ void LedNumber_ClearNumber(LedNumber self)
 
 void LedNumber_ShowNumber(LedNumber self)
 {
-  int i;
-
   // CHECK_NULL(self);
 
   if (isValidDigit(self->visibleDigit))
