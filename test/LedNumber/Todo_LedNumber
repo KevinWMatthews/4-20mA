@@ -6,7 +6,7 @@ What if we display a three-digit number with only two LEDs?
 
   Null checks
 Check on behavior of Null data pins for LedNumber creation.
-
+WHOA!! add null checks
 
 Revise destroy() to make it more robust, clear non-null self even if *self is null? Make the test check for NULLs, etc
 Test NULL select pins
