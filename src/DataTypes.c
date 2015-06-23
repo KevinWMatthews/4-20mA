@@ -58,4 +58,12 @@ void Pin_SetState(_Pin self, _PinState state)
 {
   CHECK_NULL(self);
   self->state = state;
+  if (state == _PIN_HIGH)
+  {
+    *(self->address) |= self->bitmask;
+  }
+  else if (state == _PIN_LOW)
+  {
+    *(self->address) &= ~(self->bitmask);
+  }
 }

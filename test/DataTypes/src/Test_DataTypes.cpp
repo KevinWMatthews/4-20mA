@@ -53,8 +53,17 @@ TEST(DataTypes, AllFunctionsCanHandleNull)
   Pin_SetState(NULL, _PIN_UNDEFINED);
 }
 
-TEST(DataTypes, SetPinState)
+TEST(DataTypes, SetPinStateHigh)
 {
   Pin_SetState(pin, _PIN_HIGH);
   LONGS_EQUAL(_PIN_HIGH, Pin_GetState(pin));
+  LONGS_EQUAL(_PIN_HIGH, memoryRegister);
+}
+
+TEST(DataTypes, SetPinStateLow)
+{
+  Pin_SetState(pin, _PIN_HIGH);
+  Pin_SetState(pin, _PIN_LOW);
+  LONGS_EQUAL(_PIN_LOW, Pin_GetState(pin));
+  LONGS_EQUAL(_PIN_LOW, memoryRegister);
 }
