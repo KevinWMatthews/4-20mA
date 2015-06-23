@@ -16,40 +16,29 @@ typedef enum
 #define CHECK_NULL(pointer) if ((pointer) == NULL) return
 #define CHECK_NULL_RETURN_VALUE(pointer, retVal) if ((pointer) == NULL) return (retVal)
 
-typedef enum
-{
-  PIN_UNDEFINED = -1,
-  PIN_OFF = 0,
-  PIN_ON  = 1
-} Pin;
 
-typedef Pin * PinAddress;
-
-void setPinState(PinAddress pin, Pin state);
-
-//*********************//
 //Function return values
 typedef enum
 {
-  _PIN_NULL_POINTER = -66,
-  _PIN_UNDEFINED = -1,
-  _PIN_LOW = 0,
-  _PIN_HIGH  = 1
-} _PinState;
+  PIN_NULL_POINTER = -66,
+  PIN_UNDEFINED = -1,
+  PIN_LOW = 0,
+  PIN_HIGH  = 1
+} PinState;
 
-#define NULL_POINTER -66
+#define NULL_POINTER 66
 
 
-typedef struct _PinStruct * _Pin;
+typedef struct PinStruct * Pin;
 
 //This data type is designed for pins that will be in existence for the duration
 //of the program!
-_Pin Pin_Create(int8_t * address, int8_t bitmask);
-void Pin_Destroy(_Pin * self);
+Pin Pin_Create(uint8_t * address, uint8_t bitmask);
+void Pin_Destroy(Pin * self);
 
-int8_t * Pin_GetAddress(_Pin self);
-int8_t Pin_GetBitmask(_Pin self);
-_PinState Pin_GetState(_Pin self);
-void Pin_SetState(_Pin self, _PinState state);
+uint8_t * Pin_GetAddress(Pin self);
+uint8_t Pin_GetBitmask(Pin self);
+PinState Pin_GetState(Pin self);
+void Pin_SetState(Pin self, PinState state);
 
 #endif

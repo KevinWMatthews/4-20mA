@@ -2,32 +2,26 @@
 #include <stdlib.h>
 
 
-void setPinState(PinAddress pin, Pin state)
-{
-  CHECK_NULL(pin);
-  *pin = state;
-}
-
 //********************//
-typedef struct _PinStruct
+typedef struct PinStruct
 {
-  int8_t * address;
-  int8_t bitmask;
-  _PinState state;
-} _PinStruct;
+  uint8_t * address;
+  uint8_t bitmask;
+  PinState state;
+} PinStruct;
 
-_Pin Pin_Create(int8_t * address, int8_t bitmask)
+Pin Pin_Create(uint8_t * address, uint8_t bitmask)
 {
-  _Pin self = NULL;
+  Pin self = NULL;
 
-  self = calloc(1, sizeof(_PinStruct));
+  self = calloc(1, sizeof(PinStruct));
   self->address = address;
   self->bitmask = bitmask;
-  self->state = _PIN_UNDEFINED;
+  self->state = PIN_UNDEFINED;
   return self;
 }
 
-void Pin_Destroy(_Pin * self)
+void Pin_Destroy(Pin * self)
 {
   CHECK_NULL(self);
   CHECK_NULL(*self);
@@ -35,34 +29,34 @@ void Pin_Destroy(_Pin * self)
   *self = NULL;
 }
 
-int8_t * Pin_GetAddress(_Pin self)
+uint8_t * Pin_GetAddress(Pin self)
 {
   CHECK_NULL_RETURN_VALUE(self, NULL);
   return self->address;
 }
 
-int8_t Pin_GetBitmask(_Pin self)
+uint8_t Pin_GetBitmask(Pin self)
 {
   CHECK_NULL_RETURN_VALUE(self, NULL_POINTER);
   return self->bitmask;
 }
 
-_PinState Pin_GetState(_Pin self)
+PinState Pin_GetState(Pin self)
 {
-  CHECK_NULL_RETURN_VALUE(self, _PIN_NULL_POINTER);
+  CHECK_NULL_RETURN_VALUE(self, PIN_NULL_POINTER);
   return self->state;
 }
 
 
-void Pin_SetState(_Pin self, _PinState state)
+void Pin_SetState(Pin self, PinState state)
 {
   CHECK_NULL(self);
   self->state = state;
-  if (state == _PIN_HIGH)
+  if (state == PIN_HIGH)
   {
     *(self->address) |= self->bitmask;
   }
-  else if (state == _PIN_LOW)
+  else if (state == PIN_LOW)
   {
     *(self->address) &= ~(self->bitmask);
   }

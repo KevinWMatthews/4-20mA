@@ -23,17 +23,19 @@ typedef enum
 
 typedef struct
 {
-  PinAddress pin1;
-  PinAddress pin2;
-  PinAddress pin4;
-  PinAddress pin5;
-  PinAddress pin6;
-  PinAddress pin7;
-  PinAddress pin9;
-  PinAddress pin10;
+  Pin pin1;
+  Pin pin2;
+  //pin 3 must be wired to ground
+  Pin pin4;
+  Pin pin5;
+  Pin pin6;
+  Pin pin7;
+  //pin 8 must be wired to ground
+  Pin pin9;
+  Pin pin10;
 } LedDigit_DataPins;
 
-LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress selectPin);
+LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, Pin selectPin);
 void LedDigit_Destroy(LedDigit * self);
 
 void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value);

@@ -26,3 +26,5 @@ Find a way to execute all of the unit tests.
 We'll either need to navigate the subdirectories with a script (probably the best idea) or copy the test executables into another folder and run all of these.
 
 Clean up avr-gcc compiler warnings (warnings with -Wall)!
+
+Improve upon DataTypes' Pin data type. It only uses one bit, so we're potentially wasting a lot of space.

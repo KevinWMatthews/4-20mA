@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=DataTypes
+TESTS_TO_RUN=DataTypes LedDigit
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.

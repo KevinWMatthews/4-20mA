@@ -19,8 +19,8 @@ extern "C"
 
 TEST_GROUP(DataTypes)
 {
-  _Pin pin;
-  int8_t memoryRegister;
+  Pin pin;
+  uint8_t memoryRegister;
 
   void setup()
   {
@@ -37,7 +37,7 @@ TEST(DataTypes, CreatePin)
 {
   POINTERS_EQUAL(&memoryRegister, Pin_GetAddress(pin));
   LONGS_EQUAL(1<<PIN0, Pin_GetBitmask(pin));
-  LONGS_EQUAL(_PIN_UNDEFINED, Pin_GetState(pin));
+  LONGS_EQUAL(PIN_UNDEFINED, Pin_GetState(pin));
 }
 
 TEST(DataTypes, DestroyCanHandlesNullPointer)
@@ -49,21 +49,21 @@ TEST(DataTypes, AllFunctionsCanHandleNull)
 {
   POINTERS_EQUAL(NULL, Pin_GetAddress(NULL));
   LONGS_EQUAL(NULL_POINTER, Pin_GetBitmask(NULL));
-  LONGS_EQUAL(_PIN_NULL_POINTER, Pin_GetState(NULL));
-  Pin_SetState(NULL, _PIN_UNDEFINED);
+  LONGS_EQUAL(PIN_NULL_POINTER, Pin_GetState(NULL));
+  Pin_SetState(NULL, PIN_UNDEFINED);
 }
 
 TEST(DataTypes, SetPinStateHigh)
 {
-  Pin_SetState(pin, _PIN_HIGH);
-  LONGS_EQUAL(_PIN_HIGH, Pin_GetState(pin));
-  LONGS_EQUAL(_PIN_HIGH, memoryRegister);
+  Pin_SetState(pin, PIN_HIGH);
+  LONGS_EQUAL(PIN_HIGH, Pin_GetState(pin));
+  LONGS_EQUAL(PIN_HIGH, memoryRegister);
 }
 
 TEST(DataTypes, SetPinStateLow)
 {
-  Pin_SetState(pin, _PIN_HIGH);
-  Pin_SetState(pin, _PIN_LOW);
-  LONGS_EQUAL(_PIN_LOW, Pin_GetState(pin));
-  LONGS_EQUAL(_PIN_LOW, memoryRegister);
+  Pin_SetState(pin, PIN_HIGH);
+  Pin_SetState(pin, PIN_LOW);
+  LONGS_EQUAL(PIN_LOW, Pin_GetState(pin));
+  LONGS_EQUAL(PIN_LOW, memoryRegister);
 }

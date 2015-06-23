@@ -8,7 +8,7 @@ typedef struct LedDigitPinStruct * LedDigitPins;
 typedef struct LedDigitStruct
 {
   LedDigit_DataPins * dataPins;
-  PinAddress selectPin;
+  Pin selectPin;
   LedDigit_DisplayDigit digitToShow;
   BOOL showDecimal;
 } LedDigitStruct;
@@ -42,7 +42,7 @@ static void clearDecimal(LedDigit_DataPins * pins);
 
 
 //*** Public functions ***//
-LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress selectPin)
+LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, Pin selectPin)
 {
   LedDigit self;
   CHECK_NULL_RETURN_VALUE(dataPinAddresses, NULL);
@@ -53,7 +53,7 @@ LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, PinAddress select
   self->selectPin = selectPin;
 
   showNothing(self->dataPins);
-  *(self->selectPin) = PIN_OFF;
+  Pin_SetState(self->selectPin, PIN_LOW);
   self->digitToShow = NOTHING;
   self->showDecimal = FALSE;
 
@@ -160,13 +160,13 @@ void LedDigit_UpdateLed(LedDigit self)
     clearDecimal(self->dataPins);
   }
 
-  setPinState(self->selectPin, PIN_ON);
+  Pin_SetState(self->selectPin, PIN_HIGH);
 }
 
 void LedDigit_TurnLedOff(LedDigit self)
 {
   CHECK_NULL(self);
-  setPinState(self->selectPin, PIN_OFF);
+  Pin_SetState(self->selectPin, PIN_LOW);
   showNothing(self->dataPins);
   clearDecimal(self->dataPins);
 }
@@ -175,131 +175,131 @@ void LedDigit_TurnLedOff(LedDigit self)
 //*** Private functions ***//
 static void showNothing(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_OFF);
-  setPinState(pins->PIN_B, PIN_OFF);
-  setPinState(pins->PIN_C, PIN_OFF);
-  setPinState(pins->PIN_D, PIN_OFF);
-  setPinState(pins->PIN_E, PIN_OFF);
-  setPinState(pins->PIN_F, PIN_OFF);
-  setPinState(pins->PIN_G, PIN_OFF);
+  Pin_SetState(pins->PIN_A, PIN_LOW);
+  Pin_SetState(pins->PIN_B, PIN_LOW);
+  Pin_SetState(pins->PIN_C, PIN_LOW);
+  Pin_SetState(pins->PIN_D, PIN_LOW);
+  Pin_SetState(pins->PIN_E, PIN_LOW);
+  Pin_SetState(pins->PIN_F, PIN_LOW);
+  Pin_SetState(pins->PIN_G, PIN_LOW);
 }
 
 static void showZero(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_ON);
-  setPinState(pins->PIN_E, PIN_ON);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_OFF);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_HIGH);
+  Pin_SetState(pins->PIN_E, PIN_HIGH);
+  Pin_SetState(pins->PIN_F, PIN_HIGH);
+  Pin_SetState(pins->PIN_G, PIN_LOW);
 }
 
 static void showOne(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_OFF);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_OFF);
-  setPinState(pins->PIN_E, PIN_OFF);
-  setPinState(pins->PIN_F, PIN_OFF);
-  setPinState(pins->PIN_G, PIN_OFF);
+  Pin_SetState(pins->PIN_A, PIN_LOW);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_LOW);
+  Pin_SetState(pins->PIN_E, PIN_LOW);
+  Pin_SetState(pins->PIN_F, PIN_LOW);
+  Pin_SetState(pins->PIN_G, PIN_LOW);
 }
 
 static void showTwo(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_OFF);
-  setPinState(pins->PIN_D, PIN_ON);
-  setPinState(pins->PIN_E, PIN_ON);
-  setPinState(pins->PIN_F, PIN_OFF);
-  setPinState(pins->PIN_G, PIN_ON);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_LOW);
+  Pin_SetState(pins->PIN_D, PIN_HIGH);
+  Pin_SetState(pins->PIN_E, PIN_HIGH);
+  Pin_SetState(pins->PIN_F, PIN_LOW);
+  Pin_SetState(pins->PIN_G, PIN_HIGH);
 }
 
 static void showThree(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_ON);
-  setPinState(pins->PIN_E, PIN_OFF);
-  setPinState(pins->PIN_F, PIN_OFF);
-  setPinState(pins->PIN_G, PIN_ON);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_HIGH);
+  Pin_SetState(pins->PIN_E, PIN_LOW);
+  Pin_SetState(pins->PIN_F, PIN_LOW);
+  Pin_SetState(pins->PIN_G, PIN_HIGH);
 }
 
 static void showFour(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_OFF);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_OFF);
-  setPinState(pins->PIN_E, PIN_OFF);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
+  Pin_SetState(pins->PIN_A, PIN_LOW);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_LOW);
+  Pin_SetState(pins->PIN_E, PIN_LOW);
+  Pin_SetState(pins->PIN_F, PIN_HIGH);
+  Pin_SetState(pins->PIN_G, PIN_HIGH);
 }
 
 static void showFive(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_OFF);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_ON);
-  setPinState(pins->PIN_E, PIN_OFF);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_LOW);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_HIGH);
+  Pin_SetState(pins->PIN_E, PIN_LOW);
+  Pin_SetState(pins->PIN_F, PIN_HIGH);
+  Pin_SetState(pins->PIN_G, PIN_HIGH);
 }
 
 static void showSix(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_OFF);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_ON);
-  setPinState(pins->PIN_E, PIN_ON);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_LOW);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_HIGH);
+  Pin_SetState(pins->PIN_E, PIN_HIGH);
+  Pin_SetState(pins->PIN_F, PIN_HIGH);
+  Pin_SetState(pins->PIN_G, PIN_HIGH);
 }
 
 static void showSeven(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_OFF);
-  setPinState(pins->PIN_E, PIN_OFF);
-  setPinState(pins->PIN_F, PIN_OFF);
-  setPinState(pins->PIN_G, PIN_OFF);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_LOW);
+  Pin_SetState(pins->PIN_E, PIN_LOW);
+  Pin_SetState(pins->PIN_F, PIN_LOW);
+  Pin_SetState(pins->PIN_G, PIN_LOW);
 }
 
 static void showEight(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_ON);
-  setPinState(pins->PIN_E, PIN_ON);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_HIGH);
+  Pin_SetState(pins->PIN_E, PIN_HIGH);
+  Pin_SetState(pins->PIN_F, PIN_HIGH);
+  Pin_SetState(pins->PIN_G, PIN_HIGH);
 }
 
 static void showNine(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_A, PIN_ON);
-  setPinState(pins->PIN_B, PIN_ON);
-  setPinState(pins->PIN_C, PIN_ON);
-  setPinState(pins->PIN_D, PIN_OFF);
-  setPinState(pins->PIN_E, PIN_OFF);
-  setPinState(pins->PIN_F, PIN_ON);
-  setPinState(pins->PIN_G, PIN_ON);
+  Pin_SetState(pins->PIN_A, PIN_HIGH);
+  Pin_SetState(pins->PIN_B, PIN_HIGH);
+  Pin_SetState(pins->PIN_C, PIN_HIGH);
+  Pin_SetState(pins->PIN_D, PIN_LOW);
+  Pin_SetState(pins->PIN_E, PIN_LOW);
+  Pin_SetState(pins->PIN_F, PIN_HIGH);
+  Pin_SetState(pins->PIN_G, PIN_HIGH);
 }
 
 static void showDecimal(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_DP, PIN_ON);
+  Pin_SetState(pins->PIN_DP, PIN_HIGH);
 }
 
 static void clearDecimal(LedDigit_DataPins * pins)
 {
-  setPinState(pins->PIN_DP, PIN_OFF);
+  Pin_SetState(pins->PIN_DP, PIN_LOW);
 }
