@@ -3,11 +3,6 @@ Tiny26_Timers
 ~~~ Timer 0 ~~~
 Can be sourced from system clock CK, prescaled, CK or an external pin.
 
-TIMER0, OVF0 (Timer/Counter0 Overflow)
-  Priority 7 (low number == high priority)
-  Program Address $006
-
-
 ~TCCR0 - Timer/Counter0 Control Register
   Bits 7..4 Reserved
 
@@ -30,6 +25,10 @@ TIMER0, OVF0 (Timer/Counter0 Overflow)
   Up-counter with read and write access
   Bit   7   6   5   4   3   2   1   0
       MSB                         LSB
+
+~TIMER0, OVF0 (Timer/Counter0 Overflow)
+  When timer0 matches or overflows it triggers the
+  TIM0_OVF interrupt handler (ISR).
 
 
 ~~~ Timer 1 ~~~
@@ -124,17 +123,20 @@ Bits 3..0 - CS13, CS13, CS11, CS10 (Clock Select Bits 3, 2, 1, 0)
   Timer/Counter1 must count up to the OCR1A value
   A software write that sets TCNT1 and OCR1A to the same value does not generate a match!
   Actions to be taken on a match are specified in TCCR1A
+  This register can not be cleared on a match?!
 
 ~OCR1B (Timer/Counter1 Output Compare Register B)
   8-bit value that will be continuously compared to Timer/Counter1
   Timer/Counter1 must count up to the OCR1B value
   A software write that sets TCNT1 and OCR1B to the same value does not generate a match!
   Actions to be taken on a match are specified in TCCR1A
+  This register can not be cleared on a match?!
 
 ~OCR1C (Timer/Counter1 Output Compare Register C)
   8-bit value that will be continuously compared to Timer/Counter1
   Timer/Counter1 must count up to the OCR1B value
   A software write that sets TCNT1 and OCR1B to the same value does not generate a match!
+  This register can be cleared on a match:
   If CTC1 in TCCR1B is set, a compare match clears TCNT1 and sets an Overflow Interrupt Flag (TOV1).
 
 ~PLLCSR (PLL Control and Status Register)

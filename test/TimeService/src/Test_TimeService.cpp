@@ -420,6 +420,21 @@ TEST(TimeService, CallbackFlagClearedAfterExecution)
   TimeService_ServiceSingleCallback(alarm, nullPointer);
 }
 
+TEST(TimeService, SeveralServicesDontDisruptCounter)
+{
+  callback = callbackFunction;
+  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  TimeService_ActivatePeriodicAlarm(alarm);
+  TimeService_Private_SetCounter(alarm, period-11);
+  TimeService_TimerTick();
+
+  LONGS_EQUAL(period-10, TimeService_Private_GetCounter(alarm));
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
+  LONGS_EQUAL(period-10, TimeService_Private_GetCounter(alarm));
+  TimeService_ServiceSingleCallback(alarm, nullPointer);
+  LONGS_EQUAL(period-10, TimeService_Private_GetCounter(alarm));
+}
+
 //Maybe this isn't the best test, but I'm just learning
 //We should test the callback function separately
 //This is to demonstrate that NULL will actually reach the callback

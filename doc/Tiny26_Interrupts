@@ -105,7 +105,7 @@ C  ADC Conversion Complete
       RETI (Return from Interrupt) instruction sets the I-bit (re-enabling interrupts)
       Defaults to 0 on power-up
 
-The user must set the I-bit to 1!
+The user must set the I-bit to 1 during the setup routine! Otherwise interrupts will remain disabled.
 
 When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are disabled.
 The I-bit is set to one when a Return from Interrupt (RETI) instruction is executed.
