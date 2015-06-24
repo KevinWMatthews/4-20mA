@@ -54,10 +54,10 @@ void Pin_SetState(Pin self, PinState state)
   self->state = state;
   if (state == PIN_HIGH)
   {
-    *(self->address) |= self->bitmask;
+    *(self->address) |= self->bitmask;  //SBI
   }
   else if (state == PIN_LOW)
   {
-    *(self->address) &= ~(self->bitmask);
+    *(self->address) &= ~(self->bitmask); //CBI
   }
 }

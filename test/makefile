@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=DataTypes LedDigit
+TESTS_TO_RUN=PinDriver
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
@@ -26,6 +26,8 @@ TIMESERVICE_DIR=TimeService
 MAINLOOP_DIR=MainLoop
 
 NUMERICFUNCTIONS_DIR=NumericFunctions
+
+PINDRIVER_DIR=PinDriver
 
 #Create a makefile target for each series of tests
 Default:
@@ -57,6 +59,10 @@ MainLoop:
 
 NumericFunctions:
 	$(MAKE_TESTS) $(NUMERICFUNCTIONS_DIR) $(MAKECMDGOALS)
+
+PinDriver:
+	$(MAKE_TESTS) $(PINDRIVER_DIR) $(MAKECMDGOALS)
+
 
 ### Makefile targets ###
 .DEFAULT_GOAL:=all
