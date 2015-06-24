@@ -1,0 +1,6 @@
+TODO
+
+how to distinguish between two kinds of SBI?
+does the new one work for a complete bitmask?
+
+Think really hard about how to organize the makefiles

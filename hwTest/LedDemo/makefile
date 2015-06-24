@@ -12,9 +12,9 @@ TARGET_NAME=LedDemo
 MCU=attiny26
 
 #Root directory of the project as a whole, which may not be the current directory
-ROOT_DIR=../..
+ROOT_DIR=.
 SRC_DIRS=src
-INC_DIRS=inc $(ROOT_DIR)/inc
+INC_DIRS=inc
 #TODO LIB_DIRS=
 #Static lirary names without 'lib' prefix and .a suffix
 #TODO LIBS_LIST=
@@ -22,7 +22,7 @@ OBJ_DIR=obj
 TARGET_DIR=build
 
 #Specify specific source files that aren't in the above directories (hopefully a temporary situation)
-SRC_FILES=$(ROOT_DIR)/src/PinDriver.c
+SRC_FILES=
 
 #Optimization level
 #use s (size opt), 1, 2, 3, 0 (off), fast, g (debugging)
