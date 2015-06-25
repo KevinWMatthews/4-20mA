@@ -9,7 +9,7 @@ TEST_TARGET_NAME=LedDigit
 ### Directory structure ###
 # List all production code folders
 ROOT_DIR=../..
-SRC_DIRS=$(ROOT_DIR)/src
+SRC_DIRS=$(ROOT_DIR)/src $(ROOT_DIR)/mockHw/avr
 INC_DIRS=$(ROOT_DIR)/inc $(ROOT_DIR)/mockHw
 LIB_DIRS=
 #Static library names without lib prefix and .a suffix

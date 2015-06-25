@@ -4,7 +4,8 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=LedNumberWiring LedNumber
+TESTS_TO_RUN=AtoD Adc DataTypes LineFit LedDigit LedDigitWiring \
+             LedNumberWiring LedNumber MainLoop NumericFunctions PinDriver TimeService
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
