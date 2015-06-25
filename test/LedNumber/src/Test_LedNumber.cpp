@@ -76,46 +76,9 @@ TEST_GROUP(LedNumber)
     mock().expectOneCall("LedDigit_TurnLedOff")
           .withParameter("self", digit);
   }
-
-  // void singleDigitShows(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
-  // {
-  //   LedNumber_SetNumber(self, numberToShow);
-  //   LedNumber_ShowNumber(self);
-
-  //   for (int i = 0; i < numberOfDigits; i++)
-  //   {
-  //     if (i == 0)
-  //     {
-  //       LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
-  //     }
-  //     else
-  //     {
-  //       LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
-  //     }
-  //   }
-  // }
-
-  // void allDigitsShowSequentially(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
-  // {
-  //   LedNumber_SetNumber(self, numberToShow);
-
-  //   for (int i = 0; i < numberOfDigits; i++)
-  //   {
-  //     LedNumber_ShowNumber(self);
-  //     for (int j = 0; j < numberOfDigits; j++)
-  //     {
-  //       if (j == i)
-  //       {
-  //         LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
-  //       }
-  //       else
-  //       {
-  //         LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
-  //       }
-  //     }
-  //   }
-  // }
 };
+
+
 
 //**********************//
 //*** Mock Functions ***//
@@ -142,11 +105,6 @@ void LedDigit_ClearDigit(LedDigit self)
         .withParameter("self", self);
 }
 
-// void LedDigit_ClearDecimal(LedDigit self);
-// void LedDigit_ClearAll(LedDigit self);
-// LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self);
-// BOOL LedDigit_IsDecimalShown(LedDigit self);
-
 void LedDigit_UpdateLed(LedDigit self)
 {
     mock().actualCall("LedDigit_UpdateLed")
@@ -156,6 +114,30 @@ void LedDigit_UpdateLed(LedDigit self)
 void LedDigit_TurnLedOff(LedDigit self)
 {
   mock().actualCall("LedDigit_TurnLedOff")
+        .withParameter("self", self);
+}
+
+void LedDigit_ClearDecimal(LedDigit self)
+{
+  mock().actualCall("LedDigit_ClearDecimal")
+        .withParameter("self", self);
+}
+
+void LedDigit_ClearAll(LedDigit self)
+{
+  mock().actualCall("LedDigit_ClearAll")
+        .withParameter("self", self);
+}
+
+LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self)
+{
+  mock().actualCall("LedDigit_CurrentDigit")
+        .withParameter("self", self);
+}
+
+BOOL LedDigit_IsDecimalShown(LedDigit self)
+{
+  mock().actualCall("LedDigit_IsDecimalShown")
         .withParameter("self", self);
 }
 

@@ -1,9 +1,0 @@
-TODO
-
-how to distinguish between two kinds of SBI?
-does the new one work for a complete bitmask?
-
-Think really hard about how to organize the makefiles
-
-Wait, remove the PA defines from LedWiring.h
-Hope it still works....

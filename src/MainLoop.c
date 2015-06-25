@@ -23,7 +23,7 @@ static void setConversionStatus(int8_t status)
 //Wrappers for interrupts
 void MainLoop_AtodConversion(void * param)
 {
-  CHECK_NULL(param);
+  RETURN_IF_NULL(param);
   PeriodicAlarm * atodReadAlarmPointer = (PeriodicAlarm *)param;
   atodConversionStatus = AtoD_StartConversion();
   TimeService_ActivatePeriodicAlarm(*atodReadAlarmPointer);
@@ -36,11 +36,11 @@ void MainLoop_GetReading(void * param)
   int16_t atodReading;
   float reading;
 
-  CHECK_NULL(param);
+  RETURN_IF_NULL(param);
   parameterStruct = (getReadingParameterStruct *)param;
-  CHECK_NULL(parameterStruct->outputModel);
-  CHECK_NULL(parameterStruct->ledDisplay);
-  CHECK_NULL(parameterStruct->getReadingAlarm);
+  RETURN_IF_NULL(parameterStruct->outputModel);
+  RETURN_IF_NULL(parameterStruct->ledDisplay);
+  RETURN_IF_NULL(parameterStruct->getReadingAlarm);
 
   if (getConversionStatus() == ATOD_CONVERSION_BUSY)
   {
@@ -59,7 +59,7 @@ void MainLoop_GetReading(void * param)
 void MainLoop_UpdateDisplay(void * param)
 {
   LedNumber * ledDisplay;
-  CHECK_NULL(param);
+  RETURN_IF_NULL(param);
   ledDisplay = (LedNumber *)param;
 
   LedNumber_ShowNumber(*ledDisplay);

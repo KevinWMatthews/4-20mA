@@ -44,8 +44,8 @@ void LedNumber_Destroy(LedNumber * self)
   LedNumber pointer;
   int i;
 
-  CHECK_NULL(self);
-  CHECK_NULL(*self);
+  RETURN_IF_NULL(self);
+  RETURN_IF_NULL(*self);
 
   pointer = *self;
 
@@ -60,7 +60,7 @@ void LedNumber_Destroy(LedNumber * self)
 
 void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place)
 {
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   self->ledDigits[place] = digit;
 }
 
@@ -69,10 +69,10 @@ void LedNumber_SetNumber(LedNumber self, int16_t number)
   int16_t digitToShow;
   int i;
 
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   for (i = 0; i < self->numberOfDigits; i++)
   {
-    CHECK_NULL(self->ledDigits[i]);
+    RETURN_IF_NULL(self->ledDigits[i]);
     digitToShow = getDigitFromNumber(number, i+1, self->numberOfDigits);
     LedDigit_SetDigit(self->ledDigits[i], digitToShow);
   }
@@ -82,7 +82,7 @@ void LedNumber_ClearNumber(LedNumber self)
 {
   int i;
 
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   for (i = 0; i < self->numberOfDigits; i++)
   {
     LedDigit_ClearDigit(self->ledDigits[i]);
@@ -91,7 +91,7 @@ void LedNumber_ClearNumber(LedNumber self)
 
 void LedNumber_ShowNumber(LedNumber self)
 {
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
 
   if (isValidDigit(self->visibleDigit))
   {
@@ -109,7 +109,7 @@ void LedNumber_ShowNumber(LedNumber self)
 
 void LedNumber_TurnOff(LedNumber self)
 {
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   LedDigit_TurnLedOff(self->ledDigits[self->visibleDigit]);
   self->visibleDigit = LED_NONE;
 }

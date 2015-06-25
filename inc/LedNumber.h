@@ -3,11 +3,19 @@
 
 #include "LedDigit.h"
 #include "LedNumberWiring.h"
-#include "DataTypes.h"
 
+
+
+//******************//
+//*** Data types ***//
+//******************//
 typedef struct LedNumberStruct * LedNumber;
 
 
+
+//************************//
+//*** Public Functions ***//
+//************************//
 LedNumber LedNumber_Create(int8_t numberOfDigits);
 void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place);
 void LedNumber_Destroy(LedNumber * self);

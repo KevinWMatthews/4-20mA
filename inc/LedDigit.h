@@ -2,8 +2,12 @@
 #define LedDigit_H_
 
 #include "DataTypes.h"
-#include <stdint.h>
 
+
+
+//******************//
+//*** Data Types ***//
+//******************//
 typedef struct LedDigitStruct * LedDigit;
 
 typedef enum
@@ -22,6 +26,11 @@ typedef enum
 } LedDigit_DisplayDigit;
 
 
+
+//************************//
+//*** Public Functions ***//
+//************************//
+void LedDigit_HwSetup(void);
 LedDigit LedDigit_Create(void);
 void LedDigit_Destroy(LedDigit * self);
 

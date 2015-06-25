@@ -16,6 +16,8 @@ TEST_GROUP(LedDigit)
 
   void setup()
   {
+    expectInitCall();
+    LedDigit_HwSetup();
     expectPinCalls(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
     expectPinDecimalPointCall(FALSE);
     digit = LedDigit_Create();
@@ -26,6 +28,12 @@ TEST_GROUP(LedDigit)
     LedDigit_Destroy(&digit);
     mock().checkExpectations();
     mock().clear();
+  }
+
+  //*** Helper functions ***//
+  void expectInitCall(void)
+  {
+    mock().expectOneCall("LedDigitWiring_Init");
   }
 
   void expectPinCall(BOOL setPin, LedDigitWiring_Pin pin)
@@ -58,28 +66,17 @@ TEST_GROUP(LedDigit)
   {
     expectPinCall(pinDP, PIN_DP);
   }
-
-
-
-  // void callAllFunctions(LedDigit self, LedDigit_DisplayDigit number)
-  // {
-    // //Other than Create() and Destroy()
-    // LedDigit_SetDigit(self, number);
-    // LedDigit_SetDecimal(self);
-    // LedDigit_ClearDigit(self);
-    // LedDigit_ClearDecimal(self);
-    // LedDigit_ClearAll(self);
-    // LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(self));
-    // CHECK_FALSE(LedDigit_IsDecimalShown(self));
-    // LedDigit_UpdateLed(self);
-    // LedDigit_TurnLedOff(self);
-  // }
 };
 
 
 
+//**********************//
+//*** Function mocks ***//
+//**********************//
 void LedDigitWiring_Init(void)
-{}
+{
+  mock().actualCall("LedDigitWiring_Init");
+}
 
 void LedDigitWiring_SetPin(LedDigitWiring_Pin pin)
 {
@@ -94,8 +91,9 @@ void LedDigitWiring_ClearPin(LedDigitWiring_Pin pin)
 }
 
 
-
-//*** The tests! ***/
+//******************//
+//*** Unit Tests ***//
+//******************//
 //Initialization and NULL pointers
 TEST(LedDigit, Create)
 {
@@ -120,11 +118,7 @@ TEST(LedDigit, DestroyClearsPointer)
   POINTERS_EQUAL(NULL, digit);
 }
 
-TEST(LedDigit, AllFunctionsCanHandleNullSelf)
-{
-}
-
-//Functionality
+//*** Functionality ***//
 TEST(LedDigit, SetDigitThatWillBeShown)
 {
   LedDigit_SetDigit(digit, SEVEN);

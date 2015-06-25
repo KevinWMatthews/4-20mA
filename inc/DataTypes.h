@@ -13,8 +13,8 @@ typedef enum
 #define NULL 0
 #endif
 
-#define CHECK_NULL(pointer) if ((pointer) == NULL) return
-#define CHECK_NULL_RETURN_VALUE(pointer, retVal) if ((pointer) == NULL) return (retVal)
+#define RETURN_IF_NULL(pointer) if ((pointer) == NULL) return
+#define RETURN_IF_NULL_RETURN_VALUE(pointer, retVal) if ((pointer) == NULL) return (retVal)
 
 
 //Function return values

@@ -23,34 +23,34 @@ Pin Pin_Create(uint8_t * address, uint8_t bitmask)
 
 void Pin_Destroy(Pin * self)
 {
-  CHECK_NULL(self);
-  CHECK_NULL(*self);
+  RETURN_IF_NULL(self);
+  RETURN_IF_NULL(*self);
   free(*self);
   *self = NULL;
 }
 
 uint8_t * Pin_GetAddress(Pin self)
 {
-  CHECK_NULL_RETURN_VALUE(self, NULL);
+  RETURN_IF_NULL_RETURN_VALUE(self, NULL);
   return self->address;
 }
 
 uint8_t Pin_GetBitmask(Pin self)
 {
-  CHECK_NULL_RETURN_VALUE(self, NULL_POINTER);
+  RETURN_IF_NULL_RETURN_VALUE(self, NULL_POINTER);
   return self->bitmask;
 }
 
 PinState Pin_GetState(Pin self)
 {
-  CHECK_NULL_RETURN_VALUE(self, PIN_NULL_POINTER);
+  RETURN_IF_NULL_RETURN_VALUE(self, PIN_NULL_POINTER);
   return self->state;
 }
 
 
 void Pin_SetState(Pin self, PinState state)
 {
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   self->state = state;
   if (state == PIN_HIGH)
   {

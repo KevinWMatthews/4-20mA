@@ -1,22 +1,10 @@
 TODO
 
-Look into how/if to stub out <avr/io.h>. Is this a good design pattern?
-Also need to figure out how to get this into the file list.
-It IS already in the dependency list :)
-
-Get test code to build using avr-gcc.
-
-Is it possible to avoid recompiling tests unnecessarily? Each time we change any source code, the library must be recompiled, and this takes some time. It might be necessary; the tests need to run on the new source code, after all.
-
-Rename CHECK null to CHECK_NULL_AND_RETURN
-
-Look through 250 code to see how we select which LED to light up.
+Revise the ADC and AtoD task division.
 
 Add documentation to header files
 
-Think hard about the ADC and AtoD task division.
 
-Move pin functions and data type to its own file?
 
 Want to document and streamline testing for NULL pointers for a generic multi-instance module.
 
@@ -27,8 +15,6 @@ We'll either need to navigate the subdirectories with a script (probably the bes
 
 Clean up avr-gcc compiler warnings (warnings with -Wall)!
 
-Improve upon DataTypes' Pin data type. It only uses one bit, so we're potentially wasting a lot of space.
-
-Makefile TODO on whether test code should include Mock HW
-
 Edit makefile to allow user to switch between hardware platforms. Will require directory reorganization!
+
+Every set of tests recompiles the production code library. This is inefficient.

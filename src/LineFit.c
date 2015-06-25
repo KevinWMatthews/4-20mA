@@ -22,28 +22,28 @@ LineFit LineFit_Create(void)
 
 void LineFit_Destroy(LineFit * self)
 {
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   free(*self);
   *self = NULL;
 }
 
 void LineFit_SetPoint1(LineFit self, int16_t x1, int16_t y1)
 {
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   self->x1 = x1;
   self->y1 = y1;
 }
 
 void LineFit_SetPoint2(LineFit self, int16_t x2, int16_t y2)
 {
-  CHECK_NULL(self);
+  RETURN_IF_NULL(self);
   self->x2 = x2;
   self->y2 = y2;
 }
 
 int8_t LineFit_CalculateEquation(LineFit self)
 {
-  CHECK_NULL_RETURN_VALUE(self, LINE_FIT_FAIL_VERTICAL_LINE);
+  RETURN_IF_NULL_RETURN_VALUE(self, LINE_FIT_FAIL_VERTICAL_LINE);
   if (self->x2 == self->x1)
   {
     return LINE_FIT_FAIL_VERTICAL_LINE;
@@ -55,6 +55,6 @@ int8_t LineFit_CalculateEquation(LineFit self)
 
 float LineFit_GetOutput(LineFit self, int16_t x)
 {
-  CHECK_NULL_RETURN_VALUE(self, 0.0);
+  RETURN_IF_NULL_RETURN_VALUE(self, 0.0);
   return (self->m * x) + self->b;
 }
