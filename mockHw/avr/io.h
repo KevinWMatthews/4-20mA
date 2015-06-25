@@ -3,13 +3,18 @@
 
 #include "DataTypes.h"
 
+//Explicitly mock registers
 extern uint8_t DDRA;
+extern uint8_t DDRB;
 extern uint8_t PORTA;
+extern uint8_t PORTB;
 
 //*** Copied from <avr/io.h> ***//
 
-//Explicitly mock registers
+//*** GPIO lines ***//
 // #define DDRA    _SFR_IO8(0x1A)
+// #define DDRB    _SFR_IO8(0x17)
+
 // #define PORTA   _SFR_IO8(0x1B)
 #define PA0     0
 #define PA1     1
@@ -19,6 +24,17 @@ extern uint8_t PORTA;
 #define PA5     5
 #define PA6     6
 #define PA7     7
+
+// #define PORTB   _SFR_IO8(0x18)
+#define PB0     0
+#define PB1     1
+#define PB2     2
+#define PB3     3
+#define PB4     4
+#define PB5     5
+#define PB6     6
+#define PB7     7
+
 
 
 //ADMUX - ADC Multiplexer Selection Register

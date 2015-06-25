@@ -28,3 +28,7 @@ We'll either need to navigate the subdirectories with a script (probably the bes
 Clean up avr-gcc compiler warnings (warnings with -Wall)!
 
 Improve upon DataTypes' Pin data type. It only uses one bit, so we're potentially wasting a lot of space.
+
+Makefile TODO on whether test code should include Mock HW
+
+Edit makefile to allow user to switch between hardware platforms. Will require directory reorganization!

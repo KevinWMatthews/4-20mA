@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=LedDigit LedDigitWiring
+TESTS_TO_RUN=LedNumberWiring
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
@@ -22,6 +22,8 @@ LEDDIGIT_DIR=LedDigit
 LEDDIGITWIRING_DIR=LedDigitWiring
 
 LEDNUMBER_DIR=LedNumber
+
+LEDNUMBERWIRING_DIR=LedNumberWiring
 
 MAINLOOP_DIR=MainLoop
 
@@ -53,6 +55,9 @@ LedDigit:
 
 LedDigitWiring:
 	$(MAKE_TESTS) $(LEDDIGITWIRING_DIR) $(MAKECMDGOALS)
+
+LedNumberWiring:
+	$(MAKE_TESTS) $(LEDNUMBERWIRING_DIR) $(MAKECMDGOALS)
 
 LedNumber:
 	$(MAKE_TESTS) $(LEDNUMBER_DIR) $(MAKECMDGOALS)
