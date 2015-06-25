@@ -7,4 +7,7 @@
 #define SBI(variable, bitNumber) ((variable) |= (1<<(bitNumber)))
 #define CBI(variable, bitNumber) ((variable) &= ~(1<<(bitNumber)))
 
+#define SBIT(variable, bit) ((variable) |= (bit))
+#define CBIT(variable, bit) ((variable) &= ~(bit))
+
 #endif

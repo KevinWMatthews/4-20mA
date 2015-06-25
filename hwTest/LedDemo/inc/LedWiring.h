@@ -4,6 +4,16 @@
 #include <avr/io.h>
 #include "DataTypes.h"
 
+#define PA0     0
+#define PA1     1
+#define PA2     2
+#define PA3     3
+#define PA4     4
+#define PA5     5
+#define PA6     6
+#define PA7     7
+
+
 /* This file encapsulates the hardware dependencies of LedDemo.
  * LedDemo_Wiring will depend directly on a particular chip and its manufacturer-provided header file.
  * This header will be found by the embedded compiler during production builds.
