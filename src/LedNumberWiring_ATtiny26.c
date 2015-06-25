@@ -13,7 +13,7 @@ void LedNumberWiring_Init(void)
   DDRB = WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
 }
 
-uint8_t convertPinToWiringPin(LedNumber_DigitPlace pin)
+static uint8_t convertPinToWiringPin(LedNumber_DigitPlace pin)
 {
   switch (pin)
   {

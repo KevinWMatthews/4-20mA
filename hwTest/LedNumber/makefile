@@ -22,7 +22,11 @@ OBJ_DIR=obj
 TARGET_DIR=build
 
 #Specify specific source files that aren't in the above directories (hopefully a temporary situation)
-SRC_FILES=$(ROOT_DIR)/src/LedNumber.c $(ROOT_DIR)/src/LedDigit.c $(ROOT_DIR)/src/DataTypes.c
+SRC_FILES=$(ROOT_DIR)/src/LedNumber.c \
+          $(ROOT_DIR)/src/LedNumberWiring_ATtiny26.c \
+          $(ROOT_DIR)/src/LedDigit.c \
+          $(ROOT_DIR)/src/LedDigitWiring_ATtiny26.c \
+          $(ROOT_DIR)/src/DataTypes.c
 
 #Optimization level
 #use s (size opt), 1, 2, 3, 0 (off), fast, g (debugging)
