@@ -32,3 +32,5 @@ Improve upon DataTypes' Pin data type. It only uses one bit, so we're potentiall
 Makefile TODO on whether test code should include Mock HW
 
 Edit makefile to allow user to switch between hardware platforms. Will require directory reorganization!
+
+Depending on the order in which tests are run, io.c may or may not make it into production code. We need to standardize this.

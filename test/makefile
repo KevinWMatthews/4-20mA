@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=LedNumberWiring
+TESTS_TO_RUN=LedNumberWiring LedNumber
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.

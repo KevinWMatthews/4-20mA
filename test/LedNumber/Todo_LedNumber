@@ -1,21 +1,11 @@
 Add decimal support, but later; we'll have to figure out what kind of behavior that we want.
 
+What if we added 0 digits?
+
   Overflow checks:
 Add return status to AddLedDigit() (what if we add too many digits?).
 What if we display a three-digit number with only two LEDs?
 
-  Null checks
-Check on behavior of Null data pins for LedNumber creation.
-WHOA!! add null checks
+What if a digit creation fails?
 
-Revise destroy() to make it more robust, clear non-null self even if *self is null? Make the test check for NULLs, etc
-Test NULL select pins
-Test NULL LedDigit pointers
-
-
-Watch out for the assert in LedNumber...
-Need to replace with a null check that can actually continue to run
-
-Look at using LedNumber_DigitPlace in getDigitFromNumber()
-
-Add tests to spy.
+(?) Look at using LedNumber_DigitPlace in getDigitFromNumber()

@@ -1,10 +1,13 @@
 #include "LedNumber.h"
+#include "LedNumberWiring.h"
 #include "LedDigit.h"
 #include <stdlib.h>
 
-#include <assert.h>
 
+
+//******************//
 //*** Data types ***//
+//******************//
 typedef struct LedNumberStruct
 {
   LedDigit * ledDigits;       //Pointer to a dynamically allocated array of LEDs
@@ -13,12 +16,18 @@ typedef struct LedNumberStruct
 } LedNumberStruct;
 
 
+
+//**************************************//
 //*** File-scope function prototypes ***//
+//**************************************//
 static int16_t getDigitFromNumber(int16_t number, int8_t place, int numberOfDigits);
 static BOOL isValidDigit(LedNumber_DigitPlace place);
 
 
-//*** Public functions ***//
+
+//************************//
+//*** Public Functions ***//
+//************************//
 LedNumber LedNumber_Create(int8_t numberOfDigits)
 {
   LedNumber self = NULL;
@@ -26,13 +35,8 @@ LedNumber LedNumber_Create(int8_t numberOfDigits)
   self = calloc(1, sizeof(LedNumberStruct));
   self->numberOfDigits = numberOfDigits;
   self->ledDigits = calloc(self->numberOfDigits, sizeof(LedDigit));
-  self->visibleDigit = NO_LED;
+  self->visibleDigit = LED_NONE;
   return self;
-}
-
-void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place)
-{
-  self->ledDigits[place] = digit;
 }
 
 void LedNumber_Destroy(LedNumber * self)
@@ -47,7 +51,6 @@ void LedNumber_Destroy(LedNumber * self)
 
   for (i = 0; i < pointer->numberOfDigits; i++)
   {
-    assert(&pointer->ledDigits[i] != NULL);
     LedDigit_Destroy(&pointer->ledDigits[i]);
   }
   free(pointer->ledDigits);
@@ -55,14 +58,21 @@ void LedNumber_Destroy(LedNumber * self)
   self = NULL;
 }
 
+void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place)
+{
+  CHECK_NULL(self);
+  self->ledDigits[place] = digit;
+}
+
 void LedNumber_SetNumber(LedNumber self, int16_t number)
 {
   int16_t digitToShow;
   int i;
 
-  // CHECK_NULL(self);
+  CHECK_NULL(self);
   for (i = 0; i < self->numberOfDigits; i++)
   {
+    CHECK_NULL(self->ledDigits[i]);
     digitToShow = getDigitFromNumber(number, i+1, self->numberOfDigits);
     LedDigit_SetDigit(self->ledDigits[i], digitToShow);
   }
@@ -72,8 +82,7 @@ void LedNumber_ClearNumber(LedNumber self)
 {
   int i;
 
-  // CHECK_NULL(self);
-
+  CHECK_NULL(self);
   for (i = 0; i < self->numberOfDigits; i++)
   {
     LedDigit_ClearDigit(self->ledDigits[i]);
@@ -82,7 +91,7 @@ void LedNumber_ClearNumber(LedNumber self)
 
 void LedNumber_ShowNumber(LedNumber self)
 {
-  // CHECK_NULL(self);
+  CHECK_NULL(self);
 
   if (isValidDigit(self->visibleDigit))
   {
@@ -100,12 +109,16 @@ void LedNumber_ShowNumber(LedNumber self)
 
 void LedNumber_TurnOff(LedNumber self)
 {
-  // CHECK_NULL(self);
+  CHECK_NULL(self);
   LedDigit_TurnLedOff(self->ledDigits[self->visibleDigit]);
-  self->visibleDigit = NO_LED;
+  self->visibleDigit = LED_NONE;
 }
 
-//*** File-scope function definitions ***//
+
+
+//****************************//
+//*** File-scope Functions ***//
+//****************************//
 //place ranges from 1 to numberOfDigits
 static int16_t getDigitFromNumber(int16_t number, int8_t place, int numberOfDigits)
 {
@@ -124,5 +137,5 @@ static int16_t getDigitFromNumber(int16_t number, int8_t place, int numberOfDigi
 
 static BOOL isValidDigit(LedNumber_DigitPlace place)
 {
-  return place != NO_LED && place != LED_MAX;
+  return place != LED_NONE && place != LED_MAX;
 }

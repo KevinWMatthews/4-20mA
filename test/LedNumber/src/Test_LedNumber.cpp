@@ -1,89 +1,171 @@
 extern "C"
 {
   #include "LedNumber.h"    //Code under test
-  #include "DataTypes.h"
-  #include "Spy_LedDigit.h"
-  #include <string.h>
+  #include "LedDigit.h"
 }
 
 //CppUTest includes should be after your system includes
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
 #include "Test_LedNumber.h"
 
 #define NUMBER_OF_DIGITS 4
 
+int8_t dummyDigits[4];
+
+
 TEST_GROUP(LedNumber)
 {
   LedNumber number;
-  Spy_LedDigit spyDigits[NUMBER_OF_DIGITS]; //An array of pointers
-  LedDigit_DataPins dummyDataPins;          //Used just to make LedDigit_Create() happy
-  Pin dummySelectPins[NUMBER_OF_DIGITS];
+  LedDigit digits[NUMBER_OF_DIGITS];
 
   void setup()
   {
     number = LedNumber_Create(NUMBER_OF_DIGITS);
     for (int i = 0; i < NUMBER_OF_DIGITS; i++)
     {
-      spyDigits[i] = (Spy_LedDigit)LedDigit_Create(&dummyDataPins, &dummySelectPins[i]);
-      //Watch out for changes to the DigitPlace enum
-      LedNumber_AddLedDigit(number, (LedDigit)spyDigits[i], (LedNumber_DigitPlace)i);
+      digits[i] = LedDigit_Create();
+      LedNumber_AddLedDigit(number, digits[i], (LedNumber_DigitPlace)i);
     }
   }
 
   void teardown()
   {
     LedNumber_Destroy(&number);
+    mock().checkExpectations();
+    mock().clear();
   }
 
-  void singleDigitShows(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
+  void expectSetSingleDigit(LedDigit digit, int8_t value)
   {
-    LedNumber_SetNumber(self, numberToShow);
-    LedNumber_ShowNumber(self);
-
-    for (int i = 0; i < numberOfDigits; i++)
-    {
-      if (i == 0)
-      {
-        LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
-      }
-      else
-      {
-        LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
-      }
-    }
+    mock().expectOneCall("LedDigit_SetDigit")
+          .withParameter("self", digit)
+          .withParameter("value", value);
   }
 
-  void allDigitsShowSequentially(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
+  void expectSetDigits(int8_t led4, int8_t led3, int8_t led2, int8_t led1  )
   {
-    LedNumber_SetNumber(self, numberToShow);
-
-    for (int i = 0; i < numberOfDigits; i++)
-    {
-      LedNumber_ShowNumber(self);
-      for (int j = 0; j < numberOfDigits; j++)
-      {
-        if (j == i)
-        {
-          LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
-        }
-        else
-        {
-          LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
-        }
-      }
-    }
+    expectSetSingleDigit(digits[0], led1);
+    expectSetSingleDigit(digits[1], led2);
+    expectSetSingleDigit(digits[2], led3);
+    expectSetSingleDigit(digits[3], led4);
   }
+
+  void expectClearSingleDigit(LedNumber_DigitPlace place)
+  {
+    mock().expectOneCall("LedDigit_ClearDigit")
+          .withParameter("self", digits[place]);
+  }
+
+  void expectClearDigits(void)
+  {
+    expectClearSingleDigit(LED_1);
+    expectClearSingleDigit(LED_2);
+    expectClearSingleDigit(LED_3);
+    expectClearSingleDigit(LED_4);
+  }
+
+  void expectShowDigit(LedDigit digit)
+  {
+    mock().expectOneCall("LedDigit_UpdateLed")
+          .withParameter("self", digit);
+  }
+
+  void expectTurnOffDigit(LedDigit digit)
+  {
+    mock().expectOneCall("LedDigit_TurnLedOff")
+          .withParameter("self", digit);
+  }
+
+  // void singleDigitShows(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
+  // {
+  //   LedNumber_SetNumber(self, numberToShow);
+  //   LedNumber_ShowNumber(self);
+
+  //   for (int i = 0; i < numberOfDigits; i++)
+  //   {
+  //     if (i == 0)
+  //     {
+  //       LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
+  //     }
+  //     else
+  //     {
+  //       LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-i]));
+  //     }
+  //   }
+  // }
+
+  // void allDigitsShowSequentially(LedNumber self, int16_t numberToShow, int8_t numberOfDigits)
+  // {
+  //   LedNumber_SetNumber(self, numberToShow);
+
+  //   for (int i = 0; i < numberOfDigits; i++)
+  //   {
+  //     LedNumber_ShowNumber(self);
+  //     for (int j = 0; j < numberOfDigits; j++)
+  //     {
+  //       if (j == i)
+  //       {
+  //         LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
+  //       }
+  //       else
+  //       {
+  //         LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[numberOfDigits-1-j]));
+  //       }
+  //     }
+  //   }
+  // }
 };
 
-//*** Test initialization and response to NULL pointers ***//
+//**********************//
+//*** Mock Functions ***//
+//**********************//
+LedDigit LedDigit_Create(void)
+{
+  static int i = 0;
+  return (LedDigit)&dummyDigits[i++]; //It really is dumb, but it prevents null checks pointer from failing
+}
+
+void LedDigit_Destroy(LedDigit * self)
+{}
+
+void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value)
+{
+  mock().actualCall("LedDigit_SetDigit")
+        .withParameter("self", self)
+        .withParameter("value", value);
+}
+
+void LedDigit_ClearDigit(LedDigit self)
+{
+  mock().actualCall("LedDigit_ClearDigit")
+        .withParameter("self", self);
+}
+
+// void LedDigit_ClearDecimal(LedDigit self);
+// void LedDigit_ClearAll(LedDigit self);
+// LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self);
+// BOOL LedDigit_IsDecimalShown(LedDigit self);
+
+void LedDigit_UpdateLed(LedDigit self)
+{
+    mock().actualCall("LedDigit_UpdateLed")
+          .withParameter("self", self);
+}
+
+void LedDigit_TurnLedOff(LedDigit self)
+{
+  mock().actualCall("LedDigit_TurnLedOff")
+        .withParameter("self", self);
+}
+
+
+
+//*******************//
+//*** Unit Tests  ***//
+//*******************//
 TEST(LedNumber, Create)
 {
-  //TODO learn how to detect a memory leak!
-  for (int i = 0; i < NUMBER_OF_DIGITS; i++)
-  {
-    LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[i]));
-    LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[i]));
-  }
 }
 
 TEST(LedNumber, DestroyCanHandleNullNumber)
@@ -91,92 +173,68 @@ TEST(LedNumber, DestroyCanHandleNullNumber)
   LedNumber_Destroy(NULL);
 }
 
-TEST(LedNumber, AllFunctionsCanHandleNullDigits)
+TEST(LedNumber, AllFunctionsCanHandleNull)
 {
-  LedDigit_DataPins dataPins;
-  LedNumber hasNullDigits = LedNumber_Create(4);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED1);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED2);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED3);
-  LedNumber_AddLedDigit(hasNullDigits, NULL, LED4);
-
-  LedNumber_SetNumber(hasNullDigits, 5);
-
-  LedNumber_Destroy(&hasNullDigits);
+  LedNumber_AddLedDigit(NULL, digits[0], LED_1);
+  LedNumber_SetNumber(NULL, 1234);
+  LedNumber_ClearNumber(NULL);
+  LedNumber_ShowNumber(NULL);
+  LedNumber_TurnOff(NULL);
 }
 
-
-//*** Test functionality ***//
 TEST(LedNumber, SetSingleDigitNumber)
 {
+  expectSetDigits(0, 0, 0, 7);
   LedNumber_SetNumber(number, 7);
-
-  LONGS_EQUAL(SEVEN, Spy_LedDigit_CurrentDigit(spyDigits[LED1]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }
 
 TEST(LedNumber, SetFourDigitNumber)
 {
+  expectSetDigits(6, 7, 8, 9);
   LedNumber_SetNumber(number, 6789);
-
-  LONGS_EQUAL(SIX, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
-  LONGS_EQUAL(SEVEN, Spy_LedDigit_CurrentDigit(spyDigits[LED3]));
-  LONGS_EQUAL(EIGHT, Spy_LedDigit_CurrentDigit(spyDigits[LED2]));
-  LONGS_EQUAL(NINE, Spy_LedDigit_CurrentDigit(spyDigits[LED1]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }
 
 TEST(LedNumber, ClearNumber)
 {
+  expectSetDigits(2, 3, 4, 5);
   LedNumber_SetNumber(number, 2345);
+
+  expectClearDigits();
   LedNumber_ClearNumber(number);
-
-  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED4]));
-  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED3]));
-  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED2]));
-  LONGS_EQUAL(NOTHING, Spy_LedDigit_CurrentDigit(spyDigits[LED1]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }
 
-TEST(LedNumber, ShowFourDigitsWithFourInitialized)
+TEST(LedNumber, ShowNumber)
 {
-  allDigitsShowSequentially(number, 2345, NUMBER_OF_DIGITS);
-  singleDigitShows(number, 2345, NUMBER_OF_DIGITS);
-}
+  expectSetDigits(4, 5, 6, 7);
+  LedNumber_SetNumber(number, 4567);
 
-TEST(LedNumber, ShowThreeDigitsWithFourInitialized)
-{
-  allDigitsShowSequentially(number, 987, NUMBER_OF_DIGITS);
-  singleDigitShows(number, 987, NUMBER_OF_DIGITS);
-}
 
-TEST(LedNumber, ShowOneDigitWithFourInitialized)
-{
-  allDigitsShowSequentially(number, 0, NUMBER_OF_DIGITS);
-  singleDigitShows(number, 0, NUMBER_OF_DIGITS);
+  expectShowDigit(digits[LED_MAX-1]);
+  LedNumber_ShowNumber(number);
+
+  for (int i = LED_MAX-1; i > LED_NONE+1; i--)
+  {
+    expectTurnOffDigit(digits[i]);
+    expectShowDigit(digits[i-1]);
+    LedNumber_ShowNumber(number);
+  }
+
+  expectTurnOffDigit(digits[0]);
+  expectShowDigit(digits[LED_MAX-1]);
+  LedNumber_ShowNumber(number);
 }
 
 TEST(LedNumber, TurnOffLedNumber)
 {
+  expectSetDigits(4, 5, 6, 7);
   LedNumber_SetNumber(number, 4567);
+
+  expectShowDigit(digits[LED_MAX-1]);
   LedNumber_ShowNumber(number);
+
+  expectTurnOffDigit(digits[LED_MAX-1]);
   LedNumber_TurnOff(number);
 
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
-
+  expectShowDigit(digits[LED_MAX-1]);
   LedNumber_ShowNumber(number);
-
-  LONGS_EQUAL(PIN_ON, Spy_LedDigit_SelectPinState(spyDigits[LED4]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED3]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED2]));
-  LONGS_EQUAL(PIN_OFF, Spy_LedDigit_SelectPinState(spyDigits[LED1]));
 }
