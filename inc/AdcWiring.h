@@ -1,8 +1,7 @@
-#ifndef ADC_H_
-#define ADC_H_
+#ifndef Adc_Wiring_H_
+#define Adc_Wiring_H_
 
 #include "DataTypes.h"
-#include <stdint.h>
 
 
 //This hardware-dependent module is inteded to by used by the AtoD module.
@@ -29,12 +28,12 @@ typedef enum
 //**************************//
 //*** Standard Functions ***//
 //**************************//
-BOOL Adc_IsAdcBusy(void);
-void Adc_StartConversion(void);
-BOOL Adc_IsInterruptFlagSet(void);
-uint8_t Adc_ReadDataRegister_High(void);
-uint8_t Adc_ReadDataRegister_Low(void);
-void Adc_ClearInterruptFlag(void);
+BOOL AdcWiring_IsAdcBusy(void);
+void AdcWiring_StartConversion(void);
+BOOL AdcWiring_IsInterruptFlagSet(void);
+uint8_t AdcWiring_ReadDataRegister_High(void);
+uint8_t AdcWiring_ReadDataRegister_Low(void);
+void AdcWiring_ClearInterruptFlag(void);
 
 
 
@@ -66,24 +65,24 @@ typedef enum
 //*** Setup Functions ***//
 //***********************//
 //Set up the ADC for use.
-void Adc_Init(void);
+void AdcWiring_Init(void);
 
 //Enable the ADC for use.
 //Call after initialization.
-void Adc_Enable(void);
+void AdcWiring_Enable(void);
 
 //Perform internal chip initialization.
 //Execute after enabling the ADC.
-void Adc_FirstConversion(void);
+void AdcWiring_FirstConversion(void);
 
 
 //*************************//
 //*** Private Functions ***//
 //*************************//
 //These functions are in the header file only to facilitate in-depth testing
-void Adc_Private_SelectReferenceVoltage(Adc_VoltageSource);
-void Adc_Private_SelectResultAdjust(Adc_ResultAdjust);
-void Adc_Private_SelectInputAndGain(Adc_AnalogInputAndGain);
-void Adc_Private_SelectPrescaleFactor(Adc_PrescaleFactor);
+void AdcWiring_Private_SelectReferenceVoltage(Adc_VoltageSource);
+void AdcWiring_Private_SelectResultAdjust(Adc_ResultAdjust);
+void AdcWiring_Private_SelectInputAndGain(Adc_AnalogInputAndGain);
+void AdcWiring_Private_SelectPrescaleFactor(Adc_PrescaleFactor);
 
 #endif

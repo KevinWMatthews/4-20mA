@@ -1,17 +1,17 @@
 extern "C"
 {
-  #include "Adc.h"  //Code under test
+  #include "AdcWiring.h"  //Code under test
   #include "BitManip.h"
   #include <avr/io.h>
 }
 
 //CppUTest includes should be after your and system includes
 #include "CppUTest/TestHarness.h"
-#include "Test_Adc.h"
+#include "Test_AdcWiring.h"
 
 
 
-TEST_GROUP(Adc)
+TEST_GROUP(AdcWiring)
 {
   void setup()
   {
@@ -27,7 +27,7 @@ TEST_GROUP(Adc)
 };
 
 //Wait, this may not be true...
-TEST(Adc, RegistersZeroAfterInit)
+TEST(AdcWiring, RegistersZeroAfterInit)
 {
   LONGS_EQUAL(0, ADCSR);
   LONGS_EQUAL(0, ADMUX);
@@ -35,28 +35,28 @@ TEST(Adc, RegistersZeroAfterInit)
   LONGS_EQUAL(0, ADCL);
 }
 
-TEST(Adc, SelectReferenceVoltage)
+TEST(AdcWiring, SelectReferenceVoltage)
 {
   uint8_t expected = 0xff;
   ADMUX = 0xff;
   //ADC_AVCC = 0b00, so clear its bits
   CBI(expected, REFS1);
   CBI(expected, REFS0);
-  Adc_Private_SelectReferenceVoltage(ADC_AVCC);
+  AdcWiring_Private_SelectReferenceVoltage(ADC_AVCC);
   CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
 
-TEST(Adc, SelectResultAdjust)
+TEST(AdcWiring, SelectResultAdjust)
 {
   uint8_t expected = 0xff;
   ADMUX = 0xff;
   //ADC_RIGHT_ADJUST= 0b0, so clear its bit
   CBI(expected, ADLAR);
-  Adc_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
+  AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
   CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
 
-TEST(Adc, SelectInputAndGain)
+TEST(AdcWiring, SelectInputAndGain)
 {
   uint8_t expected = 0xff;
   ADMUX = 0xff;
@@ -66,22 +66,22 @@ TEST(Adc, SelectInputAndGain)
   CBI(expected, MUX2);
   CBI(expected, MUX1);
   CBI(expected, MUX0);
-  Adc_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
+  AdcWiring_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
   CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
 
-TEST(Adc, SetPrescaleFactor)
+TEST(AdcWiring, SetPrescaleFactor)
 {
   uint8_t expected = 0xff;
   ADCSR = 0xff;
   CBI(expected, ADPS2);
   CBI(expected, ADPS1);
   CBI(expected, ADPS0);
-  Adc_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_0);
+  AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_0);
   CHECK_TRUE(IFBITMASK(expected, ADCSR, 0xff));
 }
 
-TEST(Adc, Init)
+TEST(AdcWiring, Init)
 {
   uint8_t expected_ADMUX = 0, expected_ADCSR = 0;
   CBI(expected_ADMUX, REFS1);
@@ -95,68 +95,68 @@ TEST(Adc, Init)
   CBI(expected_ADCSR, ADPS2);
   CBI(expected_ADCSR, ADPS1);
   SBI(expected_ADCSR, ADPS0);
-  Adc_Init();
+  AdcWiring_Init();
   CHECK_TRUE(IFBITMASK(expected_ADMUX, ADMUX, 0xff));
   CHECK_TRUE(IFBITMASK(expected_ADCSR, ADCSR, 0x07));
 }
 
-TEST(Adc, Enable)
+TEST(AdcWiring, Enable)
 {
-  Adc_Enable();
+  AdcWiring_Enable();
   CHECK_TRUE(IFBIT(ADCSR, ADEN));
 }
 
-TEST(Adc, FirstConversion)
+TEST(AdcWiring, FirstConversion)
 {
-  Adc_FirstConversion();
+  AdcWiring_FirstConversion();
   CHECK_TRUE(IFBIT(ADCSR, ADSC));
 }
 
-TEST(Adc, IsAdcBusy)
+TEST(AdcWiring, IsAdcBusy)
 {
-  CHECK_FALSE(Adc_IsAdcBusy());
+  CHECK_FALSE(AdcWiring_IsAdcBusy());
   SBI(ADCSR, ADSC);
-  CHECK_TRUE(Adc_IsAdcBusy());
+  CHECK_TRUE(AdcWiring_IsAdcBusy());
 }
 
-TEST(Adc, StartConversion)
+TEST(AdcWiring, StartConversion)
 {
-  Adc_StartConversion();
+  AdcWiring_StartConversion();
   CHECK_TRUE(IFBIT(ADCSR, ADSC));
 }
 
-TEST(Adc, Adc_IsInterruptFlagSet)
+TEST(AdcWiring, AdcWiring_IsInterruptFlagSet)
 {
-  CHECK_FALSE(Adc_IsInterruptFlagSet());
+  CHECK_FALSE(AdcWiring_IsInterruptFlagSet());
   SBI(ADCSR, ADIF);
-  CHECK_TRUE(Adc_IsInterruptFlagSet());
+  CHECK_TRUE(AdcWiring_IsInterruptFlagSet());
 }
 
-TEST(Adc, Adc_ClearInterruptFlag)
+TEST(AdcWiring, AdcWiring_ClearInterruptFlag)
 {
-  Adc_ClearInterruptFlag();
+  AdcWiring_ClearInterruptFlag();
   //Seems counterintuitive, but we write 1 to clear the flag. HW takes care of the rest.
-  CHECK_TRUE(Adc_IsInterruptFlagSet());
+  CHECK_TRUE(AdcWiring_IsInterruptFlagSet());
 }
 
-TEST(Adc, ReadHighRegister_ReadZero)
+TEST(AdcWiring, ReadHighRegister_ReadZero)
 {
-  LONGS_EQUAL(0, Adc_ReadDataRegister_High());
+  LONGS_EQUAL(0, AdcWiring_ReadDataRegister_High());
 }
 
-TEST(Adc, ReadLowRegister_ReadZero)
+TEST(AdcWiring, ReadLowRegister_ReadZero)
 {
-  LONGS_EQUAL(0, Adc_ReadDataRegister_Low());
+  LONGS_EQUAL(0, AdcWiring_ReadDataRegister_Low());
 }
 
-TEST(Adc, ReadHighRegister_ReadMax)
+TEST(AdcWiring, ReadHighRegister_ReadMax)
 {
   ADCH = 0xFF;
-  LONGS_EQUAL(0b11, Adc_ReadDataRegister_High());
+  LONGS_EQUAL(0b11, AdcWiring_ReadDataRegister_High());
 }
 
-TEST(Adc, ReadLowRegister_ReadMax)
+TEST(AdcWiring, ReadLowRegister_ReadMax)
 {
   ADCL = 0xFF;
-  LONGS_EQUAL(0xFF, Adc_ReadDataRegister_Low());
+  LONGS_EQUAL(0xFF, AdcWiring_ReadDataRegister_Low());
 }

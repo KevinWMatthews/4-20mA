@@ -1,21 +1,21 @@
 #include "AtoD.h"
-#include "Adc.h"
+#include "AdcWiring.h"
 
 void AtoD_Setup(void)
 {
-  Adc_Init();
-  Adc_Enable();
-  Adc_FirstConversion();
+  AdcWiring_Init();
+  AdcWiring_Enable();
+  AdcWiring_FirstConversion();
 }
 
 int8_t AtoD_StartConversion(void)
 {
-  if (Adc_IsAdcBusy())
+  if (AdcWiring_IsAdcBusy())
   {
     return ATOD_CONVERSION_BUSY;
   }
 
-  Adc_StartConversion();
+  AdcWiring_StartConversion();
   return ATOD_CONVERSION_STARTED;
 }
 
@@ -32,18 +32,18 @@ int8_t AtoD_Read(int16_t * adcReading)
 {
   uint8_t high_register, low_register;
 
-  if (Adc_IsAdcBusy())
+  if (AdcWiring_IsAdcBusy())
   {
     return ATOD_READ_BUSY;
   }
-  // if (!Adc_IsInterruptFlagSet())
+  // if (!AdcWiring_IsInterruptFlagSet())
   // {
   //   return ATOD_INTERRUPT_FLAG_NOT_SET;
   // }
 
-  low_register = Adc_ReadDataRegister_Low();
-  high_register = Adc_ReadDataRegister_High();
+  low_register = AdcWiring_ReadDataRegister_Low();
+  high_register = AdcWiring_ReadDataRegister_High();
   *adcReading = create10BitFromTwo8Bit(high_register, low_register);
-  Adc_ClearInterruptFlag();
+  AdcWiring_ClearInterruptFlag();
   return ATOD_READ_SUCCESS;
 }

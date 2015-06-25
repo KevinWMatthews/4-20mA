@@ -1,7 +1,7 @@
 extern "C"
 {
   #include "AtoD.h" //Code under test
-  #include "Adc.h"  //HW communication
+  #include "AdcWiring.h"  //HW communication
 }
 
 //CppUTest includes should be after your and system includes
@@ -39,80 +39,80 @@ TEST_GROUP(AtoD)
 //**************************//
 //*** ADC function mocks ***//
 //**************************//
-BOOL Adc_IsAdcBusy(void)
+BOOL AdcWiring_IsAdcBusy(void)
 {
-  mock().actualCall("Adc_IsAdcBusy");
+  mock().actualCall("AdcWiring_IsAdcBusy");
   return (BOOL)(mock().intReturnValue());
 }
 
-void Adc_StartConversion(void)
+void AdcWiring_StartConversion(void)
 {
-  mock().actualCall("Adc_StartConversion");
+  mock().actualCall("AdcWiring_StartConversion");
   return;
 }
 
-BOOL Adc_IsInterruptFlagSet(void)
+BOOL AdcWiring_IsInterruptFlagSet(void)
 {
-  mock().actualCall("Adc_IsInterruptFlagSet");
+  mock().actualCall("AdcWiring_IsInterruptFlagSet");
   return (BOOL)(mock().intReturnValue());
 }
 
-uint8_t Adc_ReadDataRegister_High(void)
+uint8_t AdcWiring_ReadDataRegister_High(void)
 {
-  mock().actualCall("Adc_ReadDataRegister_High");
+  mock().actualCall("AdcWiring_ReadDataRegister_High");
   return mock().intReturnValue();
 }
 
-uint8_t Adc_ReadDataRegister_Low(void)
+uint8_t AdcWiring_ReadDataRegister_Low(void)
 {
-  mock().actualCall("Adc_ReadDataRegister_Low");
+  mock().actualCall("AdcWiring_ReadDataRegister_Low");
   return mock().intReturnValue();
 }
 
-void Adc_ClearInterruptFlag(void)
+void AdcWiring_ClearInterruptFlag(void)
 {
-  mock().actualCall("Adc_ClearInterruptFlag");
+  mock().actualCall("AdcWiring_ClearInterruptFlag");
   return;
 }
 
 //Mock ADC setup functions
-void Adc_Init(void)
+void AdcWiring_Init(void)
 {
-  mock().actualCall("Adc_Init");
+  mock().actualCall("AdcWiring_Init");
 }
 
-void Adc_Enable(void)
+void AdcWiring_Enable(void)
 {
-  mock().actualCall("Adc_Enable");
+  mock().actualCall("AdcWiring_Enable");
 }
 
-void Adc_FirstConversion(void)
+void AdcWiring_FirstConversion(void)
 {
-  mock().actualCall("Adc_FirstConversion");
+  mock().actualCall("AdcWiring_FirstConversion");
 }
 
 
 //*** The tests! ***//
 TEST(AtoD, StartConversion_AdcIsBusy)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(TRUE);
   LONGS_EQUAL(ATOD_CONVERSION_BUSY, AtoD_StartConversion());
   mock().checkExpectations();
 }
 
-TEST(AtoD, StartConversion_AdcIsFree)
+TEST(AtoD, StartConversion_AdcsFree)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(FALSE);
-  mock().expectOneCall("Adc_StartConversion");
+  mock().expectOneCall("AdcWiring_StartConversion");
   LONGS_EQUAL(ATOD_CONVERSION_STARTED, AtoD_StartConversion());
   mock().checkExpectations();
 }
 
 TEST(AtoD, Read_AdcIsBusy)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(TRUE);
   LONGS_EQUAL(ATOD_READ_BUSY, AtoD_Read(&adcReading));
   mock().checkExpectations();
@@ -120,9 +120,9 @@ TEST(AtoD, Read_AdcIsBusy)
 
 // TEST(AtoD, Read_InterruptFlagNotSet)
 // {
-//   mock().expectOneCall("Adc_IsAdcBusy")
+//   mock().expectOneCall("AdcWiring_IsAdcBusy")
 //         .andReturnValue(FALSE);
-//   mock().expectOneCall("Adc_IsInterruptFlagSet")
+//   mock().expectOneCall("AdcWiring_IsInterruptFlagSet")
 //         .andReturnValue(FALSE);
 //   LONGS_EQUAL(ATOD_INTERRUPT_FLAG_NOT_SET, AtoD_Read(&adcReading));
 //   mock().checkExpectations();
@@ -130,15 +130,15 @@ TEST(AtoD, Read_AdcIsBusy)
 
 TEST(AtoD, Read_SuccessReadZero)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(FALSE);
-  // mock().expectOneCall("Adc_IsInterruptFlagSet")
+  // mock().expectOneCall("AdcWiring_IsInterruptFlagSet")
   //       .andReturnValue(TRUE);
-  mock().expectOneCall("Adc_ReadDataRegister_Low")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_Low")
         .andReturnValue(0);
-  mock().expectOneCall("Adc_ReadDataRegister_High")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_High")
         .andReturnValue(0);
-  mock().expectOneCall("Adc_ClearInterruptFlag");
+  mock().expectOneCall("AdcWiring_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(0, adcReading);
   mock().checkExpectations();
@@ -146,15 +146,15 @@ TEST(AtoD, Read_SuccessReadZero)
 
 TEST(AtoD, Read_SuccessReadMax)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(FALSE);
-  // mock().expectOneCall("Adc_IsInterruptFlagSet")
+  // mock().expectOneCall("AdcWiring_IsInterruptFlagSet")
   //       .andReturnValue(TRUE);
-  mock().expectOneCall("Adc_ReadDataRegister_Low")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_Low")
         .andReturnValue(0xFF);
-  mock().expectOneCall("Adc_ReadDataRegister_High")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_High")
         .andReturnValue(0x03);
-  mock().expectOneCall("Adc_ClearInterruptFlag");
+  mock().expectOneCall("AdcWiring_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(1023, adcReading);
   mock().checkExpectations();
@@ -162,15 +162,15 @@ TEST(AtoD, Read_SuccessReadMax)
 
 TEST(AtoD, Read_SuccesLowRegisterFullHighRegisterEmpty)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(FALSE);
-  // mock().expectOneCall("Adc_IsInterruptFlagSet")
+  // mock().expectOneCall("AdcWiring_IsInterruptFlagSet")
   //       .andReturnValue(TRUE);
-  mock().expectOneCall("Adc_ReadDataRegister_Low")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_Low")
         .andReturnValue(0xFF);
-  mock().expectOneCall("Adc_ReadDataRegister_High")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_High")
         .andReturnValue(0);
-  mock().expectOneCall("Adc_ClearInterruptFlag");
+  mock().expectOneCall("AdcWiring_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(255, adcReading);
   mock().checkExpectations();
@@ -178,15 +178,15 @@ TEST(AtoD, Read_SuccesLowRegisterFullHighRegisterEmpty)
 
 TEST(AtoD, Read_SuccesLowRegisterEmptyHighRegisterFull)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(FALSE);
-  // mock().expectOneCall("Adc_IsInterruptFlagSet")
+  // mock().expectOneCall("AdcWiring_IsInterruptFlagSet")
   //       .andReturnValue(TRUE);
-  mock().expectOneCall("Adc_ReadDataRegister_Low")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_Low")
         .andReturnValue(0);
-  mock().expectOneCall("Adc_ReadDataRegister_High")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_High")
         .andReturnValue(0x03);
-  mock().expectOneCall("Adc_ClearInterruptFlag");
+  mock().expectOneCall("AdcWiring_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(768, adcReading);
   mock().checkExpectations();
@@ -194,15 +194,15 @@ TEST(AtoD, Read_SuccesLowRegisterEmptyHighRegisterFull)
 
 TEST(AtoD, Read_FilterBadValuesInHighDataRegister)
 {
-  mock().expectOneCall("Adc_IsAdcBusy")
+  mock().expectOneCall("AdcWiring_IsAdcBusy")
         .andReturnValue(FALSE);
-  // mock().expectOneCall("Adc_IsInterruptFlagSet")
+  // mock().expectOneCall("AdcWiring_IsInterruptFlagSet")
   //       .andReturnValue(TRUE);
-  mock().expectOneCall("Adc_ReadDataRegister_Low")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_Low")
         .andReturnValue(0);
-  mock().expectOneCall("Adc_ReadDataRegister_High")
+  mock().expectOneCall("AdcWiring_ReadDataRegister_High")
         .andReturnValue(0xFC);
-  mock().expectOneCall("Adc_ClearInterruptFlag");
+  mock().expectOneCall("AdcWiring_ClearInterruptFlag");
   LONGS_EQUAL(ATOD_READ_SUCCESS, AtoD_Read(&adcReading));
   LONGS_EQUAL(0, adcReading);
   mock().checkExpectations();
@@ -211,9 +211,9 @@ TEST(AtoD, Read_FilterBadValuesInHighDataRegister)
 //Setup test
 TEST(AtoDSetup, test)
 {
-  mock().expectOneCall("Adc_Init");
-  mock().expectOneCall("Adc_Enable");
-  mock().expectOneCall("Adc_FirstConversion");
+  mock().expectOneCall("AdcWiring_Init");
+  mock().expectOneCall("AdcWiring_Enable");
+  mock().expectOneCall("AdcWiring_FirstConversion");
   AtoD_Setup();
   mock().checkExpectations();
 }
