@@ -4,8 +4,8 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=AtoD Adc DataTypes LineFit LedDigit LedDigitWiring \
-             LedNumberWiring LedNumber MainLoop NumericFunctions PinDriver TimeService
+TESTS_TO_RUN=AtoD Adc LineFit LedDigit LedDigitWiring \
+             LedNumberWiring LedNumber MainLoop NumericFunctions TimeService
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
@@ -13,8 +13,6 @@ DEFAULT_DIR=.
 ATOD_DIR=AtoD
 
 ADC_DIR=Adc
-
-DATATYPES_DIR=DataTypes
 
 LINEFIT_DIR=LineFit
 
@@ -30,8 +28,6 @@ MAINLOOP_DIR=MainLoop
 
 NUMERICFUNCTIONS_DIR=NumericFunctions
 
-PINDRIVER_DIR=PinDriver
-
 TIMESERVICE_DIR=TimeService
 
 
@@ -44,9 +40,6 @@ AtoD:
 
 Adc:
 	$(MAKE_TESTS) $(ADC_DIR) $(MAKECMDGOALS)
-
-DataTypes:
-	$(MAKE_TESTS) $(DATATYPES_DIR) $(MAKECMDGOALS)
 
 LineFit:
 	$(MAKE_TESTS) $(LINEFIT_DIR) $(MAKECMDGOALS)
@@ -71,9 +64,6 @@ MainLoop:
 
 NumericFunctions:
 	$(MAKE_TESTS) $(NUMERICFUNCTIONS_DIR) $(MAKECMDGOALS)
-
-PinDriver:
-	$(MAKE_TESTS) $(PINDRIVER_DIR) $(MAKECMDGOALS)
 
 
 ### Makefile targets ###
