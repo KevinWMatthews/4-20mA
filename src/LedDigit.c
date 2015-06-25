@@ -1,4 +1,5 @@
 #include "LedDigit.h"
+#include "LedDigitWiring.h"
 #include "DataTypes.h"
 #include <stdlib.h>
 
