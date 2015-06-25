@@ -65,12 +65,7 @@ typedef enum
 //***********************//
 //*** Setup Functions ***//
 //***********************//
-//Map chip's registers to local pointers.
-//Must be called BEFORE Adc_Init!
-void Adc_MapMemory(uint8_t * adcsr, uint8_t * admux, uint8_t * adch, uint8_t * adcl);
-
 //Set up the ADC for use.
-//Call Adc_MapMemory() BEFORE initialization!
 void Adc_Init(void);
 
 //Enable the ADC for use.

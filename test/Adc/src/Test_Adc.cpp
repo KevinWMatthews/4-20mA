@@ -9,20 +9,16 @@ extern "C"
 #include "CppUTest/TestHarness.h"
 #include "Test_Adc.h"
 
-uint8_t adcsr;
-uint8_t admux;
-uint8_t adch;
-uint8_t adcl;
+
 
 TEST_GROUP(Adc)
 {
   void setup()
   {
-    adcsr = 0;
-    admux = 0;
-    adch = 0;
-    adcl = 0;
-    Adc_MapMemory(&adcsr, &admux, &adch, &adcl);
+    ADCSR = 0;
+    ADMUX = 0;
+    ADCH = 0;
+    ADCL = 0;
   }
 
   void teardown()
@@ -33,37 +29,37 @@ TEST_GROUP(Adc)
 //Wait, this may not be true...
 TEST(Adc, RegistersZeroAfterInit)
 {
-  LONGS_EQUAL(0, adcsr);
-  LONGS_EQUAL(0, admux);
-  LONGS_EQUAL(0, adch);
-  LONGS_EQUAL(0, adcl);
+  LONGS_EQUAL(0, ADCSR);
+  LONGS_EQUAL(0, ADMUX);
+  LONGS_EQUAL(0, ADCH);
+  LONGS_EQUAL(0, ADCL);
 }
 
 TEST(Adc, SelectReferenceVoltage)
 {
   uint8_t expected = 0xff;
-  admux = 0xff;
+  ADMUX = 0xff;
   //ADC_AVCC = 0b00, so clear its bits
   CBI(expected, REFS1);
   CBI(expected, REFS0);
   Adc_Private_SelectReferenceVoltage(ADC_AVCC);
-  CHECK_TRUE(IFBITMASK(expected, admux, 0xff));
+  CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
 
 TEST(Adc, SelectResultAdjust)
 {
   uint8_t expected = 0xff;
-  admux = 0xff;
+  ADMUX = 0xff;
   //ADC_RIGHT_ADJUST= 0b0, so clear its bit
   CBI(expected, ADLAR);
   Adc_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
-  CHECK_TRUE(IFBITMASK(expected, admux, 0xff));
+  CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
 
 TEST(Adc, SelectInputAndGain)
 {
   uint8_t expected = 0xff;
-  admux = 0xff;
+  ADMUX = 0xff;
   //ADC_SINGLE_ENDED_ADC0 = 0b00000, so clear its bits
   CBI(expected, MUX4);
   CBI(expected, MUX3);
@@ -71,68 +67,68 @@ TEST(Adc, SelectInputAndGain)
   CBI(expected, MUX1);
   CBI(expected, MUX0);
   Adc_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
-  CHECK_TRUE(IFBITMASK(expected, admux, 0xff));
+  CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
 
 TEST(Adc, SetPrescaleFactor)
 {
   uint8_t expected = 0xff;
-  adcsr = 0xff;
+  ADCSR = 0xff;
   CBI(expected, ADPS2);
   CBI(expected, ADPS1);
   CBI(expected, ADPS0);
   Adc_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_0);
-  CHECK_TRUE(IFBITMASK(expected, adcsr, 0xff));
+  CHECK_TRUE(IFBITMASK(expected, ADCSR, 0xff));
 }
 
 TEST(Adc, Init)
 {
-  uint8_t expected_admux = 0, expected_adcsr = 0;
-  CBI(expected_admux, REFS1);
-  CBI(expected_admux, REFS0);
-  CBI(expected_admux, ADLAR);
-  CBI(expected_admux, MUX4);
-  CBI(expected_admux, MUX3);
-  CBI(expected_admux, MUX2);
-  CBI(expected_admux, MUX1);
-  CBI(expected_admux, MUX0);
-  CBI(expected_adcsr, ADPS2);
-  CBI(expected_adcsr, ADPS1);
-  SBI(expected_adcsr, ADPS0);
+  uint8_t expected_ADMUX = 0, expected_ADCSR = 0;
+  CBI(expected_ADMUX, REFS1);
+  CBI(expected_ADMUX, REFS0);
+  CBI(expected_ADMUX, ADLAR);
+  CBI(expected_ADMUX, MUX4);
+  CBI(expected_ADMUX, MUX3);
+  CBI(expected_ADMUX, MUX2);
+  CBI(expected_ADMUX, MUX1);
+  CBI(expected_ADMUX, MUX0);
+  CBI(expected_ADCSR, ADPS2);
+  CBI(expected_ADCSR, ADPS1);
+  SBI(expected_ADCSR, ADPS0);
   Adc_Init();
-  CHECK_TRUE(IFBITMASK(expected_admux, admux, 0xff));
-  CHECK_TRUE(IFBITMASK(expected_adcsr, adcsr, 0x07));
+  CHECK_TRUE(IFBITMASK(expected_ADMUX, ADMUX, 0xff));
+  CHECK_TRUE(IFBITMASK(expected_ADCSR, ADCSR, 0x07));
 }
 
 TEST(Adc, Enable)
 {
   Adc_Enable();
-  CHECK_TRUE(IFBIT(adcsr, ADEN));
+  CHECK_TRUE(IFBIT(ADCSR, ADEN));
 }
 
 TEST(Adc, FirstConversion)
 {
   Adc_FirstConversion();
-  CHECK_TRUE(IFBIT(adcsr, ADSC));
+  CHECK_TRUE(IFBIT(ADCSR, ADSC));
 }
 
 TEST(Adc, IsAdcBusy)
 {
   CHECK_FALSE(Adc_IsAdcBusy());
-  SBI(adcsr, ADSC);
+  SBI(ADCSR, ADSC);
   CHECK_TRUE(Adc_IsAdcBusy());
 }
 
 TEST(Adc, StartConversion)
 {
   Adc_StartConversion();
-  CHECK_TRUE(IFBIT(adcsr, ADSC));
+  CHECK_TRUE(IFBIT(ADCSR, ADSC));
 }
 
 TEST(Adc, Adc_IsInterruptFlagSet)
 {
   CHECK_FALSE(Adc_IsInterruptFlagSet());
-  SBI(adcsr, ADIF);
+  SBI(ADCSR, ADIF);
   CHECK_TRUE(Adc_IsInterruptFlagSet());
 }
 
@@ -155,12 +151,12 @@ TEST(Adc, ReadLowRegister_ReadZero)
 
 TEST(Adc, ReadHighRegister_ReadMax)
 {
-  adch = 0xFF;
+  ADCH = 0xFF;
   LONGS_EQUAL(0b11, Adc_ReadDataRegister_High());
 }
 
 TEST(Adc, ReadLowRegister_ReadMax)
 {
-  adcl = 0xFF;
+  ADCL = 0xFF;
   LONGS_EQUAL(0xFF, Adc_ReadDataRegister_Low());
 }
