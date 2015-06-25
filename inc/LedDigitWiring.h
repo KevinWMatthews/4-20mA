@@ -11,15 +11,14 @@
 //*** Data types ***//
 typedef enum
 {
-  PIN_A = 0,
-  PIN_B = 1,
-  PIN_C = 2,
-  PIN_D = 3,
-  PIN_E = 4,
-  PIN_F = 5,
-  PIN_G = 6,
-  PIN_DP =7 ,
-  PIN_SELECT = 8
+  PIN_A = 1,
+  PIN_B = 2,
+  PIN_C = 3,
+  PIN_D = 4,
+  PIN_E = 5,
+  PIN_F = 6,
+  PIN_G = 7,
+  PIN_DP = 8
 } LedDigitWiring_Pin;
 
 

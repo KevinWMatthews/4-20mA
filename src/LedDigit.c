@@ -3,58 +3,51 @@
 #include "DataTypes.h"
 #include <stdlib.h>
 
-typedef struct LedDigitPinStruct * LedDigitPins;
 
 //*** File-scope data structures and types ***//
 typedef struct LedDigitStruct
 {
-  LedDigit_DataPins * dataPins;
-  Pin selectPin;
   LedDigit_DisplayDigit digitToShow;
   BOOL showDecimal;
 } LedDigitStruct;
 
 //The user manual denotes sections of the LED with letters
 //and maps these letters to HW pins. We follow suit.
-#define PIN_A pin7
-#define PIN_B pin6
-#define PIN_C pin4
-#define PIN_D pin2
-#define PIN_E pin1
-#define PIN_F pin9
-#define PIN_G pin10
-#define PIN_DP pin5
+// #define PIN_A pin7
+// #define PIN_B pin6
+// #define PIN_C pin4
+// #define PIN_D pin2
+// #define PIN_E pin1
+// #define PIN_F pin9
+// #define PIN_G pin10
+// #define PIN_DP pin5
 
 
 //*** Prototypes for file-scope functions ***//
-static void showNothing(LedDigit_DataPins * pins);
-static void showZero(LedDigit_DataPins * pins);
-static void showOne(LedDigit_DataPins * pins);
-static void showTwo(LedDigit_DataPins * pins);
-static void showThree(LedDigit_DataPins * pins);
-static void showFour(LedDigit_DataPins * pins);
-static void showFive(LedDigit_DataPins * pins);
-static void showSix(LedDigit_DataPins * pins);
-static void showSeven(LedDigit_DataPins * pins);
-static void showEight(LedDigit_DataPins * pins);
-static void showNine(LedDigit_DataPins * pins);
-static void showDecimal(LedDigit_DataPins * pins);
-static void clearDecimal(LedDigit_DataPins * pins);
+static void showNothing(void);
+static void showZero(void);
+static void showOne(void);
+static void showTwo(void);
+static void showThree(void);
+static void showFour(void);
+static void showFive(void);
+static void showSix(void);
+static void showSeven(void);
+static void showEight(void);
+static void showNine(void);
+static void showDecimal(void);
+static void clearDecimal(void);
 
 
 //*** Public functions ***//
-LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, Pin selectPin)
+LedDigit LedDigit_Create(void)
 {
   LedDigit self;
-  CHECK_NULL_RETURN_VALUE(dataPinAddresses, NULL);
-  CHECK_NULL_RETURN_VALUE(selectPin, NULL);
 
   self = calloc(1, sizeof(LedDigitStruct));
-  self->dataPins = dataPinAddresses;
-  self->selectPin = selectPin;
 
-  showNothing(self->dataPins);
-  Pin_SetState(self->selectPin, PIN_LOW);
+  showNothing();
+  clearDecimal();
   self->digitToShow = NOTHING;
   self->showDecimal = FALSE;
 
@@ -118,189 +111,186 @@ void LedDigit_UpdateLed(LedDigit self)
   switch (self->digitToShow)
   {
   case NOTHING:
-    showNothing(self->dataPins);
+    showNothing();
     break;
   case ZERO:
-    showZero(self->dataPins);
+    showZero();
     break;
   case ONE:
-    showOne(self->dataPins);
+    showOne();
     break;
   case TWO:
-    showTwo(self->dataPins);
+    showTwo();
     break;
   case THREE:
-    showThree(self->dataPins);
+    showThree();
     break;
   case FOUR:
-    showFour(self->dataPins);
+    showFour();
     break;
   case FIVE:
-    showFive(self->dataPins);
+    showFive();
     break;
   case SIX:
-    showSix(self->dataPins);
+    showSix();
     break;
   case SEVEN:
-    showSeven(self->dataPins);
+    showSeven();
     break;
   case EIGHT:
-    showEight(self->dataPins);
+    showEight();
     break;
   case NINE:
-    showNine(self->dataPins);
+    showNine();
     break;
   }
 
   if (self->showDecimal == TRUE)
   {
-    showDecimal(self->dataPins);
+    showDecimal();
   }
   else
   {
-    clearDecimal(self->dataPins);
+    clearDecimal();
   }
-
-  Pin_SetState(self->selectPin, PIN_HIGH);
 }
 
 void LedDigit_TurnLedOff(LedDigit self)
 {
   CHECK_NULL(self);
-  Pin_SetState(self->selectPin, PIN_LOW);
-  showNothing(self->dataPins);
-  clearDecimal(self->dataPins);
+  showNothing();
+  clearDecimal();
 }
 
 
 //*** Private functions ***//
-static void showNothing(LedDigit_DataPins * pins)
+static void showNothing(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_LOW);
-  Pin_SetState(pins->PIN_B, PIN_LOW);
-  Pin_SetState(pins->PIN_C, PIN_LOW);
-  Pin_SetState(pins->PIN_D, PIN_LOW);
-  Pin_SetState(pins->PIN_E, PIN_LOW);
-  Pin_SetState(pins->PIN_F, PIN_LOW);
-  Pin_SetState(pins->PIN_G, PIN_LOW);
+  LedDigitWiring_ClearPin(PIN_A);
+  LedDigitWiring_ClearPin(PIN_B);
+  LedDigitWiring_ClearPin(PIN_C);
+  LedDigitWiring_ClearPin(PIN_D);
+  LedDigitWiring_ClearPin(PIN_E);
+  LedDigitWiring_ClearPin(PIN_F);
+  LedDigitWiring_ClearPin(PIN_G);
 }
 
-static void showZero(LedDigit_DataPins * pins)
+static void showZero(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_HIGH);
-  Pin_SetState(pins->PIN_E, PIN_HIGH);
-  Pin_SetState(pins->PIN_F, PIN_HIGH);
-  Pin_SetState(pins->PIN_G, PIN_LOW);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_SetPin(PIN_D);
+  LedDigitWiring_SetPin(PIN_E);
+  LedDigitWiring_SetPin(PIN_F);
+  LedDigitWiring_ClearPin(PIN_G);
 }
 
-static void showOne(LedDigit_DataPins * pins)
+static void showOne(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_LOW);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_LOW);
-  Pin_SetState(pins->PIN_E, PIN_LOW);
-  Pin_SetState(pins->PIN_F, PIN_LOW);
-  Pin_SetState(pins->PIN_G, PIN_LOW);
+  LedDigitWiring_ClearPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_ClearPin(PIN_D);
+  LedDigitWiring_ClearPin(PIN_E);
+  LedDigitWiring_ClearPin(PIN_F);
+  LedDigitWiring_ClearPin(PIN_G);
 }
 
-static void showTwo(LedDigit_DataPins * pins)
+static void showTwo(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_LOW);
-  Pin_SetState(pins->PIN_D, PIN_HIGH);
-  Pin_SetState(pins->PIN_E, PIN_HIGH);
-  Pin_SetState(pins->PIN_F, PIN_LOW);
-  Pin_SetState(pins->PIN_G, PIN_HIGH);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_ClearPin(PIN_C);
+  LedDigitWiring_SetPin(PIN_D);
+  LedDigitWiring_SetPin(PIN_E);
+  LedDigitWiring_ClearPin(PIN_F);
+  LedDigitWiring_SetPin(PIN_G);
 }
 
-static void showThree(LedDigit_DataPins * pins)
+static void showThree(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_HIGH);
-  Pin_SetState(pins->PIN_E, PIN_LOW);
-  Pin_SetState(pins->PIN_F, PIN_LOW);
-  Pin_SetState(pins->PIN_G, PIN_HIGH);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_SetPin(PIN_D);
+  LedDigitWiring_ClearPin(PIN_E);
+  LedDigitWiring_ClearPin(PIN_F);
+  LedDigitWiring_SetPin(PIN_G);
 }
 
-static void showFour(LedDigit_DataPins * pins)
+static void showFour(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_LOW);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_LOW);
-  Pin_SetState(pins->PIN_E, PIN_LOW);
-  Pin_SetState(pins->PIN_F, PIN_HIGH);
-  Pin_SetState(pins->PIN_G, PIN_HIGH);
+  LedDigitWiring_ClearPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_ClearPin(PIN_D);
+  LedDigitWiring_ClearPin(PIN_E);
+  LedDigitWiring_SetPin(PIN_F);
+  LedDigitWiring_SetPin(PIN_G);
 }
 
-static void showFive(LedDigit_DataPins * pins)
+static void showFive(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_LOW);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_HIGH);
-  Pin_SetState(pins->PIN_E, PIN_LOW);
-  Pin_SetState(pins->PIN_F, PIN_HIGH);
-  Pin_SetState(pins->PIN_G, PIN_HIGH);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_ClearPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_SetPin(PIN_D);
+  LedDigitWiring_ClearPin(PIN_E);
+  LedDigitWiring_SetPin(PIN_F);
+  LedDigitWiring_SetPin(PIN_G);
 }
 
-static void showSix(LedDigit_DataPins * pins)
+static void showSix(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_LOW);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_HIGH);
-  Pin_SetState(pins->PIN_E, PIN_HIGH);
-  Pin_SetState(pins->PIN_F, PIN_HIGH);
-  Pin_SetState(pins->PIN_G, PIN_HIGH);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_ClearPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_SetPin(PIN_D);
+  LedDigitWiring_SetPin(PIN_E);
+  LedDigitWiring_SetPin(PIN_F);
+  LedDigitWiring_SetPin(PIN_G);
 }
 
-static void showSeven(LedDigit_DataPins * pins)
+static void showSeven(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_LOW);
-  Pin_SetState(pins->PIN_E, PIN_LOW);
-  Pin_SetState(pins->PIN_F, PIN_LOW);
-  Pin_SetState(pins->PIN_G, PIN_LOW);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_ClearPin(PIN_D);
+  LedDigitWiring_ClearPin(PIN_E);
+  LedDigitWiring_ClearPin(PIN_F);
+  LedDigitWiring_ClearPin(PIN_G);
 }
 
-static void showEight(LedDigit_DataPins * pins)
+static void showEight(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_HIGH);
-  Pin_SetState(pins->PIN_E, PIN_HIGH);
-  Pin_SetState(pins->PIN_F, PIN_HIGH);
-  Pin_SetState(pins->PIN_G, PIN_HIGH);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_SetPin(PIN_D);
+  LedDigitWiring_SetPin(PIN_E);
+  LedDigitWiring_SetPin(PIN_F);
+  LedDigitWiring_SetPin(PIN_G);
 }
 
-static void showNine(LedDigit_DataPins * pins)
+static void showNine(void)
 {
-  Pin_SetState(pins->PIN_A, PIN_HIGH);
-  Pin_SetState(pins->PIN_B, PIN_HIGH);
-  Pin_SetState(pins->PIN_C, PIN_HIGH);
-  Pin_SetState(pins->PIN_D, PIN_LOW);
-  Pin_SetState(pins->PIN_E, PIN_LOW);
-  Pin_SetState(pins->PIN_F, PIN_HIGH);
-  Pin_SetState(pins->PIN_G, PIN_HIGH);
+  LedDigitWiring_SetPin(PIN_A);
+  LedDigitWiring_SetPin(PIN_B);
+  LedDigitWiring_SetPin(PIN_C);
+  LedDigitWiring_ClearPin(PIN_D);
+  LedDigitWiring_ClearPin(PIN_E);
+  LedDigitWiring_SetPin(PIN_F);
+  LedDigitWiring_SetPin(PIN_G);
 }
 
-static void showDecimal(LedDigit_DataPins * pins)
+static void showDecimal(void)
 {
-  Pin_SetState(pins->PIN_DP, PIN_HIGH);
+  LedDigitWiring_SetPin(PIN_DP);
 }
 
-static void clearDecimal(LedDigit_DataPins * pins)
+static void clearDecimal(void)
 {
-  Pin_SetState(pins->PIN_DP, PIN_LOW);
+  LedDigitWiring_ClearPin(PIN_DP);
 }

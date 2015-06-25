@@ -14,8 +14,7 @@
 #define WIRINGPIN_E (1<<PA4)
 #define WIRINGPIN_F (1<<PA5)
 #define WIRINGPIN_G (1<<PA6)
-#define WIRINGPIN_DP  (1<<PA7)    //TODO need to wire this properly
-#define WIRINGPIN_SELECT (1<<PA7)
+#define WIRINGPIN_DP (1<<PA7)
 
 
 
@@ -25,7 +24,7 @@
 void LedDigitWiring_Init(void)
 {
   //Configure LED pins as outputs
-  DDRA = WIRINGPIN_A | WIRINGPIN_B | WIRINGPIN_C | WIRINGPIN_D | WIRINGPIN_E | WIRINGPIN_F | WIRINGPIN_G | WIRINGPIN_SELECT;
+  DDRA = WIRINGPIN_A | WIRINGPIN_B | WIRINGPIN_C | WIRINGPIN_D | WIRINGPIN_E | WIRINGPIN_F | WIRINGPIN_G |WIRINGPIN_DP;
 }
 
 uint8_t convertPinToWiringPin(LedDigitWiring_Pin pin)
@@ -48,8 +47,6 @@ uint8_t convertPinToWiringPin(LedDigitWiring_Pin pin)
     return WIRINGPIN_G;
   case PIN_DP:
     return WIRINGPIN_DP;
-  case PIN_SELECT:
-    return WIRINGPIN_SELECT;
   }
 }
 

@@ -21,21 +21,8 @@ typedef enum
   NINE = 9
 } LedDigit_DisplayDigit;
 
-typedef struct
-{
-  Pin pin1;
-  Pin pin2;
-  //pin 3 must be wired to ground
-  Pin pin4;
-  Pin pin5;
-  Pin pin6;
-  Pin pin7;
-  //pin 8 must be wired to ground
-  Pin pin9;
-  Pin pin10;
-} LedDigit_DataPins;
 
-LedDigit LedDigit_Create(LedDigit_DataPins * dataPinAddresses, Pin selectPin);
+LedDigit LedDigit_Create(void);
 void LedDigit_Destroy(LedDigit * self);
 
 void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value);

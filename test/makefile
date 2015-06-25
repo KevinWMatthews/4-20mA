@@ -23,13 +23,13 @@ LEDDIGITWIRING_DIR=LedDigitWiring
 
 LEDNUMBER_DIR=LedNumber
 
-TIMESERVICE_DIR=TimeService
-
 MAINLOOP_DIR=MainLoop
 
 NUMERICFUNCTIONS_DIR=NumericFunctions
 
 PINDRIVER_DIR=PinDriver
+
+TIMESERVICE_DIR=TimeService
 
 
 #Create a makefile target for each series of tests

@@ -92,9 +92,3 @@ TEST(LedDigitWiring, SetPinDecimalPoint)
   LedDigitWiring_SetPin(PIN_DP);
   checkMemoryRegisters(0, 0x80);
 }
-
-TEST(LedDigitWiring, SetPinSelect)
-{
-  LedDigitWiring_SetPin(PIN_SELECT);
-  checkMemoryRegisters(0, 0x80);
-}
