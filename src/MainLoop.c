@@ -1,39 +1,39 @@
 #include "MainLoop.h"
-#include "AtoD.h"
+#include "Adc.h"
 #include "NumericFunctions.h"
 
 
-static int8_t atodConversionStatus;
+static int8_t adcConversionStatus;
 
 
 //*** File-scope functions ***//
 static int8_t getConversionStatus(void)
 {
-  return atodConversionStatus;
+  return adcConversionStatus;
 }
 
 static void setConversionStatus(int8_t status)
 {
-  atodConversionStatus = status;
+  adcConversionStatus = status;
 }
 
 
 
 //*** Public functions ***//
 //Wrappers for interrupts
-void MainLoop_AtodConversion(void * param)
+void MainLoop_AdcConversion(void * param)
 {
   RETURN_IF_NULL(param);
-  PeriodicAlarm * atodReadAlarmPointer = (PeriodicAlarm *)param;
-  atodConversionStatus = AtoD_StartConversion();
-  TimeService_ActivatePeriodicAlarm(*atodReadAlarmPointer);
+  PeriodicAlarm * adcReadAlarmPointer = (PeriodicAlarm *)param;
+  adcConversionStatus = Adc_StartConversion();
+  TimeService_ActivatePeriodicAlarm(*adcReadAlarmPointer);
 }
 
 void MainLoop_GetReading(void * param)
 {
   getReadingParameterStruct * parameterStruct;
-  int8_t atodReturnCode;
-  int16_t atodReading;
+  int8_t adcReturnCode;
+  int16_t adcReading;
   float reading;
 
   RETURN_IF_NULL(param);
@@ -42,16 +42,16 @@ void MainLoop_GetReading(void * param)
   RETURN_IF_NULL(parameterStruct->ledDisplay);
   RETURN_IF_NULL(parameterStruct->getReadingAlarm);
 
-  if (getConversionStatus() == ATOD_CONVERSION_BUSY)
+  if (getConversionStatus() == ADC_CONVERSION_BUSY)
   {
     return;
   }
-  atodReturnCode = AtoD_Read(&atodReading);
-  if (atodReturnCode != ATOD_READ_SUCCESS)
+  adcReturnCode = Adc_Read(&adcReading);
+  if (adcReturnCode != ADC_READ_SUCCESS)
   {
     return;
   }
-  reading = LineFit_GetOutput(parameterStruct->outputModel, atodReading);
+  reading = LineFit_GetOutput(parameterStruct->outputModel, adcReading);
   LedNumber_SetNumber(parameterStruct->ledDisplay, round_int16(reading));
   TimeService_DeactivatePeriodicAlarm(parameterStruct->getReadingAlarm);
 }
@@ -68,7 +68,7 @@ void MainLoop_UpdateDisplay(void * param)
 
 
 //*** Private functions ***//
-void MainLoop_Private_SetAtodConversionStatus(int8_t status)
+void MainLoop_Private_SetAdcConversionStatus(int8_t status)
 {
   setConversionStatus(status);
 }

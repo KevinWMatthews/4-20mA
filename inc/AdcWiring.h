@@ -4,10 +4,10 @@
 #include "DataTypes.h"
 
 
-//This hardware-dependent module is inteded to by used by the AtoD module.
-//It is an abstraction layer to keep AtoD from having direct hardware dependencies.
+//This hardware-dependent module is inteded to by used by the Adc module.
+//It is an abstraction layer to keep Adc from having direct hardware dependencies.
 //It is NOT designed to be used directly by the user.
-//To use the ADC, refer to AtoD.h
+//To use the ADC, refer to Adc.h
 
 
 //***********************//

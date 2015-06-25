@@ -4,7 +4,7 @@ ifndef SILENCE
 endif
 
 TARGET_NAME=4-20mA
-TEST_TARGET_NAME=AtoD
+TEST_TARGET_NAME=Adc
 
 ### Directory structure ###
 # List all production code folders

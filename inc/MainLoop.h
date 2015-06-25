@@ -7,7 +7,7 @@
 #include "DataTypes.h"
 
 //Prototypes for callbacks
-void MainLoop_AtodConversion(void * param);
+void MainLoop_AdcConversion(void * param);
 void MainLoop_GetReading(void * param);
 void MainLoop_UpdateDisplay(void * param);
 
@@ -19,13 +19,13 @@ typedef struct getReadingParameterStruct
 } getReadingParameterStruct;
 
 //A hack so that we can "pass data" to a callback.
-void MainLoop_Init(PeriodicAlarm atodRead, LedNumber number, LineFit line);
+void MainLoop_Init(PeriodicAlarm adcRead, LedNumber number, LineFit line);
 
-int8_t MainLoop_GetAtodConversionStatus(void);
+int8_t MainLoop_GetAdcConversionStatus(void);
 
 
 //Included to make testing easier.
 //If you have a need to use these then you're probably doing something wrong.
-void MainLoop_Private_SetAtodConversionStatus(int8_t value);
+void MainLoop_Private_SetAdcConversionStatus(int8_t value);
 
 #endif

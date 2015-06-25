@@ -1,6 +1,6 @@
 SDD
 
-~Get value from AtoD converter.
+~Get value from ADC.
 ~Convert into 4-20mA reading.
 Send reading to display.
 ~Send part of reading to each digit.
@@ -11,9 +11,9 @@ Might need to use a "sink driver" to provide enough power to the LEDs. Now that 
 
 We will have a TimeService to perform periodic tasks.
 
-The TimeService will be responsible for getting readings from the AtoD converter, scale them, send them to the display, etc.
+The TimeService will be responsible for getting readings from the ADC scale them, send them to the display, etc.
 
-The ADC will be sampled relatively infrequently, say, twice a second. We'll have to figure out how long to wait until the ADC returns a reading, etc. I don't remember if this is done directly or if AtoD can simple start things out. It's looking like we use AtoD, but we might want to redesign this now that I have more experience ;)
+The ADC will be sampled relatively infrequently, say, twice a second. We'll have to figure out how long to wait until the ADC returns a reading, etc.
 
 Once we get a reading, we'll process it using LineFit.
 

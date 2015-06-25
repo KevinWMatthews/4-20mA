@@ -4,19 +4,19 @@ Initialize everything
 
   Loop:
 if conversion start (delay too?)
-  Get AtoD reading
+  Get Adc reading
   Convert into 4-20 reading (LineFit)
 
 
 ServiceAllCallbacks:
   Once per second:
-    Start AtoD conversion.
+    Start Adc conversion.
 
   240 times per second:
     Send Reading to Display
 
 
-Should ReadAtodValue() reset the conversion status if it's busy, i.e. should we force the program to wait until the next AtoD conversion is started?
+Should ReadAdcValue() reset the conversion status if it's busy, i.e. should we force the program to wait until the next Adc conversion is started?
 
 
 Update the .h file's documentation.
