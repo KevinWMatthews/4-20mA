@@ -13,7 +13,7 @@ BOOL AdcWiring_IsAdcBusy(void)
 
 void AdcWiring_StartConversion(void)
 {
-  ADCSR = 1 << ADSC;
+  SBI(ADCSR, ADSC);
 }
 
 BOOL AdcWiring_IsInterruptFlagSet(void)
@@ -34,7 +34,7 @@ uint8_t AdcWiring_ReadDataRegister_Low(void)
 
 void AdcWiring_ClearInterruptFlag(void)
 {
-  ADCSR = 1 << ADIF;
+  SBI(ADCSR, ADIF);
 }
 
 
@@ -43,7 +43,7 @@ void AdcWiring_ClearInterruptFlag(void)
 //***********************//
 void AdcWiring_Init(void)
 {
-  AdcWiring_Private_SelectReferenceVoltage(ADC_AVCC);
+  AdcWiring_Private_SelectReferenceVoltage(ADC_INTERNAL_NO_PA3);
   AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
   AdcWiring_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
   AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_2);
@@ -75,10 +75,10 @@ void AdcWiring_Private_SelectPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
 
 void AdcWiring_Enable(void)
 {
-  ADCSR = ADC_ENABLED << ADEN;
+  SBI(ADCSR, ADEN);
 }
 
 void AdcWiring_FirstConversion(void)
 {
-  ADCSR = 1 << ADSC;
+  SBI(ADCSR, ADSC);
 }

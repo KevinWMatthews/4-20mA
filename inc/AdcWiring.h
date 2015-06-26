@@ -1,5 +1,5 @@
-#ifndef Adc_Wiring_H_
-#define Adc_Wiring_H_
+#ifndef AdcWiring_H_
+#define AdcWiring_H_
 
 #include "DataTypes.h"
 
@@ -13,12 +13,6 @@
 //***********************//
 //*** Register Values ***//
 //***********************//
-typedef enum
-{
-  ADC_DISABLED = 0,
-  ADC_ENABLED = 1
-} Adc_Enabled;
-
 typedef enum
 {
   ADC_FREE = 0,
@@ -42,12 +36,15 @@ void AdcWiring_ClearInterruptFlag(void);
 //********************//
 typedef enum
 {
-  ADC_AVCC = 0b00
+  ADC_AVCC            = 0b00,
+  ADC_AREF_PIN        = 0b01,
+  ADC_INTERNAL_NO_PA3 = 0b10
 } Adc_VoltageSource;
 
 typedef enum
 {
-  ADC_RIGHT_ADJUST = 0
+  ADC_RIGHT_ADJUST = 0,
+  ADC_LEFT_ADJUST  = 1
 } Adc_ResultAdjust;
 
 typedef enum
@@ -57,8 +54,9 @@ typedef enum
 
 typedef enum
 {
-  ADC_PRESCALE_FACTOR_0 = 0b000,  //Actually sets it to 2
-  ADC_PRESCALE_FACTOR_2 = 0b001
+  ADC_PRESCALE_FACTOR_0  = 0b000,  //Actually sets it to 2
+  ADC_PRESCALE_FACTOR_2  = 0b001,
+  ADC_PRESCALE_FACTOR_64 = 0b110
 } Adc_PrescaleFactor;
 
 //***********************//

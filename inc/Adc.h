@@ -1,7 +1,7 @@
 #ifndef Adc_H_
 #define Adc_H_
 
-#include <stdint.h>
+#include "DataTypes.h"
 
 enum
 {

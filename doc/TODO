@@ -1,7 +1,12 @@
 TODO
 
+Revamp tests in ADC to fix the holes that I left.
+
 Add documentation to header files
 
+
+Set up the AVCC and VCC with a 100 nF cap and a 10uH:
+  The AVCC pin on the ATtiny26(L) should be connected to the digital V CC supply voltage via an LC network as shown in Figure 57.
 
 
 Want to document and streamline testing for NULL pointers for a generic multi-instance module.

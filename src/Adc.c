@@ -10,10 +10,10 @@ void Adc_Setup(void)
 
 int8_t Adc_StartConversion(void)
 {
-  if (AdcWiring_IsAdcBusy())
-  {
-    return ADC_CONVERSION_BUSY;
-  }
+  // if (AdcWiring_IsAdcBusy())
+  // {
+  //   return ADC_CONVERSION_BUSY;
+  // }
 
   AdcWiring_StartConversion();
   return ADC_CONVERSION_STARTED;

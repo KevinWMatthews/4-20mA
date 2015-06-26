@@ -1,3 +1,6 @@
 TODO
 
 Can't currently fit all of the source code in the Tiny26, so we'll have to specify which specific .c files we need to use for each demo.
+
+Need to make compiler recognize changes in .h files
+  Use .lst? .d?
