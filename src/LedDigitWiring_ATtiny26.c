@@ -52,10 +52,10 @@ static uint8_t convertPinToWiringPin(LedDigitWiring_Pin pin)
 
 void LedDigitWiring_SetPin(LedDigitWiring_Pin pin)
 {
-  SBIT(PORTA, convertPinToWiringPin(pin));
+  CBIT(PORTA, convertPinToWiringPin(pin));
 }
 
 void LedDigitWiring_ClearPin(LedDigitWiring_Pin pin)
 {
-  CBIT(PORTA, convertPinToWiringPin(pin));
+  SBIT(PORTA, convertPinToWiringPin(pin));
 }

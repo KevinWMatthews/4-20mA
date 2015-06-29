@@ -8,6 +8,7 @@
 #include "LedDigitWiring.h"
 
 
+
 int main(void)
 {
   LedDigit digit;
@@ -21,12 +22,20 @@ int main(void)
 
   while (1)
   {
-    _delay_ms(2000);
+    _delay_ms(1000);
     LedDigit_SetDigit(digit, currentDigit);
     LedDigit_UpdateLed(digit);
     if (currentDigit == NINE)
     {
       currentDigit = ZERO;
+      if (LedDigit_IsDecimalShown(digit))
+      {
+        LedDigit_ClearDecimal(digit);
+      }
+      else
+      {
+        LedDigit_SetDecimal(digit);
+      }
     }
     else
     {
