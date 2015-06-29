@@ -1,3 +1,4 @@
+### gcc/avr-gcc ###
 #Ignore results of production code build
 build/
 obj/
@@ -5,3 +6,11 @@ obj/
 #Ignore results of CppUTest test build
 */test/build/
 */test/obj/
+
+
+### Atmel Studio ###
+#Ignore user-specific solution files
+**/*.atsuo
+
+#Ignore Debug files
+**/Debug/
