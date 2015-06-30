@@ -40,12 +40,12 @@ TEST_GROUP(LedDigit)
   {
     if (setPin == TRUE)
     {
-      mock().expectOneCall("LedDigitWiring_SetPin")
+      mock().expectOneCall("LedDigitWiring_TurnSegmentOn")
             .withParameter("pin", pin);
     }
     else
     {
-      mock().expectOneCall("LedDigitWiring_ClearPin")
+      mock().expectOneCall("LedDigitWiring_TurnSegmentOff")
             .withParameter("pin", pin);
     }
   }
@@ -78,15 +78,15 @@ void LedDigitWiring_Init(void)
   mock().actualCall("LedDigitWiring_Init");
 }
 
-void LedDigitWiring_SetPin(LedDigitWiring_Pin pin)
+void LedDigitWiring_TurnSegmentOn(LedDigitWiring_Pin pin)
 {
-  mock().actualCall("LedDigitWiring_SetPin")
+  mock().actualCall("LedDigitWiring_TurnSegmentOn")
         .withParameter("pin", pin);
 }
 
-void LedDigitWiring_ClearPin(LedDigitWiring_Pin pin)
+void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
 {
-  mock().actualCall("LedDigitWiring_ClearPin")
+  mock().actualCall("LedDigitWiring_TurnSegmentOff")
         .withParameter("pin", pin);
 }
 

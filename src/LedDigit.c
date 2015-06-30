@@ -172,131 +172,131 @@ void LedDigit_TurnLedOff(LedDigit self)
 //****************************//
 static void showNothing(void)
 {
-  LedDigitWiring_ClearPin(PIN_A);
-  LedDigitWiring_ClearPin(PIN_B);
-  LedDigitWiring_ClearPin(PIN_C);
-  LedDigitWiring_ClearPin(PIN_D);
-  LedDigitWiring_ClearPin(PIN_E);
-  LedDigitWiring_ClearPin(PIN_F);
-  LedDigitWiring_ClearPin(PIN_G);
+  LedDigitWiring_TurnSegmentOff(PIN_A);
+  LedDigitWiring_TurnSegmentOff(PIN_B);
+  LedDigitWiring_TurnSegmentOff(PIN_C);
+  LedDigitWiring_TurnSegmentOff(PIN_D);
+  LedDigitWiring_TurnSegmentOff(PIN_E);
+  LedDigitWiring_TurnSegmentOff(PIN_F);
+  LedDigitWiring_TurnSegmentOff(PIN_G);
 }
 
 static void showZero(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_SetPin(PIN_D);
-  LedDigitWiring_SetPin(PIN_E);
-  LedDigitWiring_SetPin(PIN_F);
-  LedDigitWiring_ClearPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOn(PIN_D);
+  LedDigitWiring_TurnSegmentOn(PIN_E);
+  LedDigitWiring_TurnSegmentOn(PIN_F);
+  LedDigitWiring_TurnSegmentOff(PIN_G);
 }
 
 static void showOne(void)
 {
-  LedDigitWiring_ClearPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_ClearPin(PIN_D);
-  LedDigitWiring_ClearPin(PIN_E);
-  LedDigitWiring_ClearPin(PIN_F);
-  LedDigitWiring_ClearPin(PIN_G);
+  LedDigitWiring_TurnSegmentOff(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOff(PIN_D);
+  LedDigitWiring_TurnSegmentOff(PIN_E);
+  LedDigitWiring_TurnSegmentOff(PIN_F);
+  LedDigitWiring_TurnSegmentOff(PIN_G);
 }
 
 static void showTwo(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_ClearPin(PIN_C);
-  LedDigitWiring_SetPin(PIN_D);
-  LedDigitWiring_SetPin(PIN_E);
-  LedDigitWiring_ClearPin(PIN_F);
-  LedDigitWiring_SetPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOff(PIN_C);
+  LedDigitWiring_TurnSegmentOn(PIN_D);
+  LedDigitWiring_TurnSegmentOn(PIN_E);
+  LedDigitWiring_TurnSegmentOff(PIN_F);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
 }
 
 static void showThree(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_SetPin(PIN_D);
-  LedDigitWiring_ClearPin(PIN_E);
-  LedDigitWiring_ClearPin(PIN_F);
-  LedDigitWiring_SetPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOn(PIN_D);
+  LedDigitWiring_TurnSegmentOff(PIN_E);
+  LedDigitWiring_TurnSegmentOff(PIN_F);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
 }
 
 static void showFour(void)
 {
-  LedDigitWiring_ClearPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_ClearPin(PIN_D);
-  LedDigitWiring_ClearPin(PIN_E);
-  LedDigitWiring_SetPin(PIN_F);
-  LedDigitWiring_SetPin(PIN_G);
+  LedDigitWiring_TurnSegmentOff(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOff(PIN_D);
+  LedDigitWiring_TurnSegmentOff(PIN_E);
+  LedDigitWiring_TurnSegmentOn(PIN_F);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
 }
 
 static void showFive(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_ClearPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_SetPin(PIN_D);
-  LedDigitWiring_ClearPin(PIN_E);
-  LedDigitWiring_SetPin(PIN_F);
-  LedDigitWiring_SetPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOff(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOn(PIN_D);
+  LedDigitWiring_TurnSegmentOff(PIN_E);
+  LedDigitWiring_TurnSegmentOn(PIN_F);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
 }
 
 static void showSix(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_ClearPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_SetPin(PIN_D);
-  LedDigitWiring_SetPin(PIN_E);
-  LedDigitWiring_SetPin(PIN_F);
-  LedDigitWiring_SetPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOff(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOn(PIN_D);
+  LedDigitWiring_TurnSegmentOn(PIN_E);
+  LedDigitWiring_TurnSegmentOn(PIN_F);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
 }
 
 static void showSeven(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_ClearPin(PIN_D);
-  LedDigitWiring_ClearPin(PIN_E);
-  LedDigitWiring_ClearPin(PIN_F);
-  LedDigitWiring_ClearPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOff(PIN_D);
+  LedDigitWiring_TurnSegmentOff(PIN_E);
+  LedDigitWiring_TurnSegmentOff(PIN_F);
+  LedDigitWiring_TurnSegmentOff(PIN_G);
 }
 
 static void showEight(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_SetPin(PIN_D);
-  LedDigitWiring_SetPin(PIN_E);
-  LedDigitWiring_SetPin(PIN_F);
-  LedDigitWiring_SetPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOn(PIN_D);
+  LedDigitWiring_TurnSegmentOn(PIN_E);
+  LedDigitWiring_TurnSegmentOn(PIN_F);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
 }
 
 static void showNine(void)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_SetPin(PIN_B);
-  LedDigitWiring_SetPin(PIN_C);
-  LedDigitWiring_ClearPin(PIN_D);
-  LedDigitWiring_ClearPin(PIN_E);
-  LedDigitWiring_SetPin(PIN_F);
-  LedDigitWiring_SetPin(PIN_G);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  LedDigitWiring_TurnSegmentOff(PIN_D);
+  LedDigitWiring_TurnSegmentOff(PIN_E);
+  LedDigitWiring_TurnSegmentOn(PIN_F);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
 }
 
 static void showDecimal(void)
 {
-  LedDigitWiring_SetPin(PIN_DP);
+  LedDigitWiring_TurnSegmentOn(PIN_DP);
 }
 
 static void clearDecimal(void)
 {
-  LedDigitWiring_ClearPin(PIN_DP);
+  LedDigitWiring_TurnSegmentOff(PIN_DP);
 }

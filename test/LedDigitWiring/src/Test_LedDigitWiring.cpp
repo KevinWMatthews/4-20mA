@@ -12,8 +12,7 @@ TEST_GROUP(LedDigitWiring)
 {
   void setup()
   {
-    DDRA = 0;
-    PORTA = 0;
+    LedDigitWiring_Init();
   }
 
   void teardown()
@@ -27,68 +26,63 @@ TEST_GROUP(LedDigitWiring)
   }
 };
 
-TEST(LedDigitWiring, SetupCheck)
+TEST(LedDigitWiring, Initialize)
 {
-  checkMemoryRegisters(0, 0);
+  //GPIO to outputs, high to turn off LED digit segments
+  checkMemoryRegisters(0xff, 0xff);
 }
 
-TEST(LedDigitWiring, InitializeGpioToOutputs)
+TEST(LedDigitWiring, SetSegmentA)
 {
-  LedDigitWiring_Init();
-  checkMemoryRegisters(0xff, 0);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  checkMemoryRegisters(0xff, 0xfe);
 }
 
-TEST(LedDigitWiring, SetPinA)
+TEST(LedDigitWiring, ClearSegmentA)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  checkMemoryRegisters(0, 0x01);
+  LedDigitWiring_TurnSegmentOn(PIN_A);
+  LedDigitWiring_TurnSegmentOff(PIN_A);
+  checkMemoryRegisters(0xff, 0xff);
 }
 
-TEST(LedDigitWiring, ClearPinA)
+TEST(LedDigitWiring, SetSegmentB)
 {
-  LedDigitWiring_SetPin(PIN_A);
-  LedDigitWiring_ClearPin(PIN_A);
-  checkMemoryRegisters(0, 0);
+  LedDigitWiring_TurnSegmentOn(PIN_B);
+  checkMemoryRegisters(0xff, 0xfd);
 }
 
-TEST(LedDigitWiring, SetPinB)
+TEST(LedDigitWiring, SetSegmentC)
 {
-  LedDigitWiring_SetPin(PIN_B);
-  checkMemoryRegisters(0, 0x02);
+  LedDigitWiring_TurnSegmentOn(PIN_C);
+  checkMemoryRegisters(0xff, 0xfb);
 }
 
-TEST(LedDigitWiring, SetPinC)
+TEST(LedDigitWiring, SetSegmentD)
 {
-  LedDigitWiring_SetPin(PIN_C);
-  checkMemoryRegisters(0, 0x04);
+  LedDigitWiring_TurnSegmentOn(PIN_D);
+  checkMemoryRegisters(0xff, 0xf7);
 }
 
-TEST(LedDigitWiring, SetPinD)
+TEST(LedDigitWiring, SetSegmentE)
 {
-  LedDigitWiring_SetPin(PIN_D);
-  checkMemoryRegisters(0, 0x08);
+  LedDigitWiring_TurnSegmentOn(PIN_E);
+  checkMemoryRegisters(0xff, 0xef);
 }
 
-TEST(LedDigitWiring, SetPinE)
+TEST(LedDigitWiring, SetSegmentF)
 {
-  LedDigitWiring_SetPin(PIN_E);
-  checkMemoryRegisters(0, 0x10);
+  LedDigitWiring_TurnSegmentOn(PIN_F);
+  checkMemoryRegisters(0xff, 0xdf);
 }
 
-TEST(LedDigitWiring, SetPinF)
+TEST(LedDigitWiring, SetSegmentG)
 {
-  LedDigitWiring_SetPin(PIN_F);
-  checkMemoryRegisters(0, 0x20);
+  LedDigitWiring_TurnSegmentOn(PIN_G);
+  checkMemoryRegisters(0xff, 0xbf);
 }
 
-TEST(LedDigitWiring, SetPinG)
+TEST(LedDigitWiring, SetSegmentDecimalPoint)
 {
-  LedDigitWiring_SetPin(PIN_G);
-  checkMemoryRegisters(0, 0x40);
-}
-
-TEST(LedDigitWiring, SetPinDecimalPoint)
-{
-  LedDigitWiring_SetPin(PIN_DP);
-  checkMemoryRegisters(0, 0x80);
+  LedDigitWiring_TurnSegmentOn(PIN_DP);
+  checkMemoryRegisters(0xff, 0x7f);
 }

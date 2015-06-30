@@ -25,6 +25,7 @@ void LedDigitWiring_Init(void)
 {
   //Configure LED pins as outputs
   DDRA = WIRINGPIN_A | WIRINGPIN_B | WIRINGPIN_C | WIRINGPIN_D | WIRINGPIN_E | WIRINGPIN_F | WIRINGPIN_G |WIRINGPIN_DP;
+  PORTA = 0xff;
 }
 
 static uint8_t convertPinToWiringPin(LedDigitWiring_Pin pin)
@@ -50,12 +51,12 @@ static uint8_t convertPinToWiringPin(LedDigitWiring_Pin pin)
   }
 }
 
-void LedDigitWiring_SetPin(LedDigitWiring_Pin pin)
+void LedDigitWiring_TurnSegmentOn(LedDigitWiring_Pin pin)
 {
   CBIT(PORTA, convertPinToWiringPin(pin));
 }
 
-void LedDigitWiring_ClearPin(LedDigitWiring_Pin pin)
+void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
 {
   SBIT(PORTA, convertPinToWiringPin(pin));
 }
