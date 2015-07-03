@@ -9,7 +9,7 @@ endif
 TARGET_NAME=LedNumber
 
 #mcu type according to avr-gcc
-MCU=attiny26
+MCU=attiny861
 
 #Root directory of the project as a whole, which may not be the current directory
 ROOT_DIR=../..
@@ -25,8 +25,7 @@ TARGET_DIR=build
 SRC_FILES=$(ROOT_DIR)/src/LedNumber.c \
           $(ROOT_DIR)/src/LedNumberWiring_ATtiny26.c \
           $(ROOT_DIR)/src/LedDigit.c \
-          $(ROOT_DIR)/src/LedDigitWiring_ATtiny26.c \
-          $(ROOT_DIR)/src/DataTypes.c
+          $(ROOT_DIR)/src/LedDigitWiring_ATtiny26.c
 
 #Optimization level
 #use s (size opt), 1, 2, 3, 0 (off), fast, g (debugging)
@@ -36,7 +35,7 @@ OPTLEVEL=s
 ### AVR Dude options ###
 ########################
 #Fill in the part number that avrdude uses
-AVRDUDE_MCU=t26
+AVRDUDE_MCU=t861
 
 AVRDUDE_PROGRAMMERID=avrispmkII
 

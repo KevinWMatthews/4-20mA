@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=LedDigit LedDigitWiring
+TESTS_TO_RUN=LedNumber LedNumberWiring
 #Adc AdcWiring LineFit LedDigit LedDigitWiring \
 #             LedNumberWiring LedNumber MainLoop NumericFunctions TimeService
 

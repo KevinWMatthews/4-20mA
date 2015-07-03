@@ -9,7 +9,7 @@ endif
 TARGET_NAME=LedDigit
 
 #mcu type according to avr-gcc
-MCU=attiny26
+MCU=attiny861
 
 #Root directory of the project as a whole, which may not be the current directory
 ROOT_DIR=../..
@@ -33,7 +33,7 @@ OPTLEVEL=s
 ### AVR Dude options ###
 ########################
 #Fill in the part number that avrdude uses
-AVRDUDE_MCU=t26
+AVRDUDE_MCU=t861
 
 AVRDUDE_PROGRAMMERID=avrispmkII
 

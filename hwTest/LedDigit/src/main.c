@@ -1,5 +1,5 @@
 #ifndef F_CPU               /* Used by <util/delay.h> */
-#define F_CPU 8000000UL     /* 8MHz internal crystal */
+#define F_CPU 1000000UL     /* 8MHz internal crystal divided by 8 */
 #endif
 
 #include <avr/io.h>
@@ -20,11 +20,18 @@ int main(void)
 
   currentDigit = ZERO;
 
+  DDRB = 0x03;
+
   while (1)
   {
-    _delay_ms(1000);
+    PORTB = 0x01;
     LedDigit_SetDigit(digit, currentDigit);
     LedDigit_UpdateLed(digit);
+    _delay_ms(500);
+
+    PORTB = 0x02;
+    _delay_ms(500);
+
     if (currentDigit == NINE)
     {
       currentDigit = ZERO;
@@ -41,5 +48,6 @@ int main(void)
     {
       currentDigit += 1;
     }
+
   }
 }

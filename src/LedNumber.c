@@ -95,22 +95,23 @@ void LedNumber_ShowNumber(LedNumber self)
 
   if (isValidDigit(self->visibleDigit))
   {
-    LedDigit_TurnLedOff(self->ledDigits[self->visibleDigit]);
     self->visibleDigit--;
   }
 
   if (!isValidDigit(self->visibleDigit))  // Wraparound or first time turned on
   {
-    self->visibleDigit = LED_MAX - 1;
+    self->visibleDigit = self->numberOfDigits - 1;
   }
-
+  //Turn off to prevent "on time" from bleeding to other digit segments
+  LedDigit_TurnLedOff(self->ledDigits[self->visibleDigit]);
+  LedNumberWring_SetSelectPin((LedNumber_DigitPlace)self->visibleDigit);
   LedDigit_UpdateLed(self->ledDigits[self->visibleDigit]);
 }
 
 void LedNumber_TurnOff(LedNumber self)
 {
   RETURN_IF_NULL(self);
-  LedDigit_TurnLedOff(self->ledDigits[self->visibleDigit]);
+  LedNumberWring_SetSelectPin(LED_NONE);
   self->visibleDigit = LED_NONE;
 }
 

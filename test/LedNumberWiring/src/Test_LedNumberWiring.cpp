@@ -14,6 +14,7 @@ TEST_GROUP(LedNumberWiring)
   {
     PORTB = 0;
     DDRB = 0;
+    LedNumberWiring_Init();
   }
 
   void teardown()
@@ -27,43 +28,44 @@ TEST_GROUP(LedNumberWiring)
   }
 };
 
-TEST(LedNumberWiring, SetupCheck)
-{
-  checkMemoryRegisters(0, 0);
-}
-
 TEST(LedNumberWiring, InitCheck)
 {
-  LedNumberWiring_Init();
-  checkMemoryRegisters(0x78, 0);  //Pins 3, 4, 5, 6
+  checkMemoryRegisters(0x0f, 0x0f);
 }
 
 TEST(LedNumberWiring, SelectNoLed)
 {
   LedNumberWring_SetSelectPin(LED_NONE);
-  checkMemoryRegisters(0, 0);
+  checkMemoryRegisters(0x0f, 0x0f);
 }
 
 TEST(LedNumberWiring, SelectLed1)
 {
   LedNumberWring_SetSelectPin(LED_1);
-  checkMemoryRegisters(0, 0x08);
+  checkMemoryRegisters(0x0f, 0x0e);
 }
 
 TEST(LedNumberWiring, SelectLed2)
 {
   LedNumberWring_SetSelectPin(LED_2);
-  checkMemoryRegisters(0, 0x10);
+  checkMemoryRegisters(0x0f, 0x0d);
 }
 
 TEST(LedNumberWiring, SelectLed3)
 {
   LedNumberWring_SetSelectPin(LED_3);
-  checkMemoryRegisters(0, 0x20);
+  checkMemoryRegisters(0x0f, 0x0b);
 }
 
 TEST(LedNumberWiring, SelectLed4)
 {
   LedNumberWring_SetSelectPin(LED_4);
-  checkMemoryRegisters(0, 0x40);
+  checkMemoryRegisters(0x0f, 0x07);
+}
+
+TEST(LedNumberWiring, SetConsecutiveSelectPins)
+{
+  LedNumberWring_SetSelectPin(LED_1);
+  LedNumberWring_SetSelectPin(LED_2);
+  checkMemoryRegisters(0x0f, 0x0d);
 }

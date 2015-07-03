@@ -2,15 +2,20 @@
 #include <avr/io.h>
 #include "BitManip.h"
 
-#define WIRINGPIN_LED1 (1<<PB3)
-#define WIRINGPIN_LED2 (1<<PB4)
-#define WIRINGPIN_LED3 (1<<PB5)
-#define WIRINGPIN_LED4 (1<<PB6)
+
+//********************************************//
+//*** Edit here to change hardware wiring! ***//
+//********************************************//
+#define WIRINGPIN_LED1 (1<<PB0)
+#define WIRINGPIN_LED2 (1<<PB1)
+#define WIRINGPIN_LED3 (1<<PB2)
+#define WIRINGPIN_LED4 (1<<PB3)
 
 //At the moment only portb pins 3, 4, 5, and 6 are available
 void LedNumberWiring_Init(void)
 {
-  DDRB = WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
+  DDRB |= WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
+  PORTB |= WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
 }
 
 static uint8_t convertPinToWiringPin(LedNumber_DigitPlace pin)
@@ -30,13 +35,13 @@ static uint8_t convertPinToWiringPin(LedNumber_DigitPlace pin)
 
 void LedNumberWring_SetSelectPin(LedNumber_DigitPlace pin)
 {
+  SBIT(PORTB, WIRINGPIN_LED1);
+  SBIT(PORTB, WIRINGPIN_LED2);
+  SBIT(PORTB, WIRINGPIN_LED3);
+  SBIT(PORTB, WIRINGPIN_LED4);
   if (pin == LED_NONE)
   {
-    CBIT(PORTB, WIRINGPIN_LED1);
-    CBIT(PORTB, WIRINGPIN_LED2);
-    CBIT(PORTB, WIRINGPIN_LED3);
-    CBIT(PORTB, WIRINGPIN_LED4);
     return;
   }
-  SBIT(PORTB, convertPinToWiringPin(pin));
+  CBIT(PORTB, convertPinToWiringPin(pin));
 }
