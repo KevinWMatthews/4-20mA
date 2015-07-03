@@ -1,5 +1,8 @@
 TODO
 
+Fix LedDigit HW demo
+Turn on LEDs in the correct order ;)
+
 Revamp tests in ADC to fix the holes that I left.
 
 Add documentation to header files

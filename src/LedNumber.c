@@ -104,7 +104,7 @@ void LedNumber_ShowNumber(LedNumber self)
   }
   //Turn off to prevent "on time" from bleeding to other digit segments
   LedDigit_TurnLedOff(self->ledDigits[self->visibleDigit]);
-  LedNumberWring_SetSelectPin((LedNumber_DigitPlace)self->visibleDigit);
+  LedNumberWring_SetSelectPin((LedNumber_DigitPlace)(self->numberOfDigits - self->visibleDigit - 1));
   LedDigit_UpdateLed(self->ledDigits[self->visibleDigit]);
 }
 

@@ -1,3 +1,7 @@
+Add needs to have a cap; can't add mor ediits than there are.
+
+
+
 Add decimal support, but later; we'll have to figure out what kind of behavior that we want.
 
 What if we added 0 digits?

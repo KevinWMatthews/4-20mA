@@ -231,20 +231,20 @@ TEST(LedNumber, ShowNumber)
   LedNumber_SetNumber(number, 4567);
 
   expectTurnOffDigit(digits[LED_MAX-1]);
-  expectSetSelectPin((LedNumber_DigitPlace)(LED_MAX-1));
+  expectSetSelectPin((LedNumber_DigitPlace)(0));
   expectShowDigit(digits[LED_MAX-1]);
   LedNumber_ShowNumber(number);
 
   for (int i = LED_MAX-1; i > LED_NONE+1; i--)
   {
     expectTurnOffDigit(digits[i]);
-    expectSetSelectPin((LedNumber_DigitPlace)(i-1));
+    expectSetSelectPin((LedNumber_DigitPlace)(LED_MAX-i));
     expectShowDigit(digits[i-1]);
     LedNumber_ShowNumber(number);
   }
 
   expectTurnOffDigit(digits[LED_MAX-1]);
-  expectSetSelectPin((LedNumber_DigitPlace)(LED_MAX-1));
+  expectSetSelectPin((LedNumber_DigitPlace)(0));
   expectShowDigit(digits[LED_MAX-1]);
   LedNumber_ShowNumber(number);
 }
@@ -254,16 +254,16 @@ TEST(LedNumber, TurnOffLedNumber)
   expectSetDigits(4, 5, 6, 7);
   LedNumber_SetNumber(number, 4567);
 
-  expectTurnOffDigit(digits[LED_MAX-1]);
-  expectSetSelectPin((LedNumber_DigitPlace)(LED_MAX-1));
+  expectTurnOffDigit(digits[0]);
+  expectSetSelectPin((LedNumber_DigitPlace)(0));
   expectShowDigit(digits[LED_MAX-1]);
   LedNumber_ShowNumber(number);
 
   expectSetSelectPin(LED_NONE);
   LedNumber_TurnOff(number);
 
-  expectTurnOffDigit(digits[LED_MAX-1]);
-  expectSetSelectPin((LedNumber_DigitPlace)(LED_MAX-1));
+  expectTurnOffDigit(digits[0]);
+  expectSetSelectPin((LedNumber_DigitPlace)(0));
   expectShowDigit(digits[LED_MAX-1]);
   LedNumber_ShowNumber(number);
 }
@@ -295,21 +295,21 @@ TEST(LedNumber, Two_ShowNumber)
   expectSetTwoDigits(6, 7);
   LedNumber_SetNumber(twoDigitNumber, 67);
 
-  expectTurnOffDigit(twoDigits[MAX_TWO-1]);
+  expectTurnOffDigit(twoDigits[0]);
   expectShowDigit(twoDigits[MAX_TWO-1]);
-  expectSetSelectPin((LedNumber_DigitPlace)(MAX_TWO-1));
+  expectSetSelectPin((LedNumber_DigitPlace)(0));
   LedNumber_ShowNumber(twoDigitNumber);
 
   for (int i = MAX_TWO-1; i > LED_NONE+1; i--)
   {
     expectTurnOffDigit(twoDigits[i]);
-    expectSetSelectPin((LedNumber_DigitPlace)(i-1));
+    expectSetSelectPin((LedNumber_DigitPlace)(1));
     expectShowDigit(twoDigits[i-1]);
     LedNumber_ShowNumber(twoDigitNumber);
   }
 
   expectTurnOffDigit(twoDigits[0]);
-  expectSetSelectPin((LedNumber_DigitPlace)(MAX_TWO-1));
+  expectSetSelectPin((LedNumber_DigitPlace)(0));
   expectShowDigit(twoDigits[MAX_TWO-1]);
   LedNumber_ShowNumber(twoDigitNumber);
 }
