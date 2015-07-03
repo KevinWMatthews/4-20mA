@@ -40,6 +40,6 @@ void LedNumber_ShowNumber(LedNumber self);
 void LedNumber_TurnOff(LedNumber self);
 
 
-int16_t LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place);
+LedDigit_DisplayDigit LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place);
 
 #endif

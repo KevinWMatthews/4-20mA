@@ -12,7 +12,7 @@
 #define WIRINGPIN_LED4 (1<<PB3)
 
 //At the moment only portb pins 3, 4, 5, and 6 are available
-void LedNumberWiring_Init(void)
+void LedNumberWiring_HwSetup(void)
 {
   DDRB |= WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
   PORTB |= WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;

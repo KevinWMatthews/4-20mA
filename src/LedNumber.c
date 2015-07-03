@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 
+#define NO_DIGIT -1
+
 
 //******************//
 //*** Data types ***//
@@ -11,7 +13,7 @@
 typedef struct LedNumberStruct
 {
   LedDigit ledDigit;
-  LedNumberWiring_Place * selectPins;
+  LedDigit_DisplayDigit * digits;
   LedNumber_Place largestDigit;
   LedNumber_Place visibleDigit;
 } LedNumberStruct;
@@ -21,7 +23,7 @@ typedef struct LedNumberStruct
 //**************************************//
 //*** File-scope function prototypes ***//
 //**************************************//
-// int16_t getDigitFromNumber(int16_t number, int8_t place, LedNumber_Place numberSize);
+static LedDigit_DisplayDigit getDigitFromNumber(int16_t number, LedNumber_Place place);
 static BOOL isInvalidDigit(LedNumber_Place place);
 static int8_t getDigitIndexFromPlace(LedNumber self, LedNumber_Place place);
 
@@ -32,16 +34,23 @@ static int8_t getDigitIndexFromPlace(LedNumber self, LedNumber_Place place);
 //************************//
 void LedNumber_HwSetup(void)
 {
-  LedNumberWiring_Init();
+  LedDigit_HwSetup();
+  LedNumberWiring_HwSetup();
 }
 
 LedNumber LedNumber_Create(LedNumber_Place largestDigit)
 {
+  int8_t i;
   LedNumber self = NULL;
 
   self = calloc(1, sizeof(LedNumberStruct));
   self->ledDigit = LedDigit_Create();
-  self->selectPins = calloc(largestDigit+1, sizeof(LedNumberWiring_Place));
+  self->digits = calloc(largestDigit+1, sizeof(LedDigit_DisplayDigit));
+  //TODO use memset or something
+  for (i = LED_UNITS; i <= largestDigit; i++)
+  {
+    self->digits[i] = NOTHING;
+  }
   self->largestDigit = largestDigit;
   self->visibleDigit = LED_NONE;
   return self;
@@ -58,91 +67,56 @@ void LedNumber_Destroy(LedNumber * self)
   pointer = *self;
 
   LedDigit_Destroy(&pointer->ledDigit);
-  free(pointer->selectPins);
+  free(pointer->digits);
   free(pointer);
   self = NULL;
 }
 
-// void LedNumber_SetNumber(LedNumber self, int16_t number)
-// {
-//   int16_t digitToShow;
-//   LedNumber_Place place;
+void LedNumber_SetNumber(LedNumber self, int16_t number)
+{
+  LedNumber_Place place;
+  int8_t index;
 
-//   RETURN_IF_NULL(self);
-//   for (place = LED_UNITS; place <= self->largestDigit; place++)
-//   {
-//     int8_t index = getDigitIndexFromPlace(self, place);
-//     RETURN_IF_NULL(self->ledDigits[index]);
-//     digitToShow = getDigitFromNumber(number, place);
-//     LedDigit_SetDigit(self->ledDigits[index], digitToShow);
-//   }
-// }
+  RETURN_IF_NULL(self);
+  //MAX_LED check? we've only wired up so many...
+  for (place = LED_UNITS; place <= self->largestDigit; place++)
+  {
+    // index = getDigitIndexFromPlace(self, place);
+    self->digits[place] = getDigitFromNumber(number, place);
+  }
+}
 
-// void LedNumber_ClearNumber(LedNumber self)
-// {
-//   int i;
+void LedNumber_ClearNumber(LedNumber self)
+{
+  LedNumber_Place place;
 
-//   RETURN_IF_NULL(self);
-//   for (i = 0; i <= self->largestDigit; i++)
-//   {
-//     LedDigit_ClearDigit(self->ledDigits[i]);
-//   }
-// }
+  RETURN_IF_NULL(self);
+  for (place = 0; place <= self->largestDigit; place++)
+  {
+    self->digits[place] = NO_DIGIT;
+  }
+}
 
-// void LedNumber_ShowNumber(LedNumber self)
-// {
-//   int8_t index;
-//   RETURN_IF_NULL(self);
+void LedNumber_ShowNumber(LedNumber self)
+{
+  LedNumber_Place currentDigit;
 
-//   if (isInvalidDigit(self->visibleDigit))  // Wraparound or first time turned on
-//   {
-//     self->visibleDigit = LED_UNITS;
-//   }
+  RETURN_IF_NULL(self);
+  if (isInvalidDigit(self->visibleDigit))  // Wraparound or first time turned on
+  {
+    self->visibleDigit = LED_UNITS;
+  }
+  currentDigit = self->visibleDigit;
 
-//   // switch (self->visibleDigit)
-//   // {
-//   //   case LED_NONE:
-//     //   self->visibleDigit = LED_UNITS;
-//     //   LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(LED_UNITS));
-//     //   LedDigit_UpdateLed(self->ledDigits[LED_UNITS]);
-//     //   break;
-//     // case LED_UNITS:
-//       // self->visibleDigit = LED_TENS;
-//       // LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(LED_TENS));
-//       // LedDigit_UpdateLed(self->ledDigits[LED_TENS]);
-//       // break;
-//     // case LED_TENS:
-//     //   self->visibleDigit = LED_HUNDREDS;
-//     //   LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(LED_HUNDREDS));
-//     //   LedDigit_UpdateLed(self->ledDigits[LED_HUNDREDS]);
-//     //   break;
-//     // case LED_HUNDREDS:
-//     //   self->visibleDigit = LED_THOUSANDS;
-//     //   LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(LED_THOUSANDS));
-//     //   LedDigit_UpdateLed(self->ledDigits[LED_THOUSANDS]);
-//     //   break;
-//     // case LED_THOUSANDS:
-//     //   self->visibleDigit = LED_UNITS;
-//     //   LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(LED_UNITS));
-//     //   LedDigit_UpdateLed(self->ledDigits[LED_UNITS]);
-//     //   break;
-//     // case LED_UPPER_BOUND:
-//     //   self->visibleDigit = LED_UNITS;
-//     //   LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(LED_UNITS));
-//     //   LedDigit_UpdateLed(self->ledDigits[LED_UNITS]);
-//     //   break;
-//   // }
+  // Turn off to prevent "on time" from bleeding to other digit segments
+  LedDigit_TurnLedOff(self->ledDigit);
+  LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(currentDigit));
+  LedDigit_SetDigit(self->ledDigit, self->digits[currentDigit]);
+  LedDigit_UpdateLed(self->ledDigit);
 
+  self->visibleDigit++;
+}
 
-
-//   index = getDigitIndexFromPlace(self, self->visibleDigit);
-//   // Turn off to prevent "on time" from bleeding to other digit segments
-//   LedDigit_TurnLedOff(self->ledDigits[index]);
-//   LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(self->visibleDigit));
-//   LedDigit_UpdateLed(self->ledDigits[index]);
-
-//   self->visibleDigit++;
-// }
 
 // void LedNumber_TurnOff(LedNumber self)
 // {
@@ -151,12 +125,20 @@ void LedNumber_Destroy(LedNumber * self)
 //   self->visibleDigit = LED_NONE;
 // }
 
+//*************************//
+//*** Private Functions ***//
+//*************************//
+//This exists purely so I have a way to test it.
+LedDigit_DisplayDigit LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place)
+{
+  return getDigitFromNumber(number, place);
+}
 
 
 //****************************//
 //*** File-scope Functions ***//
 //****************************//
-int16_t LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place)
+static LedDigit_DisplayDigit getDigitFromNumber(int16_t number, LedNumber_Place place)
 {
   int16_t modulusFactor, divisionFactor;
   LedNumber_Place i;
@@ -168,18 +150,18 @@ int16_t LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place
     modulusFactor *= 10;
     divisionFactor *= 10;
   }
-  return number % modulusFactor / divisionFactor;
+  return (LedDigit_DisplayDigit)(number % modulusFactor / divisionFactor);
 }
 
-// static BOOL isInvalidDigit(LedNumber_Place place)
-// {
-//   return place <= LED_NONE || place >= LED_UPPER_BOUND;
-// }
+static BOOL isInvalidDigit(LedNumber_Place place)
+{
+  return place <= LED_NONE || place >= LED_UPPER_BOUND;
+}
 
-// //To make for easier viewing in a debugger, digits are stored as such:
-// // Value:  |units| tens|hundreds|thousands|
-// // Index:  | [0] | [1] |  [2]   |   [3]   |
-// static int8_t getDigitIndexFromPlace(LedNumber self, LedNumber_Place place)
-// {
-//   return self->largestDigit - place;
-// }
+//To make for easier viewing in a debugger, digits are stored as such:
+// Value:  |units| tens|hundreds|thousands|
+// Index:  | [0] | [1] |  [2]   |   [3]   |
+static int8_t getDigitIndexFromPlace(LedNumber self, LedNumber_Place place)
+{
+  return self->largestDigit - place;
+}

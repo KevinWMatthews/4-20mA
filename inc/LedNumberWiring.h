@@ -12,7 +12,7 @@ typedef enum
   WIRINGLED_UPPER_BOUND =  4
 } LedNumberWiring_Place;
 
-void LedNumberWiring_Init(void);
+void LedNumberWiring_HwSetup(void);
 
 //Pin selection is mutually exclusive - only one pin will be selected at a time.
 //Selecting any new pin unselects all others.

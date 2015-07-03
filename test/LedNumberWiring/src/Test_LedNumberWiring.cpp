@@ -14,7 +14,7 @@ TEST_GROUP(LedNumberWiring)
   {
     PORTB = 0;
     DDRB = 0;
-    LedNumberWiring_Init();
+    LedNumberWiring_HwSetup();
   }
 
   void teardown()
