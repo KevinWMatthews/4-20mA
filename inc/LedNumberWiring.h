@@ -1,15 +1,15 @@
 #ifndef LedNumberWiring_H_
 #define LedNumberWiring_H_
 
-#define LED_MAX 4
 
 typedef enum
 {
-  WIRINGLED_NONE      = -1,
-  WIRINGLED_UNITS     =  0,
-  WIRINGLED_TENS      =  1,
-  WIRINGLED_HUNDREDS  =  2,
-  WIRINGLED_THOUSANDS =  3
+  WIRINGLED_NONE        = -1,
+  WIRINGLED_UNITS       =  0,
+  WIRINGLED_TENS        =  1,
+  WIRINGLED_HUNDREDS    =  2,
+  WIRINGLED_THOUSANDS   =  3,
+  WIRINGLED_UPPER_BOUND =  4
 } LedNumberWiring_Place;
 
 void LedNumberWiring_Init(void);

@@ -1,5 +1,8 @@
 Add needs to have a cap; can't add mor ediits than there are.
 
+wiring needs max checks
+number needs max checks
+
 
 
 Add decimal support, but later; we'll have to figure out what kind of behavior that we want.

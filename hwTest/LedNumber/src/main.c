@@ -29,17 +29,17 @@ int main(void)
   LedNumber_AddLedDigit(number, digit3, LED_HUNDREDS);
   LedNumber_AddLedDigit(number, digit4, LED_THOUSANDS);
 
-  LedNumber_SetNumber(number, num);
+  LedNumber_SetNumber(number, 1234);
 
   while (1)
   {
     LedNumber_ShowNumber(number);
-    _delay_ms(2);
-    i++;
-    if (i == 500)
-    {
-      i = 0;
-      LedNumber_SetNumber(number, num++);
-    }
+    _delay_ms(500);
+    // i++;
+    // if (i == 100)
+    // {
+    //   i = 0;
+    //   LedNumber_SetNumber(number, num++);
+    // }
   }
 }
