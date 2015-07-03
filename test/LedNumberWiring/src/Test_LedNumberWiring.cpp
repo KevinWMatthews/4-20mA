@@ -35,37 +35,37 @@ TEST(LedNumberWiring, InitCheck)
 
 TEST(LedNumberWiring, SelectNoLed)
 {
-  LedNumberWring_SetSelectPin(LED_NONE);
+  LedNumberWiring_SetSelectPin(WIRINGLED_NONE);
   checkMemoryRegisters(0x0f, 0x0f);
 }
 
 TEST(LedNumberWiring, SelectLed1)
 {
-  LedNumberWring_SetSelectPin(LED_1);
+  LedNumberWiring_SetSelectPin(WIRINGLED_UNITS);
   checkMemoryRegisters(0x0f, 0x0e);
 }
 
 TEST(LedNumberWiring, SelectLed2)
 {
-  LedNumberWring_SetSelectPin(LED_2);
+  LedNumberWiring_SetSelectPin(WIRINGLED_TENS);
   checkMemoryRegisters(0x0f, 0x0d);
 }
 
 TEST(LedNumberWiring, SelectLed3)
 {
-  LedNumberWring_SetSelectPin(LED_3);
+  LedNumberWiring_SetSelectPin(WIRINGLED_HUNDREDS);
   checkMemoryRegisters(0x0f, 0x0b);
 }
 
 TEST(LedNumberWiring, SelectLed4)
 {
-  LedNumberWring_SetSelectPin(LED_4);
+  LedNumberWiring_SetSelectPin(WIRINGLED_THOUSANDS);
   checkMemoryRegisters(0x0f, 0x07);
 }
 
 TEST(LedNumberWiring, SetConsecutiveSelectPins)
 {
-  LedNumberWring_SetSelectPin(LED_1);
-  LedNumberWring_SetSelectPin(LED_2);
+  LedNumberWiring_SetSelectPin(WIRINGLED_UNITS);
+  LedNumberWiring_SetSelectPin(WIRINGLED_TENS);
   checkMemoryRegisters(0x0f, 0x0d);
 }

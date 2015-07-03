@@ -18,28 +18,28 @@ void LedNumberWiring_Init(void)
   PORTB |= WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
 }
 
-static uint8_t convertPinToWiringPin(LedNumber_DigitPlace pin)
+static uint8_t convertPinToWiringPin(LedNumberWiring_Place pin)
 {
   switch (pin)
   {
-  case LED_1:
+  case WIRINGLED_UNITS:
     return WIRINGPIN_LED1;
-  case LED_2:
+  case WIRINGLED_TENS:
     return WIRINGPIN_LED2;
-  case LED_3:
+  case WIRINGLED_HUNDREDS:
     return WIRINGPIN_LED3;
-  case LED_4:
+  case WIRINGLED_THOUSANDS:
     return WIRINGPIN_LED4;
   }
 }
 
-void LedNumberWring_SetSelectPin(LedNumber_DigitPlace pin)
+void LedNumberWiring_SetSelectPin(LedNumberWiring_Place pin)
 {
   SBIT(PORTB, WIRINGPIN_LED1);
   SBIT(PORTB, WIRINGPIN_LED2);
   SBIT(PORTB, WIRINGPIN_LED3);
   SBIT(PORTB, WIRINGPIN_LED4);
-  if (pin == LED_NONE)
+  if (pin == WIRINGLED_NONE)
   {
     return;
   }

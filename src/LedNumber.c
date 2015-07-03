@@ -12,7 +12,7 @@ typedef struct LedNumberStruct
 {
   LedDigit * ledDigits;       //Pointer to a dynamically allocated array of LEDs
   int8_t numberOfDigits;
-  LedNumber_DigitPlace visibleDigit;
+  LedNumber_Place visibleDigit;
 } LedNumberStruct;
 
 
@@ -21,13 +21,18 @@ typedef struct LedNumberStruct
 //*** File-scope function prototypes ***//
 //**************************************//
 static int16_t getDigitFromNumber(int16_t number, int8_t place, int numberOfDigits);
-static BOOL isValidDigit(LedNumber_DigitPlace place);
+static BOOL isValidDigit(LedNumber_Place place);
 
 
 
 //************************//
 //*** Public Functions ***//
 //************************//
+void LedNumber_HwSetup(void)
+{
+  LedNumberWiring_Init();
+}
+
 LedNumber LedNumber_Create(int8_t numberOfDigits)
 {
   LedNumber self = NULL;
@@ -58,7 +63,7 @@ void LedNumber_Destroy(LedNumber * self)
   self = NULL;
 }
 
-void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_DigitPlace place)
+void LedNumber_AddLedDigit(LedNumber self, LedDigit digit, LedNumber_Place place)
 {
   RETURN_IF_NULL(self);
   self->ledDigits[place] = digit;
@@ -104,14 +109,14 @@ void LedNumber_ShowNumber(LedNumber self)
   }
   //Turn off to prevent "on time" from bleeding to other digit segments
   LedDigit_TurnLedOff(self->ledDigits[self->visibleDigit]);
-  LedNumberWring_SetSelectPin((LedNumber_DigitPlace)(self->numberOfDigits - self->visibleDigit - 1));
+  LedNumberWiring_SetSelectPin((LedNumberWiring_Place)(self->numberOfDigits - self->visibleDigit - 1));
   LedDigit_UpdateLed(self->ledDigits[self->visibleDigit]);
 }
 
 void LedNumber_TurnOff(LedNumber self)
 {
   RETURN_IF_NULL(self);
-  LedNumberWring_SetSelectPin(LED_NONE);
+  LedNumberWiring_SetSelectPin(LED_NONE);
   self->visibleDigit = LED_NONE;
 }
 
@@ -136,7 +141,7 @@ static int16_t getDigitFromNumber(int16_t number, int8_t place, int numberOfDigi
   return number % modulusFactor / divisionFactor;
 }
 
-static BOOL isValidDigit(LedNumber_DigitPlace place)
+static BOOL isValidDigit(LedNumber_Place place)
 {
   return place != LED_NONE && place != LED_MAX;
 }

@@ -5,9 +5,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "LedNumber.h"
-#include "LedNumberWiring.h"
 #include "LedDigit.h"
-#include "LedDigitWiring.h"
 
 
 int main(void)
@@ -17,7 +15,7 @@ int main(void)
   int16_t num = 0, i = 0;
 
   LedDigit_HwSetup();
-  LedNumberWiring_Init();
+  LedNumber_HwSetup();
 
   digit1 = LedDigit_Create();
   digit2 = LedDigit_Create();
@@ -26,10 +24,10 @@ int main(void)
 
 
   number = LedNumber_Create(4);
-  LedNumber_AddLedDigit(number, digit1, LED_1);
-  LedNumber_AddLedDigit(number, digit2, LED_2);
-  LedNumber_AddLedDigit(number, digit3, LED_3);
-  LedNumber_AddLedDigit(number, digit4, LED_4);
+  LedNumber_AddLedDigit(number, digit1, LED_UNITS);
+  LedNumber_AddLedDigit(number, digit2, LED_TENS);
+  LedNumber_AddLedDigit(number, digit3, LED_HUNDREDS);
+  LedNumber_AddLedDigit(number, digit4, LED_THOUSANDS);
 
   LedNumber_SetNumber(number, num);
 

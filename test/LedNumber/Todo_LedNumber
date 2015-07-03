@@ -12,4 +12,4 @@ What if we display a three-digit number with only two LEDs?
 
 What if a digit creation fails?
 
-(?) Look at using LedNumber_DigitPlace in getDigitFromNumber()
+(?) Look at using LedNumber_Place in getDigitFromNumber()
