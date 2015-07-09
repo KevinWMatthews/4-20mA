@@ -27,7 +27,7 @@ typedef struct LedNumberStruct
 //**************************************//
 static LedDigit_Value getDigitFromNumber(int16_t number, LedNumber_Place place);
 static BOOL isDigitVisible(LedNumber_Place place);
-static BOOL isDigitUpperBound(LedNumber_Place place);
+static BOOL isBeyondLargestDigit(LedNumber self);
 
 
 
@@ -96,7 +96,7 @@ void LedNumber_ShowNumber(LedNumber self)
   {
     return;
   }
-  if (isDigitUpperBound(self->visibleDigit))  //Wraparound
+  if (isBeyondLargestDigit(self))   //Wraparound
   {
     self->visibleDigit = LED_UNITS;
   }
@@ -148,7 +148,8 @@ static BOOL isDigitVisible(LedNumber_Place place)
   return place != LED_NONE;
 }
 
-static BOOL isDigitUpperBound(LedNumber_Place place)
+static BOOL isBeyondLargestDigit(LedNumber self)
 {
-   return place >= LED_UPPER_BOUND;
+  RETURN_VALUE_IF_NULL(self, TRUE);
+  return self->visibleDigit > self->largestDigit;
 }

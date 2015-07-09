@@ -17,24 +17,28 @@ extern "C"
 
 TEST_GROUP(LedNumber)
 {
-  LedNumber maxDigits;
-  int16_t numberWithMaxDigits;
+  LedNumber maxDigits, minDigits;
+  int16_t numberWithMaxDigits, numberWithMinDigits;
 
   void setup()
   {
     mock().strictOrder();
     maxDigits = LedNumber_Create((LedNumber_Place)(LED_UPPER_BOUND-1));
+    minDigits = LedNumber_Create((LedNumber_Place)LED_UNITS);
 
     numberWithMaxDigits = 0;
     for (int i = LED_NONE+1; i < LED_UPPER_BOUND; i++)
     {
       numberWithMaxDigits += i * pow(10, i);
     }
+
+    numberWithMinDigits = 0;
   }
 
   void teardown()
   {
     LedNumber_Destroy(&maxDigits);
+    LedNumber_Destroy(&minDigits);
     mock().checkExpectations();
     mock().clear();
   }
@@ -145,50 +149,24 @@ TEST(LedNumber, ShowMaxDigits)
   LedNumber_ShowNumber(maxDigits);
 }
 
+TEST(LedNumber, SetMinDigits)
+{
+  LedNumber_SetNumber(minDigits, numberWithMinDigits);
+}
 
-//*** Two digit number ***//
-// TEST(LedNumber, Two_SetSingleDigitNumber)
-// {
-//   expectSetTwoDigits(0, 7);
-//   LedNumber_SetNumber(twoDigitNumber, 7);
-// }
+TEST(LedNumber, ShowMinDigits)
+{
+  LedNumber_SetNumber(minDigits, numberWithMinDigits);
 
-// TEST(LedNumber, Two_SetMaxDigitNumber)
-// {
-//   expectSetTwoDigits(8, 9);
-//   LedNumber_SetNumber(twoDigitNumber, 89);
-// }
+  expectTurnOffDigit();
+  expectSetSelectPin(WIRINGLED_UNITS);
+  expectSetDigit(ZERO);
+  expectShowDigit();
+  LedNumber_ShowNumber(minDigits);
 
-// TEST(LedNumber, Two_ClearNumber)
-// {
-//   expectSetTwoDigits(2, 3);
-//   LedNumber_SetNumber(twoDigitNumber, 23);
-
-//   expectClearTwoDigits();
-//   LedNumber_ClearNumber(twoDigitNumber);
-// }
-
-// TEST(LedNumber, Two_ShowNumber)
-// {
-//   expectSetTwoDigits(6, 7);
-//   LedNumber_SetNumber(twoDigitNumber, 67);
-
-//   expectTurnOffDigit(twoDigits[0]);
-//   expectShowDigit(twoDigits[LED_TENS-1]);
-//   expectSetSelectPin((LedNumberWiring_Place)(0));
-//   LedNumber_ShowNumber(twoDigitNumber);
-
-//   for (int i = LED_TENS-1; i > LED_NONE+1; i--)
-//   {
-//     expectTurnOffDigit(twoDigits[i]);
-//     expectSetSelectPin((LedNumberWiring_Place)(1));
-//     expectShowDigit(twoDigits[i-1]);
-//     LedNumber_ShowNumber(twoDigitNumber);
-//   }
-
-//   expectTurnOffDigit(twoDigits[0]);
-//   expectSetSelectPin((LedNumberWiring_Place)(0));
-//   expectShowDigit(twoDigits[LED_TENS-1]);
-//   LedNumber_ShowNumber(twoDigitNumber);
-// }
-
+  expectTurnOffDigit();
+  expectSetSelectPin(WIRINGLED_UNITS);
+  expectSetDigit(ZERO);
+  expectShowDigit();
+  LedNumber_ShowNumber(minDigits);
+}
