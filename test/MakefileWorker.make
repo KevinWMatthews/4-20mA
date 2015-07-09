@@ -18,7 +18,7 @@ TARGET=$(TARGET_DIR)/$(TARGET_NAME)
 
 ### Generate and set flags ###
 # Production code
-COMPILER_FLAGS = -c -MMD -MP
+COMPILER_FLAGS = -c -MMD -MP -Wall
 INCLUDE_FLAGS=$(addprefix -I,$(INC_DIRS))
 LINKER_FLAGS=$(addprefix -L,$(LIB_DIRS))
 LINKER_FLAGS+=$(addprefix -l,$(LIB_LIST))

@@ -1,18 +1,15 @@
-Add needs to have a cap; can't add mor ediits than there are.
-
-wiring needs max checks
-number needs max checks
-
+Boundary checks:
+  Add needs to have a cap; can't add more digits than are available.
+  wiring needs max checks
+  number needs max checks
+  What if we added 0 digits?
+  What if we display a three-digit number with only two LEDs?
 
 
 Add decimal support, but later; we'll have to figure out what kind of behavior that we want.
 
-What if we added 0 digits?
 
-  Overflow checks:
-Add return status to AddLedDigit() (what if we add too many digits?).
-What if we display a three-digit number with only two LEDs?
+Move tests of private functions to a devoted file?
+Move mocks to a devoted file?
 
-What if a digit creation fails?
-
-(?) Look at using LedNumber_Place in getDigitFromNumber()
+Create turn off and/or clear number functions (we don't need them yet).

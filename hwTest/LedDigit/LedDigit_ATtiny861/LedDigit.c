@@ -10,7 +10,7 @@
 //******************//
 typedef struct LedDigitStruct
 {
-  LedDigit_DisplayDigit digitToShow;
+  LedDigit_Value digitToShow;
   BOOL showDecimal;
 } LedDigitStruct;
 
@@ -51,7 +51,7 @@ LedDigit LedDigit_Create(void)
 
   showNothing();
   clearDecimal();
-  self->digitToShow = NOTHING;
+  self->digitToShow = NO_DIGIT;
   self->showDecimal = FALSE;
 
   return self;
@@ -64,7 +64,7 @@ void LedDigit_Destroy(LedDigit * self)
   *self = NULL;
 }
 
-void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value)
+void LedDigit_SetDigit(LedDigit self, LedDigit_Value value)
 {
   RETURN_IF_NULL(self);
   self->digitToShow = value;
@@ -79,7 +79,7 @@ void LedDigit_SetDecimal(LedDigit self)
 void LedDigit_ClearDigit(LedDigit self)
 {
   RETURN_IF_NULL(self);
-  self->digitToShow = NOTHING;
+  self->digitToShow = NO_DIGIT;
 }
 
 void LedDigit_ClearDecimal(LedDigit self)
@@ -95,9 +95,9 @@ void LedDigit_ClearAll(LedDigit self)
   LedDigit_ClearDecimal(self);
 }
 
-LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self)
+LedDigit_Value LedDigit_CurrentDigit(LedDigit self)
 {
-  RETURN_IF_NULL_RETURN_VALUE(self, NOTHING);
+  RETURN_IF_NULL_RETURN_VALUE(self, NO_DIGIT);
   return self->digitToShow;
 }
 
@@ -113,7 +113,7 @@ void LedDigit_UpdateLed(LedDigit self)
 
   switch (self->digitToShow)
   {
-  case NOTHING:
+  case NO_DIGIT:
     showNothing();
     break;
   case ZERO:

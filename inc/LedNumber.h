@@ -34,12 +34,14 @@ LedNumber LedNumber_Create(LedNumber_Place largestDigit);
 void LedNumber_Destroy(LedNumber * self);
 
 void LedNumber_SetNumber(LedNumber self, int16_t number);
-void LedNumber_ClearNumber(LedNumber self);
-
 void LedNumber_ShowNumber(LedNumber self);
-void LedNumber_TurnOff(LedNumber self);
 
 
-LedDigit_DisplayDigit LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place);
+
+//*************************//
+//*** Private Functions ***//
+//*************************//
+//These exist purely for testing.
+LedDigit_Value LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place);
 
 #endif

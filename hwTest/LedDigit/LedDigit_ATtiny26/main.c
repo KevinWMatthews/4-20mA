@@ -12,7 +12,7 @@
 int main(void)
 {
   LedDigit digit;
-  LedDigit_DisplayDigit currentDigit;
+  LedDigit_Value currentDigit;
 
   LedDigitWiring_Init();
 

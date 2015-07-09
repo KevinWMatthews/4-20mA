@@ -24,3 +24,8 @@ Clean up avr-gcc compiler warnings (warnings with -Wall)!
 Edit makefile to allow user to switch between hardware platforms. Will require directory reorganization!
 
 Every set of tests recompiles the production code library. This is inefficient.
+
+Think through how to do Destroy again. Then edit all occurrences.
+Recreate a problem with double free and then fix it.
+
+Learn how to detect memory leaks, i.e. not freeing data.

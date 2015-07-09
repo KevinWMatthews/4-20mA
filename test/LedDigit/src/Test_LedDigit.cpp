@@ -97,7 +97,7 @@ void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
 //Initialization and NULL pointers
 TEST(LedDigit, Create)
 {
-  LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(digit));
+  LONGS_EQUAL(NO_DIGIT, LedDigit_CurrentDigit(digit));
   CHECK_FALSE(LedDigit_IsDecimalShown(digit));
 }
 
@@ -134,7 +134,7 @@ TEST(LedDigit, SetDecimal)
 TEST(LedDigit, ClearDigit)
 {
   LedDigit_ClearDigit(digit);
-  LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(digit));
+  LONGS_EQUAL(NO_DIGIT, LedDigit_CurrentDigit(digit));
 }
 
 TEST(LedDigit, ClearDecimal)
@@ -148,7 +148,7 @@ TEST(LedDigit, ClearAll)
   LedDigit_SetDigit(digit, EIGHT);
   LedDigit_SetDecimal(digit);
   LedDigit_ClearAll(digit);
-  LONGS_EQUAL(NOTHING, LedDigit_CurrentDigit(digit));
+  LONGS_EQUAL(NO_DIGIT, LedDigit_CurrentDigit(digit));
   CHECK_FALSE(LedDigit_IsDecimalShown(digit));
 }
 
@@ -157,7 +157,7 @@ TEST(LedDigit, ShowNothing)
   expectPinCalls(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
   expectPinDecimalPointCall(FALSE);
 
-  LedDigit_SetDigit(digit, NOTHING);
+  LedDigit_SetDigit(digit, NO_DIGIT);
   LedDigit_UpdateLed(digit);
 }
 

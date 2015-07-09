@@ -31,7 +31,7 @@ TEST_GROUP(LedNumber)
     mock().clear();
   }
 
-  void expectSetDigit(LedDigit_DisplayDigit value)
+  void expectSetDigit(LedDigit_Value value)
   {
     mock().expectOneCall("LedDigit_SetDigit")
           .withParameter("self", &dummyDigit)
@@ -73,9 +73,10 @@ LedDigit LedDigit_Create(void)
 }
 
 void LedDigit_Destroy(LedDigit * self)
-{}
+{
+}
 
-void LedDigit_SetDigit(LedDigit self, LedDigit_DisplayDigit value)
+void LedDigit_SetDigit(LedDigit self, LedDigit_Value value)
 {
   mock().actualCall("LedDigit_SetDigit")
         .withParameter("self", self)
@@ -112,7 +113,7 @@ void LedDigit_ClearAll(LedDigit self)
         .withParameter("self", self);
 }
 
-LedDigit_DisplayDigit LedDigit_CurrentDigit(LedDigit self)
+LedDigit_Value LedDigit_CurrentDigit(LedDigit self)
 {
   mock().actualCall("LedDigit_CurrentDigit")
         .withParameter("self", self);
@@ -142,6 +143,13 @@ void LedNumberWiring_SetSelectPin(LedNumberWiring_Place pin)
 //*******************//
 TEST(LedNumber, Create)
 {
+  CHECK_TRUE(fourDigitNumber);
+}
+
+TEST(LedNumber, Destroy)
+{
+  LedNumber_Destroy(&fourDigitNumber);
+  POINTERS_EQUAL(NULL, fourDigitNumber);
 }
 
 TEST(LedNumber, DestroyCanHandleNullNumber)
@@ -152,9 +160,7 @@ TEST(LedNumber, DestroyCanHandleNullNumber)
 TEST(LedNumber, AllFunctionsCanHandleNull)
 {
   LedNumber_SetNumber(NULL, 1234);
-  // LedNumber_ClearNumber(NULL);
-  // LedNumber_ShowNumber(NULL);
-  // LedNumber_TurnOff(NULL);
+  LedNumber_ShowNumber(NULL);
 }
 
 TEST(LedNumber, HardwareSetup)
@@ -164,6 +170,11 @@ TEST(LedNumber, HardwareSetup)
   LedNumber_HwSetup();
 }
 
+//Test private functions
+TEST(LedNumber, ShowNothingAfterCreate)
+{
+  LedNumber_ShowNumber(fourDigitNumber);
+}
 
 TEST(LedNumber, GetUnitsDigitFromNumber)
 {
@@ -187,18 +198,10 @@ TEST(LedNumber, GetThousandsDigitFromNumber)
 
 TEST(LedNumber, SetFourDigitNumber)
 {
+  //Setting the number does nothing visible to the program,
+  //so we have nothing to test except compilation
   LedNumber_SetNumber(fourDigitNumber, 6789);
-  //Not sure what to test; nothing, really, unless we restructure things.
 }
-
-//Need to test with output/show
-// TEST(LedNumber, ClearFourDigitNumber)
-// {
-//   LedNumber_SetNumber(fourDigitNumber, 2345);
-
-//   expectClearFourDigits();
-//   LedNumber_ClearNumber(fourDigitNumber);
-// }
 
 TEST(LedNumber, ShowFourDigitNumber)
 {
@@ -235,24 +238,6 @@ TEST(LedNumber, ShowFourDigitNumber)
   LedNumber_ShowNumber(fourDigitNumber);
 }
 
-// TEST(LedNumber, TurnOffLedNumber)
-// {
-//   expectSetFourDigits(4, 5, 6, 7);
-//   LedNumber_SetNumber(fourDigitNumber, 4567);
-
-//   expectTurnOffDigit(fourDigits[LED_UNITS]);
-//   expectSetSelectPin(WIRINGLED_UNITS);
-//   expectShowDigit(fourDigits[LED_UNITS]);
-//   LedNumber_ShowNumber(fourDigitNumber);
-
-//   expectSetSelectPin(WIRINGLED_NONE);
-//   LedNumber_TurnOff(fourDigitNumber);
-
-//   expectTurnOffDigit(fourDigits[LED_UNITS]);
-//   expectSetSelectPin(WIRINGLED_UNITS);
-//   expectShowDigit(fourDigits[LED_UNITS]);
-//   LedNumber_ShowNumber(fourDigitNumber);
-// }
 
 //*** Two digit number ***//
 // TEST(LedNumber, Two_SetSingleDigitNumber)
