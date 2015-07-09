@@ -26,6 +26,7 @@ typedef struct LedNumberStruct
 //*** File-scope function prototypes ***//
 //**************************************//
 static LedDigit_Value getDigitFromNumber(int16_t number, LedNumber_Place place);
+static BOOL isDigitOutOfBounds(LedNumber_Place place);
 static BOOL isDigitVisible(LedNumber_Place place);
 static BOOL isBeyondLargestDigit(LedNumber self);
 
@@ -44,6 +45,10 @@ LedNumber LedNumber_Create(LedNumber_Place largestDigit)
 {
   LedNumber self;
 
+  if (isDigitOutOfBounds(largestDigit))
+  {
+    return NULL;
+  }
   self = calloc(1, sizeof(LedNumberStruct));
   RETURN_VALUE_IF_NULL(self, NULL);
 
@@ -141,6 +146,11 @@ static LedDigit_Value getDigitFromNumber(int16_t number, LedNumber_Place place)
     divisionFactor *= 10;
   }
   return (LedDigit_Value)(number % modulusFactor / divisionFactor);
+}
+
+static BOOL isDigitOutOfBounds(LedNumber_Place place)
+{
+  return place >= LED_UPPER_BOUND || place <= LED_NONE;
 }
 
 static BOOL isDigitVisible(LedNumber_Place place)

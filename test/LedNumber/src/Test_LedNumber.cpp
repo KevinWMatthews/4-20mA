@@ -60,6 +60,18 @@ TEST(LedNumber, Destroy)
   POINTERS_EQUAL(NULL, maxDigits);
 }
 
+TEST(LedNumber, CantCreateNumberLargerThanAllowed)
+{
+  LedNumber numberTooLarge = LedNumber_Create(LED_UPPER_BOUND);
+  POINTERS_EQUAL(NULL, numberTooLarge);
+}
+
+TEST(LedNumber, CantCreatNumberWithZeroDigits)
+{
+  LedNumber numberTooSmall = LedNumber_Create(LED_NONE);
+  POINTERS_EQUAL(NULL, numberTooSmall);
+}
+
 TEST(LedNumber, DestroyCanHandleNullNumber)
 {
   LedNumber_Destroy(NULL);
