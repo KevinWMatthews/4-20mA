@@ -26,7 +26,6 @@ typedef struct LedNumberStruct
 //*** File-scope function prototypes ***//
 //**************************************//
 static LedDigit_Value getDigitFromNumber(int16_t number, LedNumber_Place place);
-static int8_t getDigitIndexFromPlace(LedNumber self, LedNumber_Place place);
 static BOOL isDigitVisible(LedNumber_Place place);
 static BOOL isDigitUpperBound(LedNumber_Place place);
 
@@ -46,13 +45,13 @@ LedNumber LedNumber_Create(LedNumber_Place largestDigit)
   LedNumber self;
 
   self = calloc(1, sizeof(LedNumberStruct));
-  RETURN_IF_NULL(self);
+  RETURN_VALUE_IF_NULL(self, NULL);
 
   self->ledDigit = LedDigit_Create();
-  RETURN_IF_NULL(self->ledDigit);
+  RETURN_VALUE_IF_NULL(self->ledDigit, NULL);
 
   self->digits = calloc(largestDigit+1, sizeof(LedDigit_Value));
-  RETURN_IF_NULL(self->digits);
+  RETURN_VALUE_IF_NULL(self->digits, NULL);
   memset(self->digits, NO_DIGIT, largestDigit+1);
 
   self->largestDigit = largestDigit;
@@ -142,11 +141,6 @@ static LedDigit_Value getDigitFromNumber(int16_t number, LedNumber_Place place)
     divisionFactor *= 10;
   }
   return (LedDigit_Value)(number % modulusFactor / divisionFactor);
-}
-
-static int8_t getDigitIndexFromPlace(LedNumber self, LedNumber_Place place)
-{
-  return self->largestDigit - place;
 }
 
 static BOOL isDigitVisible(LedNumber_Place place)

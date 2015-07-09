@@ -63,6 +63,12 @@ TEST(LedNumberWiring, SelectLed4)
   checkMemoryRegisters(0x0f, 0x07);
 }
 
+TEST(LedNumberWiring, SetUpperBound)
+{
+  LedNumberWiring_SetSelectPin(WIRINGLED_UPPER_BOUND);
+  checkMemoryRegisters(0x0f, 0x0f);
+}
+
 TEST(LedNumberWiring, SetConsecutiveSelectPins)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_UNITS);

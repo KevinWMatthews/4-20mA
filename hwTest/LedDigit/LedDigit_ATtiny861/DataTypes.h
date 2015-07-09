@@ -14,6 +14,6 @@ typedef enum
 #endif
 
 #define RETURN_IF_NULL(pointer) if ((pointer) == NULL) return
-#define RETURN_IF_NULL_RETURN_VALUE(pointer, retVal) if ((pointer) == NULL) return (retVal)
+#define RETURN_VALUE_IF_NULL(pointer, retVal) if ((pointer) == NULL) return (retVal)
 
 #endif

@@ -20,7 +20,7 @@ static void setCallback(PeriodicAlarm self, PeriodicAlarmCallback callback)
 
 static PeriodicAlarmCallback getCallback(PeriodicAlarm self)
 {
-  RETURN_IF_NULL_RETURN_VALUE(self, NULL);
+  RETURN_VALUE_IF_NULL(self, NULL);
   return self->callback;
 }
 
@@ -32,7 +32,7 @@ static void setPeriod(PeriodicAlarm self, int16_t period)
 
 static int16_t getPeriod(PeriodicAlarm self)
 {
-  RETURN_IF_NULL_RETURN_VALUE(self, PA_NULL_POINTER);
+  RETURN_VALUE_IF_NULL(self, PA_NULL_POINTER);
   return self->period;
 }
 
@@ -44,7 +44,7 @@ static void setCounter(PeriodicAlarm self, int16_t counter)
 
 static int16_t getCounter(PeriodicAlarm self)
 {
-  RETURN_IF_NULL_RETURN_VALUE(self, PA_NULL_POINTER);
+  RETURN_VALUE_IF_NULL(self, PA_NULL_POINTER);
   return self->counter;
 }
 
@@ -67,7 +67,7 @@ static void setExecuteCallbackNowFlag(PeriodicAlarm self, BOOL executeCallbackNo
 
 static BOOL getExecuteCallbackNowFlag(PeriodicAlarm self)
 {
-  RETURN_IF_NULL_RETURN_VALUE(self, FALSE);
+  RETURN_VALUE_IF_NULL(self, FALSE);
   return self->executeCallbackNow;
 }
 

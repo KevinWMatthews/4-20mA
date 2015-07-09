@@ -43,7 +43,7 @@ void LineFit_SetPoint2(LineFit self, int16_t x2, int16_t y2)
 
 int8_t LineFit_CalculateEquation(LineFit self)
 {
-  RETURN_IF_NULL_RETURN_VALUE(self, LINE_FIT_FAIL_VERTICAL_LINE);
+  RETURN_VALUE_IF_NULL(self, LINE_FIT_FAIL_VERTICAL_LINE);
   if (self->x2 == self->x1)
   {
     return LINE_FIT_FAIL_VERTICAL_LINE;
@@ -55,6 +55,6 @@ int8_t LineFit_CalculateEquation(LineFit self)
 
 float LineFit_GetOutput(LineFit self, int16_t x)
 {
-  RETURN_IF_NULL_RETURN_VALUE(self, 0.0);
+  RETURN_VALUE_IF_NULL(self, 0.0);
   return (self->m * x) + self->b;
 }

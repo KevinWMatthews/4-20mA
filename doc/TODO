@@ -29,3 +29,5 @@ Think through how to do Destroy again. Then edit all occurrences.
 Recreate a problem with double free and then fix it.
 
 Learn how to detect memory leaks, i.e. not freeing data.
+
+Think about SBIT, CBIT, and 0

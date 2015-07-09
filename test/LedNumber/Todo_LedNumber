@@ -12,4 +12,6 @@ Add decimal support, but later; we'll have to figure out what kind of behavior t
 Move tests of private functions to a devoted file?
 Move mocks to a devoted file?
 
+Test two-digit number, etc.
+
 Create turn off and/or clear number functions (we don't need them yet).

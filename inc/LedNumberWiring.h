@@ -2,6 +2,10 @@
 #define LedNumberWiring_H_
 
 
+
+//******************//
+//*** Data types ***//
+//******************//
 typedef enum
 {
   WIRINGLED_NONE        = -1,
@@ -12,10 +16,17 @@ typedef enum
   WIRINGLED_UPPER_BOUND =  4
 } LedNumberWiring_Place;
 
+
+
+//************************//
+//*** Public Functions ***//
+//************************//
 void LedNumberWiring_HwSetup(void);
 
 //Pin selection is mutually exclusive - only one pin will be selected at a time.
 //Selecting any new pin unselects all others.
-void LedNumberWiring_SetSelectPin(LedNumberWiring_Place pin);
+void LedNumberWiring_SetSelectPin(LedNumberWiring_Place place);
+
+
 
 #endif

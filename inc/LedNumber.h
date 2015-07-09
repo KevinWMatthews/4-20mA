@@ -25,6 +25,7 @@ typedef struct LedNumberStruct * LedNumber;
 #define LEDNUMBER_INVALID_PLACE -2
 
 
+
 //************************//
 //*** Public Functions ***//
 //************************//
@@ -43,5 +44,7 @@ void LedNumber_ShowNumber(LedNumber self);
 //*************************//
 //These exist purely for testing.
 LedDigit_Value LedDigitPrivate_GetDigitFromNumber(int16_t number, LedNumber_Place place);
+
+
 
 #endif

@@ -11,7 +11,7 @@ extern "C"
 #include "Test_LedNumber.h"
 
 
-int8_t dummyDigit;  // To prevent null checks from failing
+int8_t dummyDigit;  //Used to prevent null pointer checks from failing
 
 
 TEST_GROUP(LedNumber)
@@ -69,7 +69,7 @@ void LedDigit_HwSetup(void)
 
 LedDigit LedDigit_Create(void)
 {
-  return (LedDigit)&dummyDigit;   //It it prevents null checks pointer from failing
+  return (LedDigit)&dummyDigit;   //This prevents null pointer checks from failing
 }
 
 void LedDigit_Destroy(LedDigit * self)
@@ -117,12 +117,14 @@ LedDigit_Value LedDigit_CurrentDigit(LedDigit self)
 {
   mock().actualCall("LedDigit_CurrentDigit")
         .withParameter("self", self);
+  return (LedDigit_Value)(mock().intReturnValue());
 }
 
 BOOL LedDigit_IsDecimalShown(LedDigit self)
 {
   mock().actualCall("LedDigit_IsDecimalShown")
         .withParameter("self", self);
+  return (BOOL)(mock().intReturnValue());
 }
 
 
