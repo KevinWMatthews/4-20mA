@@ -3,6 +3,7 @@ extern "C"
   #include "LedNumber.h"    //Code under test
   #include "LedDigit.h"
   #include "LedNumberWiring.h"
+  #include <math.h>
 }
 
 //CppUTest includes should be after your system includes
@@ -16,17 +17,24 @@ extern "C"
 
 TEST_GROUP(LedNumber)
 {
-  LedNumber fourDigitNumber;
+  LedNumber maxDigits;
+  int16_t numberWithMaxDigits;
 
   void setup()
   {
     mock().strictOrder();
-    fourDigitNumber = LedNumber_Create(LED_THOUSANDS);
+    maxDigits = LedNumber_Create((LedNumber_Place)(LED_UPPER_BOUND-1));
+
+    numberWithMaxDigits = 0;
+    for (int i = LED_NONE+1; i < LED_UPPER_BOUND; i++)
+    {
+      numberWithMaxDigits += i * pow(10, i);
+    }
   }
 
   void teardown()
   {
-    LedNumber_Destroy(&fourDigitNumber);
+    LedNumber_Destroy(&maxDigits);
     mock().checkExpectations();
     mock().clear();
   }
@@ -39,13 +47,13 @@ TEST_GROUP(LedNumber)
 //*******************//
 TEST(LedNumber, Create)
 {
-  CHECK_TRUE(fourDigitNumber);
+  CHECK_TRUE(maxDigits);
 }
 
 TEST(LedNumber, Destroy)
 {
-  LedNumber_Destroy(&fourDigitNumber);
-  POINTERS_EQUAL(NULL, fourDigitNumber);
+  LedNumber_Destroy(&maxDigits);
+  POINTERS_EQUAL(NULL, maxDigits);
 }
 
 TEST(LedNumber, DestroyCanHandleNullNumber)
@@ -55,7 +63,7 @@ TEST(LedNumber, DestroyCanHandleNullNumber)
 
 TEST(LedNumber, AllFunctionsCanHandleNull)
 {
-  LedNumber_SetNumber(NULL, 1234);
+  LedNumber_SetNumber(NULL, numberWithMaxDigits);
   LedNumber_ShowNumber(NULL);
 }
 
@@ -66,72 +74,75 @@ TEST(LedNumber, HardwareSetup)
   LedNumber_HwSetup();
 }
 
-//Test private functions
+
+//*** Test private functions ***//
 TEST(LedNumber, ShowNothingAfterCreate)
 {
-  LedNumber_ShowNumber(fourDigitNumber);
+  LedNumber_ShowNumber(maxDigits);
 }
 
 TEST(LedNumber, GetUnitsDigitFromNumber)
 {
-  LONGS_EQUAL(1, LedDigitPrivate_GetDigitFromNumber(4321, LED_UNITS));
+  LONGS_EQUAL(0, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_UNITS));
 }
 
 TEST(LedNumber, GetTensDigitFromNumber)
 {
-  LONGS_EQUAL(2, LedDigitPrivate_GetDigitFromNumber(4321, LED_TENS));
+  LONGS_EQUAL(1, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_TENS));
 }
 
 TEST(LedNumber, GetHundredsDigitFromNumber)
 {
-  LONGS_EQUAL(3, LedDigitPrivate_GetDigitFromNumber(4321, LED_HUNDREDS));
+  LONGS_EQUAL(2, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_HUNDREDS));
 }
 
 TEST(LedNumber, GetThousandsDigitFromNumber)
 {
-  LONGS_EQUAL(4, LedDigitPrivate_GetDigitFromNumber(4321, LED_THOUSANDS));
+  LONGS_EQUAL(3, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_THOUSANDS));
 }
 
-TEST(LedNumber, SetFourDigitNumber)
+
+//*** Test public functions ***//
+TEST(LedNumber, SetMaxDigits)
 {
   //Setting the number does nothing visible to the program,
   //so we have nothing to test except compilation
-  LedNumber_SetNumber(fourDigitNumber, 6789);
+  LedNumber_SetNumber(maxDigits, numberWithMaxDigits);
 }
 
-TEST(LedNumber, ShowFourDigitNumber)
+TEST(LedNumber, ShowMaxDigits)
 {
-  LedNumber_SetNumber(fourDigitNumber, 4567);
+  LedNumber_SetNumber(maxDigits, numberWithMaxDigits);
 
   expectTurnOffDigit();
   expectSetSelectPin(WIRINGLED_UNITS);
-  expectSetDigit(SEVEN);
+  expectSetDigit(ZERO);
   expectShowDigit();
-  LedNumber_ShowNumber(fourDigitNumber);
+  LedNumber_ShowNumber(maxDigits);
 
   expectTurnOffDigit();
   expectSetSelectPin(WIRINGLED_TENS);
-  expectSetDigit(SIX);
+  expectSetDigit(ONE);
   expectShowDigit();
-  LedNumber_ShowNumber(fourDigitNumber);
+  LedNumber_ShowNumber(maxDigits);
 
   expectTurnOffDigit();
   expectSetSelectPin(WIRINGLED_HUNDREDS);
-  expectSetDigit(FIVE);
+  expectSetDigit(TWO);
   expectShowDigit();
-  LedNumber_ShowNumber(fourDigitNumber);
+  LedNumber_ShowNumber(maxDigits);
 
   expectTurnOffDigit();
   expectSetSelectPin(WIRINGLED_THOUSANDS);
-  expectSetDigit(FOUR);
+  expectSetDigit(THREE);
   expectShowDigit();
-  LedNumber_ShowNumber(fourDigitNumber);
+  LedNumber_ShowNumber(maxDigits);
 
   expectTurnOffDigit();
   expectSetSelectPin(WIRINGLED_UNITS);
-  expectSetDigit(SEVEN);
+  expectSetDigit(ZERO);
   expectShowDigit();
-  LedNumber_ShowNumber(fourDigitNumber);
+  LedNumber_ShowNumber(maxDigits);
 }
 
 
