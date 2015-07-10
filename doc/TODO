@@ -1,37 +1,46 @@
 TODO
 
-Fix LedDigit HW demo
-Turn on LEDs in the correct order ;)
-
-Revamp tests in ADC to fix the holes that I left.
-
-Add documentation to header files
 
 
-Set up the AVCC and VCC with a 100 nF cap and a 10uH:
+    ~~~ Documentation ~~~
+Add documentation to header files. Hey, I should at least try.
+
+Revise SDD.
+
+
+
+    ~~~ Hardware ~~~
+Revise/remove various hardware tests. They should either work and be useful or be gone.
+
+? Set up the AVCC and VCC with a 100 nF cap and a 10uH:
   The AVCC pin on the ATtiny26(L) should be connected to the digital V CC supply voltage via an LC network as shown in Figure 57.
 
+Start to rig up my actual project.
 
-Want to document and streamline testing for NULL pointers for a generic multi-instance module.
 
-Should we have a HardwareInit() function that calls all the HW Inits? We'll see how it all pans out....
 
-Find a way to execute all of the unit tests.
-We'll either need to navigate the subdirectories with a script (probably the best idea) or copy the test executables into another folder and run all of these.
-
-Clean up avr-gcc compiler warnings (warnings with -Wall)!
-
-Edit makefile to allow user to switch between hardware platforms. Will require directory reorganization!
-
-Every set of tests recompiles the production code library. This is inefficient.
+    ~~~ Software ~~~
+Document and streamline testing for NULL pointers for a generic multi-instance module.
 
 Think through how to do Destroy again. Then edit all occurrences.
+
 Recreate a problem with double free and then fix it.
 
 Learn how to detect memory leaks, i.e. not freeing data.
 
 Think about SBIT, CBIT, and 0
 
+Think about setting a bit number and setting a single bit in a bitmask. Which should we do?
+
+Think about setting and checking bitmasks.
+
 Document how signed 8-bit variables differ in behavior compared to unsigned 8-bit variables.
 
+
+
+    ~~~ Makefile ~~~
+Edit makefile to allow user to switch between hardware platforms. Will require directory reorganization!
+
 Create a compile-only makefile target. This will give me any easy-to-use visual representation of code dependencies.
+
+Figure out a way to rebuild tests without each test recompiling the production code library.
