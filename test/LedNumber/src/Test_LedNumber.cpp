@@ -99,22 +99,32 @@ TEST(LedNumber, ShowNothingAfterCreate)
 
 TEST(LedNumber, GetUnitsDigitFromNumber)
 {
-  LONGS_EQUAL(0, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_UNITS));
+  LONGS_EQUAL(LED_UNITS, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_UNITS));
 }
 
 TEST(LedNumber, GetTensDigitFromNumber)
 {
-  LONGS_EQUAL(1, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_TENS));
+  LONGS_EQUAL(LED_TENS, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_TENS));
 }
 
 TEST(LedNumber, GetHundredsDigitFromNumber)
 {
-  LONGS_EQUAL(2, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_HUNDREDS));
+  LONGS_EQUAL(LED_HUNDREDS, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_HUNDREDS));
 }
 
 TEST(LedNumber, GetThousandsDigitFromNumber)
 {
-  LONGS_EQUAL(3, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_THOUSANDS));
+  LONGS_EQUAL(LED_THOUSANDS, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_THOUSANDS));
+}
+
+TEST(LedNumber, GetAtUpperBoundWhenNoDigit)
+{
+  LONGS_EQUAL(0, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits, LED_UPPER_BOUND));
+}
+
+TEST(LedNumber, GetAtUpperBoundWhenDigit)
+{
+  LONGS_EQUAL(LED_UPPER_BOUND-1, LedDigitPrivate_GetDigitFromNumber(numberWithMaxDigits*10, LED_UPPER_BOUND));
 }
 
 
@@ -161,6 +171,12 @@ TEST(LedNumber, ShowMaxDigits)
   LedNumber_ShowNumber(maxDigits);
 }
 
+TEST(LedNumber, SetBeyondUpperBound)
+{
+  LedNumber_SetNumber(maxDigits, numberWithMaxDigits*10);
+  LedNumber_ShowNumber(maxDigits);
+}
+
 TEST(LedNumber, SetMinDigits)
 {
   LedNumber_SetNumber(minDigits, numberWithMinDigits);
@@ -180,5 +196,11 @@ TEST(LedNumber, ShowMinDigits)
   expectSetSelectPin(WIRINGLED_UNITS);
   expectSetDigit(ZERO);
   expectShowDigit();
+  LedNumber_ShowNumber(minDigits);
+}
+
+TEST(LedNumber, SetBeyondLargestDigit)
+{
+  LedNumber_SetNumber(minDigits, numberWithMinDigits+10);
   LedNumber_ShowNumber(minDigits);
 }
