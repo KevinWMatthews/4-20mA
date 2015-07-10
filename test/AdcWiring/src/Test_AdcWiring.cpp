@@ -5,7 +5,7 @@ extern "C"
   #include <avr/io.h>
 }
 
-//CppUTest includes should be after your and system includes
+//CppUTest includes should be after your system includes
 #include "CppUTest/TestHarness.h"
 #include "Test_AdcWiring.h"
 
@@ -26,7 +26,11 @@ TEST_GROUP(AdcWiring)
   }
 };
 
-//Wait, this may not be true...
+
+
+//*******************//
+//*** Unit Tests! ***//
+//*******************//
 TEST(AdcWiring, RegistersZeroAfterInit)
 {
   LONGS_EQUAL(0, ADCSR);
@@ -39,9 +43,11 @@ TEST(AdcWiring, SelectReferenceVoltage)
 {
   uint8_t expected = 0xff;
   ADMUX = 0xff;
+
   //ADC_AVCC = 0b00, so clear its bits
   CBI(expected, REFS1);
   CBI(expected, REFS0);
+
   AdcWiring_Private_SelectReferenceVoltage(ADC_AVCC);
   CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
@@ -50,8 +56,10 @@ TEST(AdcWiring, SelectResultAdjust)
 {
   uint8_t expected = 0xff;
   ADMUX = 0xff;
+
   //ADC_RIGHT_ADJUST= 0b0, so clear its bit
   CBI(expected, ADLAR);
+
   AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
   CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
@@ -60,12 +68,14 @@ TEST(AdcWiring, SelectInputAndGain)
 {
   uint8_t expected = 0xff;
   ADMUX = 0xff;
+
   //ADC_SINGLE_ENDED_ADC0 = 0b00000, so clear its bits
   CBI(expected, MUX4);
   CBI(expected, MUX3);
   CBI(expected, MUX2);
   CBI(expected, MUX1);
   CBI(expected, MUX0);
+
   AdcWiring_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
   CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
 }
@@ -74,9 +84,11 @@ TEST(AdcWiring, SetPrescaleFactor)
 {
   uint8_t expected = 0xff;
   ADCSR = 0xff;
+
   CBI(expected, ADPS2);
   CBI(expected, ADPS1);
   CBI(expected, ADPS0);
+
   AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_0);
   CHECK_TRUE(IFBITMASK(expected, ADCSR, 0xff));
 }
@@ -84,6 +96,7 @@ TEST(AdcWiring, SetPrescaleFactor)
 TEST(AdcWiring, Init)
 {
   uint8_t expected_ADMUX = 0, expected_ADCSR = 0;
+
   CBI(expected_ADMUX, REFS1);
   CBI(expected_ADMUX, REFS0);
   CBI(expected_ADMUX, ADLAR);
@@ -95,6 +108,7 @@ TEST(AdcWiring, Init)
   CBI(expected_ADCSR, ADPS2);
   CBI(expected_ADCSR, ADPS1);
   SBI(expected_ADCSR, ADPS0);
+
   AdcWiring_HwSetup();
   CHECK_TRUE(IFBITMASK(expected_ADMUX, ADMUX, 0xff));
   CHECK_TRUE(IFBITMASK(expected_ADCSR, ADCSR, 0x07));
@@ -151,12 +165,12 @@ TEST(AdcWiring, ReadLowRegister_ReadZero)
 
 TEST(AdcWiring, ReadHighRegister_ReadMax)
 {
-  ADCH = 0xFF;
+  ADCH = 0xff;
   LONGS_EQUAL(0b11, AdcWiring_ReadDataRegister_High());
 }
 
 TEST(AdcWiring, ReadLowRegister_ReadMax)
 {
-  ADCL = 0xFF;
-  LONGS_EQUAL(0xFF, AdcWiring_ReadDataRegister_Low());
+  ADCL = 0xff;
+  LONGS_EQUAL(0xff, AdcWiring_ReadDataRegister_Low());
 }

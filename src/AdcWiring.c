@@ -9,7 +9,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 void AdcWiring_HwSetup(void)
 {
-  AdcWiring_Private_SelectReferenceVoltage(ADC_INTERNAL_NO_PA3);
+  AdcWiring_Private_SelectReferenceVoltage(ADC_AVCC);
   AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
   AdcWiring_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
   AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_2);
