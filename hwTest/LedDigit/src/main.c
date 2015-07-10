@@ -14,7 +14,7 @@ int main(void)
   LedDigit digit;
   LedDigit_Value currentDigit;
 
-  LedDigitWiring_Init();
+  LedDigitWiring_HwSetup();
 
   digit = LedDigit_Create();
 

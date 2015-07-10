@@ -21,7 +21,7 @@
 //************************//
 //*** Public Functions ***//
 //************************//
-void LedDigitWiring_Init(void)
+void LedDigitWiring_HwSetup(void)
 {
   //Configure LED pins as outputs
   DDRA = WIRINGPIN_A | WIRINGPIN_B | WIRINGPIN_C | WIRINGPIN_D | WIRINGPIN_E | WIRINGPIN_F | WIRINGPIN_G |WIRINGPIN_DP;

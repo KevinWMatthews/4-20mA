@@ -14,9 +14,9 @@
 #define WIRINGPIN_LED3 (1<<PB2)
 #define WIRINGPIN_LED4 (1<<PB3)
 #define WIRINGPIN_ERROR 0xff
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-//~~~ Hardware wiring modification should not cause changes below this point! ~~~//
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~ Edit here to change hardware wiring! ~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 
 

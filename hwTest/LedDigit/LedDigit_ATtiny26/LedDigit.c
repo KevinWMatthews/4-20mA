@@ -40,7 +40,7 @@ static void clearDecimal(void);
 //************************//
 void LedDigit_HwSetup(void)
 {
-  LedDigitWiring_Init();
+  LedDigitWiring_HwSetup();
 }
 
 LedDigit LedDigit_Create(void)

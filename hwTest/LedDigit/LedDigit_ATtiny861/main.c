@@ -9,7 +9,7 @@
 
 int main(void)
 {
-  LedDigitWiring_Init();
+  LedDigitWiring_HwSetup();
   int i = -1;
   while (1)
   {
@@ -63,7 +63,7 @@ int main(void)
   //LedDigit digit;
   //LedDigit_Value currentDigit;
 //
-  //LedDigitWiring_Init();
+  //LedDigitWiring_HwSetup();
 //
   //digit = LedDigit_Create();
 //

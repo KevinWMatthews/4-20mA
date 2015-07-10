@@ -1,14 +1,5 @@
 Todo_LedDigit
 
-Update .h file documentation
-
 Should we turn all pins off when we destroy?
 
-Re-check all NULL tests, especially struct pointer and select pint
-
-Change how we initialize the struct of data pins. Want to try using calloc and copying struct members so that we aren't dependent on the scoping of the init function.
-
-Maybe we should move the select pin back to the number?
-probably. Also need to allow it to be null, in case we're only using a single digit.
-
-Rethink DisplayDigit. We might be able to remove compiler warnings without it.
+Re-check all NULL tests, especially struct pointer and select pin

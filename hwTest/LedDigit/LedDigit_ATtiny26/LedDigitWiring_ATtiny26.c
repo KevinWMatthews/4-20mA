@@ -4,9 +4,9 @@
 
 
 
-//********************************************//
-//*** Edit here to change hardware wiring! ***//
-//********************************************//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~ Edit here to change hardware wiring! ~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~////
 #define WIRINGPIN_A (1<<PA0)
 #define WIRINGPIN_B (1<<PA1)
 #define WIRINGPIN_C (1<<PA2)
@@ -15,13 +15,16 @@
 #define WIRINGPIN_F (1<<PA5)
 #define WIRINGPIN_G (1<<PA6)
 #define WIRINGPIN_DP (1<<PA7)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~ Edit here to change hardware wiring! ~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 
 
 //************************//
 //*** Public Functions ***//
 //************************//
-void LedDigitWiring_Init(void)
+void LedDigitWiring_HwSetup(void)
 {
   //Configure LED pins as outputs
   DDRA = WIRINGPIN_A | WIRINGPIN_B | WIRINGPIN_C | WIRINGPIN_D | WIRINGPIN_E | WIRINGPIN_F | WIRINGPIN_G |WIRINGPIN_DP;

@@ -23,7 +23,7 @@ typedef enum
 
 
 ///*** Public functions ***//
-void LedDigitWiring_Init(void);
+void LedDigitWiring_HwSetup(void);
 void LedDigitWiring_TurnSegmentOn(LedDigitWiring_Pin pin);
 void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin);
 

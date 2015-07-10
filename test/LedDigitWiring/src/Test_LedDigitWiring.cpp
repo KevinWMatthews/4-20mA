@@ -8,11 +8,13 @@ extern "C"
 #include "CppUTest/TestHarness.h"
 #include "Test_LedDigitWiring.h"
 
+
+
 TEST_GROUP(LedDigitWiring)
 {
   void setup()
   {
-    LedDigitWiring_Init();
+    LedDigitWiring_HwSetup();
   }
 
   void teardown()
@@ -26,9 +28,14 @@ TEST_GROUP(LedDigitWiring)
   }
 };
 
+
+
+//*******************//
+//*** Unit Tests! ***//
+//*******************//
 TEST(LedDigitWiring, Initialize)
 {
-  //GPIO to outputs, high to turn off LED digit segments
+  //Set GPIO to outputs, pull high to turn off LED digit segments
   checkMemoryRegisters(0xff, 0xff);
 }
 

@@ -4,10 +4,12 @@ extern "C"
   #include "LedDigitWiring.h"
 }
 
+#include "Mock_LedDigitWiring.h"
 //CppUTest includes should be after your system includes
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
 #include "Test_LedDigit.h"
+
 
 
 TEST_GROUP(LedDigit)
@@ -16,7 +18,7 @@ TEST_GROUP(LedDigit)
 
   void setup()
   {
-    expectInitCall();
+    expectHwSetup();
     LedDigit_HwSetup();
     expectPinCalls(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
     expectPinDecimalPointCall(FALSE);
@@ -29,66 +31,8 @@ TEST_GROUP(LedDigit)
     mock().checkExpectations();
     mock().clear();
   }
-
-  //*** Helper functions ***//
-  void expectInitCall(void)
-  {
-    mock().expectOneCall("LedDigitWiring_Init");
-  }
-
-  void expectPinCall(BOOL setPin, LedDigitWiring_Pin pin)
-  {
-    if (setPin == TRUE)
-    {
-      mock().expectOneCall("LedDigitWiring_TurnSegmentOn")
-            .withParameter("pin", pin);
-    }
-    else
-    {
-      mock().expectOneCall("LedDigitWiring_TurnSegmentOff")
-            .withParameter("pin", pin);
-    }
-  }
-
-  //TRUE to set a pin, FALSE to clear a pin
-  void expectPinCalls(BOOL pinA, BOOL pinB, BOOL pinC, BOOL pinD, BOOL pinE, BOOL pinF, BOOL pinG)
-  {
-    expectPinCall(pinA, PIN_A);
-    expectPinCall(pinB, PIN_B);
-    expectPinCall(pinC, PIN_C);
-    expectPinCall(pinD, PIN_D);
-    expectPinCall(pinE, PIN_E);
-    expectPinCall(pinF, PIN_F);
-    expectPinCall(pinG, PIN_G);
-  }
-
-  void expectPinDecimalPointCall(BOOL pinDP)
-  {
-    expectPinCall(pinDP, PIN_DP);
-  }
 };
 
-
-
-//**********************//
-//*** Function mocks ***//
-//**********************//
-void LedDigitWiring_Init(void)
-{
-  mock().actualCall("LedDigitWiring_Init");
-}
-
-void LedDigitWiring_TurnSegmentOn(LedDigitWiring_Pin pin)
-{
-  mock().actualCall("LedDigitWiring_TurnSegmentOn")
-        .withParameter("pin", pin);
-}
-
-void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
-{
-  mock().actualCall("LedDigitWiring_TurnSegmentOff")
-        .withParameter("pin", pin);
-}
 
 
 //******************//
