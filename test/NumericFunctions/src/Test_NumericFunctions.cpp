@@ -7,6 +7,8 @@ extern "C"
 #include "CppUTest/TestHarness.h"
 #include "Test_NumericFunctions.h"
 
+
+
 TEST_GROUP(NumericFunctions)
 {
   void setup()
@@ -18,6 +20,11 @@ TEST_GROUP(NumericFunctions)
   }
 };
 
+
+
+//*******************//
+//*** Unit Tests! ***//
+//*******************//
 TEST(NumericFunctions, PositiveNumberRoundingUp)
 {
   LONGS_EQUAL(5, round_int16(4.5));
