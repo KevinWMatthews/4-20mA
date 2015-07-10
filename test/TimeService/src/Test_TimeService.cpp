@@ -3,63 +3,13 @@ extern "C"
   #include "TimeService.h"
 }
 
+#include "TestHelper_TimeService.h"
 //CppUTest includes should be after your and system includes
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
 #include "Test_TimeService.h"
 
-typedef struct callbackParameter
-{
-  int anInteger;
-  float aFloat;
-} callbackParameter;
 
-static callbackParameter structCallbackParameter;
-static int integerCallbackParameter;
-
-void doubleIntegerParamemeter(void * params)
-{
-  int * iptr;
-
-  if ( params == NULL )
-  {
-    integerCallbackParameter = 0; //kloodgy demonstration
-    return;
-  }
-  iptr = (int*)params;
-  *iptr *= 2;
-}
-
-void useStructParameter(void * params)
-{
-  callbackParameter * sptr;
-
-  if ( params == NULL )
-  {
-    return;
-  }
-  sptr = (callbackParameter *)params;
-  sptr->anInteger *= 2;
-  sptr->aFloat *= 2.0;
-}
-
-void callbackFunction(void * params)
-{
-  mock().actualCall("callbackFunction")
-        .withParameter("params", params);
-}
-
-void callbackFunction2(void * params)
-{
-  mock().actualCall("callbackFunction2")
-        .withParameter("params", params);
-}
-
-void callbackFunction3(void * params)
-{
-  mock().actualCall("callbackFunction3")
-        .withParameter("params", params);
-}
 
 TEST_GROUP(TimeService)
 {
@@ -81,20 +31,13 @@ TEST_GROUP(TimeService)
     mock().checkExpectations();
     mock().clear();
   }
-
-  void checkCallbackAndPeriod(PeriodicAlarm alarm, PeriodicAlarmCallback callbackFunction, int16_t alarmPeriod)
-  {
-    POINTERS_EQUAL(callbackFunction, TimeService_Private_GetCallback(alarm));
-    LONGS_EQUAL(alarmPeriod, TimeService_Private_GetPeriod(alarm));
-  }
-
-  void checkCounterAndFlag(PeriodicAlarm self, int16_t counter, BOOL executeNow)
-  {
-    LONGS_EQUAL(counter, TimeService_Private_GetCounter(self));
-    LONGS_EQUAL(executeNow, TimeService_Private_IsCallbackTime(self));
-  }
 };
 
+
+
+//*******************//
+//*** Unit Tests! ***//
+//*******************//
 TEST(TimeService, CreateAndDestroy)
 {
 }
@@ -210,7 +153,6 @@ TEST(TimeService, DestroyMaxAlarm)
 TEST(TimeService, AddRemove_PutHolesInAlarmArray)
 {
   PeriodicAlarm alarmArray[MAX_PERIODIC_ALARMS];
-  PeriodicAlarmCallback callbackArray[MAX_PERIODIC_ALARMS];
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
@@ -461,7 +403,6 @@ TEST(TimeService, CallbackWithIntegerParameter)
   TimeService_ServiceSingleCallback(alarm, (void*)&integerCallbackParameter);
   LONGS_EQUAL(84, integerCallbackParameter);
 }
-
 
 TEST(TimeService, CallbackWithStructParameter)
 {

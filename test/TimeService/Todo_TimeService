@@ -1,5 +1,8 @@
 Todo_TimeService
 
+Create separate test file for private functions?
+Rethink the organization of the tests. It's a bit messy right now.
+
 Think about splitting counter and period enums for clarity.
 Perhaps we should add devoted activate anddeactivate functions.
 
