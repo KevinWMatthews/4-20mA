@@ -8,6 +8,8 @@ extern "C"
 #include "CppUTest/TestHarness.h"
 #include "Test_LineFit.h"
 
+
+
 TEST_GROUP(LineFit)
 {
   #define LINE_FIT_PRECISION 0.000001
@@ -24,6 +26,11 @@ TEST_GROUP(LineFit)
   }
 };
 
+
+
+//*******************//
+//*** Unit Tests! ***//
+//*******************//
 TEST(LineFit, Create)
 {
   //TODO learn how to detect a memory leak if free() isn't called
@@ -50,7 +57,7 @@ TEST(LineFit, AllFunctionsCanHandleNullPointer)
 {
   LineFit_SetPoint1(NULL, 42, 42);
   LineFit_SetPoint2(NULL, 666, 666);
-  LineFit_CalculateEquation(NULL);
+  LONGS_EQUAL(LINE_FIT_FAIL_NULL_POINTER, LineFit_CalculateEquation(NULL));
   LineFit_GetOutput(NULL, 0);
 }
 

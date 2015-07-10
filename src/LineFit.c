@@ -1,7 +1,11 @@
 #include "LineFit.h"
 #include <stdlib.h>
-#include "DataTypes.h"
 
+
+
+//******************//
+//*** Data types ***//
+//******************//
 typedef struct LineFitStruct
 {
   int16_t x1;
@@ -12,6 +16,11 @@ typedef struct LineFitStruct
   float b;
 } LineFitStruct;
 
+
+
+//************************//
+//*** Public Functions ***//
+//************************//
 LineFit LineFit_Create(void)
 {
   LineFit self = calloc(1, sizeof(LineFitStruct));
@@ -43,7 +52,7 @@ void LineFit_SetPoint2(LineFit self, int16_t x2, int16_t y2)
 
 int8_t LineFit_CalculateEquation(LineFit self)
 {
-  RETURN_VALUE_IF_NULL(self, LINE_FIT_FAIL_VERTICAL_LINE);
+  RETURN_VALUE_IF_NULL(self, LINE_FIT_FAIL_NULL_POINTER);
   if (self->x2 == self->x1)
   {
     return LINE_FIT_FAIL_VERTICAL_LINE;

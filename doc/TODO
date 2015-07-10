@@ -33,3 +33,5 @@ Learn how to detect memory leaks, i.e. not freeing data.
 Think about SBIT, CBIT, and 0
 
 Document how signed 8-bit variables differ in behavior compared to unsigned 8-bit variables.
+
+Create a compile-only makefile target. This will give me any easy-to-use visual representation of code dependencies.
