@@ -1,0 +1,3 @@
+Add boundary checks
+
+See if we can create a SetBitmask() function and then set all of the pins at once.

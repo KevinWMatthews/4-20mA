@@ -1,15 +1,3 @@
-Boundary checks:
-  Add needs to have a cap; can't add more digits than are available.
-  wiring needs max checks
-  number needs max checks
-  What if we added 0 digits?
-  What if we display a three-digit number with only two LEDs?
-
-
 Add decimal support, but later; we'll have to figure out what kind of behavior that we want.
-
-
-Move tests of private functions to a devoted file?
-Move mocks to a devoted file?
 
 Create turn off and/or clear number functions (we don't need them yet).
