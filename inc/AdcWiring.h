@@ -4,24 +4,28 @@
 #include "DataTypes.h"
 
 
-//This hardware-dependent module is inteded to by used by the Adc module.
-//It is an abstraction layer to keep Adc from having direct hardware dependencies.
+//This hardware-dependent module is inteded to by used by the Adc module only.
+//It is an abstraction layer to keep ADC from having direct hardware dependencies.
 //It is NOT designed to be used directly by the user.
 //To use the ADC, refer to Adc.h
+//In other words, unless the ADC broken, GO AWAY!
 
 
-//***********************//
-//*** Register Values ***//
-//***********************//
-typedef enum
-{
-  ADC_FREE = 0,
-  ADC_BUSY = 1
-} Adc_BusyStatus;
 
-//**************************//
-//*** Standard Functions ***//
-//**************************//
+//************************//
+//*** Public Functions ***//
+//************************//
+//Set up the ADC for use.
+void AdcWiring_HwSetup(void);
+
+//Enable the ADC for use.
+//Call after initialization.
+void AdcWiring_Enable(void);
+
+//Perform internal chip initialization.
+//Execute after enabling the ADC.
+void AdcWiring_FirstConversion(void);
+
 BOOL AdcWiring_IsAdcBusy(void);
 void AdcWiring_StartConversion(void);
 BOOL AdcWiring_IsInterruptFlagSet(void);
@@ -59,19 +63,6 @@ typedef enum
   ADC_PRESCALE_FACTOR_64 = 0b110
 } Adc_PrescaleFactor;
 
-//***********************//
-//*** Setup Functions ***//
-//***********************//
-//Set up the ADC for use.
-void AdcWiring_Init(void);
-
-//Enable the ADC for use.
-//Call after initialization.
-void AdcWiring_Enable(void);
-
-//Perform internal chip initialization.
-//Execute after enabling the ADC.
-void AdcWiring_FirstConversion(void);
 
 
 //*************************//
@@ -82,5 +73,7 @@ void AdcWiring_Private_SelectReferenceVoltage(Adc_VoltageSource);
 void AdcWiring_Private_SelectResultAdjust(Adc_ResultAdjust);
 void AdcWiring_Private_SelectInputAndGain(Adc_AnalogInputAndGain);
 void AdcWiring_Private_SelectPrescaleFactor(Adc_PrescaleFactor);
+
+
 
 #endif

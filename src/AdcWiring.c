@@ -3,9 +3,33 @@
 #include "BitManip.h"
 
 
-//**************************//
-//*** Standard Functions ***//
-//**************************//
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~ Edit here to change hardware setup! ~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+void AdcWiring_HwSetup(void)
+{
+  AdcWiring_Private_SelectReferenceVoltage(ADC_INTERNAL_NO_PA3);
+  AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
+  AdcWiring_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
+  AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_2);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~ Hardware setup modification should not cause changes below this point! ~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+
+
+void AdcWiring_Enable(void)
+{
+  SBI(ADCSR, ADEN);
+}
+
+void AdcWiring_FirstConversion(void)
+{
+  SBI(ADCSR, ADSC);
+}
+
 BOOL AdcWiring_IsAdcBusy(void)
 {
   return IFBIT(ADCSR, ADSC);
@@ -38,17 +62,12 @@ void AdcWiring_ClearInterruptFlag(void)
 }
 
 
-//***********************//
-//*** Setup functions ***//
-//***********************//
-void AdcWiring_Init(void)
-{
-  AdcWiring_Private_SelectReferenceVoltage(ADC_INTERNAL_NO_PA3);
-  AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
-  AdcWiring_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
-  AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_2);
-}
 
+//*************************//
+//*** Private Functions ***//
+//*************************//
+//These functions are in the header file only to facilitate in-depth testing
+//These will go away in a later refactoring ;)
 void AdcWiring_Private_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
 {
   ADMUX &= ~(0x03 << REFS0);
@@ -71,14 +90,4 @@ void AdcWiring_Private_SelectPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
 {
   ADCSR &= ~(0x07 << ADPS0);
   ADCSR |= (prescaleFactor & 0x07) << ADPS0;
-}
-
-void AdcWiring_Enable(void)
-{
-  SBI(ADCSR, ADEN);
-}
-
-void AdcWiring_FirstConversion(void)
-{
-  SBI(ADCSR, ADSC);
 }

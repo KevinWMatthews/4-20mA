@@ -23,7 +23,7 @@ int main(void)
 
   int8_t low, high;
 
-  Adc_Setup();
+  Adc_HwSetup();
   //AVCC is reference voltage
   CBI(ADMUX, 7);
   CBI(ADMUX, 6);

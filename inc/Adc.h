@@ -16,7 +16,7 @@ enum
   ADC_READ_SUCCESS = 1
 };
 
-void Adc_Setup(void);
+void Adc_HwSetup(void);
 int8_t Adc_StartConversion(void);
 int8_t Adc_Read(int16_t * adcReading);
 

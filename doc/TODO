@@ -31,3 +31,5 @@ Recreate a problem with double free and then fix it.
 Learn how to detect memory leaks, i.e. not freeing data.
 
 Think about SBIT, CBIT, and 0
+
+Document how signed 8-bit variables differ in behavior compared to unsigned 8-bit variables.

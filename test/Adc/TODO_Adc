@@ -1,8 +1,1 @@
 TODO_Adc
-
-I think we might want to move the ADC setup after all.
-
-Rename Setup() to Init()
-
-Figure out how to disable the interrupt flag
-Revise tests so that the interrupt flag is optional? Or remove it entirely.

@@ -95,7 +95,7 @@ TEST(AdcWiring, Init)
   CBI(expected_ADCSR, ADPS2);
   CBI(expected_ADCSR, ADPS1);
   SBI(expected_ADCSR, ADPS0);
-  AdcWiring_Init();
+  AdcWiring_HwSetup();
   CHECK_TRUE(IFBITMASK(expected_ADMUX, ADMUX, 0xff));
   CHECK_TRUE(IFBITMASK(expected_ADCSR, ADCSR, 0x07));
 }
