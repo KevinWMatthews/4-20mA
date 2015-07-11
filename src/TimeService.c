@@ -1,4 +1,5 @@
 #include "TimeService.h"
+#include "TimeServiceWiring.h"
 
 //This is a single-instance module.
 
@@ -122,6 +123,11 @@ static void executeCallback(PeriodicAlarm self, void * params)
 //************************//
 //*** Public Functions ***//
 //************************//
+void TimeService_HwSetup(void)
+{
+  TimeServiceWiring_HwSetup();
+}
+
 void TimeService_Create(void)
 {
   markAllAlarmsAsUnused();

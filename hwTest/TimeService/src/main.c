@@ -25,6 +25,8 @@ int main(void)
 
   //LED setup
   DDRA = LED_PIN;     // Configure pin as output
+
+  //Timer setup
   // 8MHz system clock / (64 Prescaler * 125 compare value) = 1000 Hz / match
   CBI(TCCR1B, CS13);  //Set Prescaler to 0111 for SystemClock/64
   SBI(TCCR1B, CS12);

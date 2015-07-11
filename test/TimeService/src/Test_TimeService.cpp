@@ -1,6 +1,7 @@
 extern "C"
 {
   #include "TimeService.h"
+  #include "TimeServiceWiring.h"
 }
 
 #include "TestHelper_TimeService.h"
@@ -53,6 +54,14 @@ TEST(TimeService, NullPointerToAnyFunctionWontCrash)
   TimeService_ActivatePeriodicAlarm(NULL);
   TimeService_DeactivatePeriodicAlarm(NULL);
   TimeService_ServiceSingleCallback(NULL, NULL);
+}
+
+
+//Wiring
+TEST(TimeService, HwSetup)
+{
+  mock().expectOneCall("TimeServiceWiring_HwSetup");
+  TimeService_HwSetup();
 }
 
 

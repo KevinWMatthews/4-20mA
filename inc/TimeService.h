@@ -21,6 +21,8 @@ typedef void (*PeriodicAlarmCallback)(void *);
 //***********************//
 //*** Public Functions **//
 //***********************//
+//Initialize the hardware timer.
+void TimeService_HwSetup(void);
 
 //Creates and initializes the TimeService as a whole.
 //No alarms are created; they must be added individually by the user.
