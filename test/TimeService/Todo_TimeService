@@ -14,3 +14,5 @@ We'd have to service alarms individually but it makes them much more powerful.
 Remove callback parameter demo (don't need the null demo, I think; we'll test that when we test/create the actual callback function).
 Clean up the tests.
 Try out a struct, even though I know it should work.
+
+Check execution time of TimerTick.

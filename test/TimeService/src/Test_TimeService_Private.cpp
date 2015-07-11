@@ -38,7 +38,13 @@ TEST(TimeService_Private, NullPointerToAnyFunctionWontCrash)
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetPeriod(NULL));
   TimeService_Private_SetCounter(NULL, 666);
   LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetCounter(NULL));
-  LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(NULL));
+  LONGS_EQUAL(FALSE, TimeService_Private_GetExecuteCallbackFlag(NULL));
+  TimeService_Private_SetExecuteCallbackFlag(NULL, FALSE);
+}
+
+TEST(TimeService_Private, GetCallback)
+{
+  POINTERS_EQUAL(&callbackFunction_PrivateTest, TimeService_Private_GetCallback(alarm));
 }
 
 TEST(TimeService_Private, GetCounter)
@@ -52,15 +58,13 @@ TEST(TimeService_Private, SetCounter)
   LONGS_EQUAL(4242, TimeService_Private_GetCounter(alarm));
 }
 
-TEST(TimeService_Private, GetCallback)
+TEST(TimeService_Private, GetCallbackFlag)
 {
-  POINTERS_EQUAL(&callbackFunction_PrivateTest, TimeService_Private_GetCallback(alarm));
+  LONGS_EQUAL(FALSE, TimeService_Private_GetExecuteCallbackFlag(alarm));
 }
 
-TEST(TimeService_Private, IsCallbackTime)
+TEST(TimeService_Private, SetCallbackFlag)
 {
-  LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(alarm));
-  //Uhh, do we need to test when the flag is true?
-  //Do we need to test this at all?
-  //I kinda don't think so
+  TimeService_Private_SetExecuteCallbackFlag(alarm, TRUE);
+  LONGS_EQUAL(TRUE, TimeService_Private_GetExecuteCallbackFlag(alarm));
 }

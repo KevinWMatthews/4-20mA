@@ -1,8 +1,7 @@
 #include "TimeService.h"
 
-
-
 //This is a single-instance module.
+
 
 
 //****************************//
@@ -93,8 +92,22 @@ static void markAllAlarmsAsUnused(void)
 
 static BOOL isCounterEnabled(PeriodicAlarm self)
 {
-  return !(getCounter(self) == PA_UNUSED) &&
-         !(getCounter(self) == PA_INACTIVE);
+  int16_t result;
+
+  result = getCounter(self);
+  if (result == PA_UNUSED)
+  {
+    return FALSE;
+  }
+  if (result == PA_INACTIVE)
+  {
+    return FALSE;
+  }
+  if (result == PA_NULL_POINTER)
+  {
+    return FALSE;
+  }
+  return TRUE;
 }
 
 static void executeCallback(PeriodicAlarm self, void * params)
@@ -212,7 +225,12 @@ int16_t TimeService_Private_GetCounter(PeriodicAlarm self)
   return getCounter(self);
 }
 
-BOOL TimeService_Private_IsCallbackTime(PeriodicAlarm self)
+void TimeService_Private_SetExecuteCallbackFlag(PeriodicAlarm self, BOOL executeCallbackNow)
+{
+  return setExecuteCallbackNowFlag(self, executeCallbackNow);
+}
+
+BOOL TimeService_Private_GetExecuteCallbackFlag(PeriodicAlarm self)
 {
   return getExecuteCallbackNowFlag(self);
 }
