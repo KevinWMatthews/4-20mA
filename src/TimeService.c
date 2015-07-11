@@ -2,6 +2,9 @@
 
 
 
+//This is a single-instance module.
+
+
 //****************************//
 //*** File-scope Variables ***//
 //****************************//

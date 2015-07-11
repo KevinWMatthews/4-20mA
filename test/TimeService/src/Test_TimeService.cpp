@@ -53,12 +53,6 @@ TEST(TimeService, NullPointerToAnyFunctionWontCrash)
   TimeService_ActivatePeriodicAlarm(NULL);
   TimeService_DeactivatePeriodicAlarm(NULL);
   TimeService_ServiceSingleCallback(NULL, NULL);
-
-  POINTERS_EQUAL(NULL, TimeService_Private_GetCallback(NULL));
-  LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetPeriod(NULL));
-  TimeService_Private_SetCounter(NULL, 666);
-  LONGS_EQUAL(PA_NULL_POINTER, TimeService_Private_GetCounter(NULL));
-  LONGS_EQUAL(FALSE, TimeService_Private_IsCallbackTime(NULL));
 }
 
 TEST(TimeService, AddSingleAlarm)
@@ -123,7 +117,7 @@ TEST(TimeService, RemoveMaxAlarms)
   }
 }
 
-TEST(TimeService, DestroySingleAlarm)
+TEST(TimeService, DestroyWhenSingleAlarm)
 {
   alarm = TimeService_AddPeriodicAlarm(callback, period);
   TimeService_Destroy();
@@ -132,7 +126,7 @@ TEST(TimeService, DestroySingleAlarm)
   checkCounterAndFlag(alarm, PA_UNUSED, FALSE);
 }
 
-TEST(TimeService, DestroyMaxAlarm)
+TEST(TimeService, DestroyWhenMaxAlarm)
 {
   PeriodicAlarm alarmArray[MAX_PERIODIC_ALARMS];
 
@@ -252,15 +246,6 @@ TEST(TimeService, DeactivateSinglePeriodicAlarm)
   TimeService_DeactivatePeriodicAlarm(alarm);
   checkCallbackAndPeriod(alarm, callback, period);
   checkCounterAndFlag(alarm, PA_INACTIVE, FALSE);
-}
-
-TEST(TimeService, SetCounter)
-{
-  int16_t testValue = 42;
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
-  TimeService_Private_SetCounter(alarm, testValue);
-
-  LONGS_EQUAL(testValue, TimeService_Private_GetCounter(alarm));
 }
 
 TEST(TimeService, IncrementCounter)

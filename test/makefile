@@ -4,8 +4,9 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=Adc AdcWiring LineFit LedDigit LedDigitWiring LedNumber \
-             LedNumberWiring LedNumber MainLoop NumericFunctions TimeService
+TESTS_TO_RUN=TimeService
+#Adc AdcWiring LineFit LedDigit LedDigitWiring LedNumber \
+#             LedNumberWiring LedNumber MainLoop NumericFunctions TimeService
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
