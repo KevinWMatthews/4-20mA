@@ -4,9 +4,10 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=TimeServiceWiring
-#Adc AdcWiring LineFit LedDigit LedDigitWiring LedNumber \
-#             LedNumberWiring LedNumber MainLoop NumericFunctions TimeService
+TESTS_TO_RUN= BitManip\
+Adc AdcWiring LineFit LedDigit LedDigitWiring LedNumber \
+             LedNumberWiring LedNumber NumericFunctions TimeService TimeServiceWiring \
+
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
 DEFAULT_DIR=.
@@ -14,6 +15,8 @@ DEFAULT_DIR=.
 ADC_DIR=Adc
 
 ADCWIRING_DIR=AdcWiring
+
+BITMANIP_DIR=BitManip
 
 LINEFIT_DIR=LineFit
 
@@ -44,6 +47,9 @@ Adc:
 
 AdcWiring:
 	$(MAKE_TESTS) $(ADCWIRING_DIR) $(MAKECMDGOALS)
+
+BitManip:
+	$(MAKE_TESTS) $(BITMANIP_DIR) $(MAKECMDGOALS)
 
 LineFit:
 	$(MAKE_TESTS) $(LINEFIT_DIR) $(MAKECMDGOALS)

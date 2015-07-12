@@ -5,9 +5,7 @@
 
 void TimeServiceWiringPrivate_SetPrescaler(TimeService_PrescaleFactor prescaleFactor)
 {
-  CLEAR_BITMASK(TCCR1B, BITMASK_TS_PRESCALE_FACTOR);
-  SET_BITMASK_SHIFT(TCCR1B, prescaleFactor, LSB_TS_PRESCALE_FACTOR, BITMASK_TS_PRESCALE_FACTOR);
-  // TCCR1B |= (prescaleFactor << LSB_TS_PRESCALE_FACTOR) & BITMASK_TS_PRESCALE_FACTOR;
+  SET_BITMASK_SHIFT_VALUE(TCCR1B, prescaleFactor, BITMASK_TS_PRESCALE_FACTOR, LSB_TS_PRESCALE_FACTOR);
 }
 
 void TimeServiceWiringPrivate_SetTimerCompare(uint8_t timerCompareValue)
@@ -17,6 +15,5 @@ void TimeServiceWiringPrivate_SetTimerCompare(uint8_t timerCompareValue)
 
 void TimeServiceWiringPrivate_ClearTimerOnMatch(BOOL clearOnMatchFlag)
 {
-  TCCR1B &= ~BITMASK_TS_CLEAR_TIMER_ON_MATCH;
-  TCCR1B |= (clearOnMatchFlag << LSB_TS_CLEAR_TIMER_ON_MATCH) & BITMASK_TS_CLEAR_TIMER_ON_MATCH;
+  SET_BITMASK_SHIFT_VALUE(TCCR1B, clearOnMatchFlag, BITMASK_TS_CLEAR_TIMER_ON_MATCH, LSB_TS_CLEAR_TIMER_ON_MATCH);
 }

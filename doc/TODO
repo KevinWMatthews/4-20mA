@@ -7,6 +7,8 @@ Add documentation to header files. Hey, I should at least try.
 
 Revise SDD.
 
+Put some nice colors in the makefile to signal the start of a build.
+
 
 
     ~~~ Hardware ~~~
@@ -20,6 +22,9 @@ Start to rig up my actual project.
 
 
     ~~~ Software ~~~
+Create tests for BitManip.h
+Round out available functions.
+
 Document and streamline testing for NULL pointers for a generic multi-instance module.
 
 Think through how to do Destroy again. Then edit all occurrences.

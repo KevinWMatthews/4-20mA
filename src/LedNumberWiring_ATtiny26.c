@@ -40,10 +40,10 @@ void LedNumberWiring_SetSelectPin(LedNumberWiring_Place place)
 {
   uint8_t pin;
 
-  SBIT(PORTB, WIRINGPIN_LED1);
-  SBIT(PORTB, WIRINGPIN_LED2);
-  SBIT(PORTB, WIRINGPIN_LED3);
-  SBIT(PORTB, WIRINGPIN_LED4);
+  SET_BIT(PORTB, WIRINGPIN_LED1);
+  SET_BIT(PORTB, WIRINGPIN_LED2);
+  SET_BIT(PORTB, WIRINGPIN_LED3);
+  SET_BIT(PORTB, WIRINGPIN_LED4);
   pin = convertPinToWiringPin(place);
   if (pin == WIRINGPIN_NONE)
   {
@@ -53,7 +53,7 @@ void LedNumberWiring_SetSelectPin(LedNumberWiring_Place place)
   {
     return;
   }
-  CBIT(PORTB, pin);
+  CLEAR_BIT(PORTB, pin);
 }
 
 

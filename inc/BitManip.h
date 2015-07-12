@@ -1,18 +1,46 @@
 #ifndef BitManip_H_
 #define BitManip_H_
 
-#define IFBIT(variable, bitNumber) (1 && (1<<(bitNumber) & (variable)))
-#define IFBITMASK(expectedBitmask, actualBitmask, bitsToCheck) \
-  (((expectedBitmask) & (bitsToCheck)) == ((actualBitmask) & (bitsToCheck)))
-#define SBI(variable, bitNumber) ((variable) |= (1<<(bitNumber)))
-#define CBI(variable, bitNumber) ((variable) &= ~(1<<(bitNumber)))
 
-#define SBIT(variable, bit) ((variable) |= (bit))
-#define CBIT(variable, bit) ((variable) &= ~(bit))
 
+//These functions expect bit in the form: 1<<bitNumber
+#define IF_BIT(variable, bit) (1 && BITWISE_AND(variable, bit))
+#define SET_BIT(variable, bit) ((variable) |= (bit))
+#define CLEAR_BIT(variable, bit) ((variable) &= ~(bit))
+
+
+
+//These functions expect a bit number (0 to 7 for 8-bit integers)
+#define IF_BIT_NUMBER(variable, bitNumber) (1 && BITWISE_AND(1<<(bitNumber), variable))
+#define SET_BIT_NUMBER(variable, bitNumber) ((variable) |= (1<<(bitNumber)))
+#define CLEAR_BIT_NUMBER(variable, bitNumber) ((variable) &= ~(1<<(bitNumber)))
+
+
+
+//These functions can process a bitmask containing multiple bits.
+//You must also pass a bitmask containing the bits that are to be affected.
+#define IF_BITMASK(expectedBitmask, actualBitmask, bitsToCheck) \
+  ( ((bitsToCheck) != 0) && \
+    (BITWISE_AND(expectedBitmask, bitsToCheck) == BITWISE_AND(actualBitmask, bitsToCheck)) )
+
+#define SET_BITMASK(variable, newValue, bitsToSet) \
+  CLEAR_BITMASK(variable, bitsToSet); \
+  ((variable) |= BITWISE_AND(newValue, bitsToSet))
 
 #define CLEAR_BITMASK(variable, bitmask) (variable) &= ~(bitmask)
-#define SET_BITMASK_SHIFT(variable, value, bitShift, bitmask) \
-  (variable) |= (((value) << (bitShift)) & (bitmask))
+
+//Use this when the new value needs to be bit shifted.
+//For example, set bits 6 and 7 to 0b11 with
+// SET_BITMASK_SHIFT_VALUE(variable, 0b11, 0b11, 6)
+#define SET_BITMASK_SHIFT_VALUE(variable, newValue, bitsToSet, shiftForValue) \
+  CLEAR_BITMASK(variable, bitsToSet); \
+  (variable) |= BITWISE_AND((newValue) << (shiftForValue), bitsToSet)
+
+
+
+//Helper macros
+#define BITWISE_AND(bitmask1, bitmask2)  ((bitmask1) & (bitmask2))
+
+
 
 #endif

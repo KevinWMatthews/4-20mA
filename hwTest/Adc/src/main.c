@@ -25,31 +25,31 @@ int main(void)
 
   Adc_HwSetup();
   //AVCC is reference voltage
-  CBI(ADMUX, 7);
-  CBI(ADMUX, 6);
+  CLEAR_BIT_NUMBER(ADMUX, 7);
+  CLEAR_BIT_NUMBER(ADMUX, 6);
   //Right-adjust results
-  CBI(ADMUX, 5);
+  CLEAR_BIT_NUMBER(ADMUX, 5);
 
   //Select ADC channel 0, no gain
-  CBI(ADMUX, 4);
-  CBI(ADMUX, 3);
-  CBI(ADMUX, 2);
-  CBI(ADMUX, 1);
-  CBI(ADMUX, 0);
+  CLEAR_BIT_NUMBER(ADMUX, 4);
+  CLEAR_BIT_NUMBER(ADMUX, 3);
+  CLEAR_BIT_NUMBER(ADMUX, 2);
+  CLEAR_BIT_NUMBER(ADMUX, 1);
+  CLEAR_BIT_NUMBER(ADMUX, 0);
 
   //Set Prescaler
-  SBI(ADCSR, 2);
-  SBI(ADCSR, 1);
-  CBI(ADCSR, 0);
+  SET_BIT_NUMBER(ADCSR, 2);
+  SET_BIT_NUMBER(ADCSR, 1);
+  CLEAR_BIT_NUMBER(ADCSR, 0);
 
   //Disable interrupt
-  CBI(ADCSR, 3);
+  CLEAR_BIT_NUMBER(ADCSR, 3);
 
   //Single conversion modes
-  CBI(ADCSR, 5);
+  CLEAR_BIT_NUMBER(ADCSR, 5);
 
   //Enable adc
-  SBI(ADCSR, 7);
+  SET_BIT_NUMBER(ADCSR, 7);
 
   DDRA = LEDPIN | L1 | L2 | L3 | L4 | L5;
 
@@ -58,7 +58,7 @@ int main(void)
   PORTA = 0;
 
   //First conversion for internal initialization
-  SBI(ADCSR, 6);
+  SET_BIT_NUMBER(ADCSR, 6);
 
   while (1)
   {

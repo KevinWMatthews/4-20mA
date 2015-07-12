@@ -22,27 +22,27 @@ void AdcWiring_HwSetup(void)
 
 void AdcWiring_Enable(void)
 {
-  SBI(ADCSR, ADEN);
+  SET_BIT_NUMBER(ADCSR, ADEN);
 }
 
 void AdcWiring_FirstConversion(void)
 {
-  SBI(ADCSR, ADSC);
+  SET_BIT_NUMBER(ADCSR, ADSC);
 }
 
 BOOL AdcWiring_IsAdcBusy(void)
 {
-  return IFBIT(ADCSR, ADSC);
+  return IF_BIT_NUMBER(ADCSR, ADSC);
 }
 
 void AdcWiring_StartConversion(void)
 {
-  SBI(ADCSR, ADSC);
+  SET_BIT_NUMBER(ADCSR, ADSC);
 }
 
 BOOL AdcWiring_IsInterruptFlagSet(void)
 {
-  return IFBIT(ADCSR, ADIF);
+  return IF_BIT_NUMBER(ADCSR, ADIF);
 }
 
 uint8_t AdcWiring_ReadDataRegister_High(void)
@@ -58,7 +58,7 @@ uint8_t AdcWiring_ReadDataRegister_Low(void)
 
 void AdcWiring_ClearInterruptFlag(void)
 {
-  SBI(ADCSR, ADIF);
+  SET_BIT_NUMBER(ADCSR, ADIF);
 }
 
 

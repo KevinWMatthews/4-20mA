@@ -45,11 +45,11 @@ TEST(AdcWiring, SelectReferenceVoltage)
   ADMUX = 0xff;
 
   //ADC_AVCC = 0b00, so clear its bits
-  CBI(expected, REFS1);
-  CBI(expected, REFS0);
+  CLEAR_BIT_NUMBER(expected, REFS1);
+  CLEAR_BIT_NUMBER(expected, REFS0);
 
   AdcWiring_Private_SelectReferenceVoltage(ADC_AVCC);
-  CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
+  CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
 }
 
 TEST(AdcWiring, SelectResultAdjust)
@@ -58,10 +58,10 @@ TEST(AdcWiring, SelectResultAdjust)
   ADMUX = 0xff;
 
   //ADC_RIGHT_ADJUST= 0b0, so clear its bit
-  CBI(expected, ADLAR);
+  CLEAR_BIT_NUMBER(expected, ADLAR);
 
   AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
-  CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
+  CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
 }
 
 TEST(AdcWiring, SelectInputAndGain)
@@ -70,14 +70,14 @@ TEST(AdcWiring, SelectInputAndGain)
   ADMUX = 0xff;
 
   //ADC_SINGLE_ENDED_ADC0 = 0b00000, so clear its bits
-  CBI(expected, MUX4);
-  CBI(expected, MUX3);
-  CBI(expected, MUX2);
-  CBI(expected, MUX1);
-  CBI(expected, MUX0);
+  CLEAR_BIT_NUMBER(expected, MUX4);
+  CLEAR_BIT_NUMBER(expected, MUX3);
+  CLEAR_BIT_NUMBER(expected, MUX2);
+  CLEAR_BIT_NUMBER(expected, MUX1);
+  CLEAR_BIT_NUMBER(expected, MUX0);
 
   AdcWiring_Private_SelectInputAndGain(ADC_SINGLE_ENDED_ADC0);
-  CHECK_TRUE(IFBITMASK(expected, ADMUX, 0xff));
+  CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
 }
 
 TEST(AdcWiring, SetPrescaleFactor)
@@ -85,64 +85,64 @@ TEST(AdcWiring, SetPrescaleFactor)
   uint8_t expected = 0xff;
   ADCSR = 0xff;
 
-  CBI(expected, ADPS2);
-  CBI(expected, ADPS1);
-  CBI(expected, ADPS0);
+  CLEAR_BIT_NUMBER(expected, ADPS2);
+  CLEAR_BIT_NUMBER(expected, ADPS1);
+  CLEAR_BIT_NUMBER(expected, ADPS0);
 
   AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_0);
-  CHECK_TRUE(IFBITMASK(expected, ADCSR, 0xff));
+  CHECK_TRUE(IF_BITMASK(expected, ADCSR, 0xff));
 }
 
 TEST(AdcWiring, Init)
 {
   uint8_t expected_ADMUX = 0, expected_ADCSR = 0;
 
-  CBI(expected_ADMUX, REFS1);
-  CBI(expected_ADMUX, REFS0);
-  CBI(expected_ADMUX, ADLAR);
-  CBI(expected_ADMUX, MUX4);
-  CBI(expected_ADMUX, MUX3);
-  CBI(expected_ADMUX, MUX2);
-  CBI(expected_ADMUX, MUX1);
-  CBI(expected_ADMUX, MUX0);
-  CBI(expected_ADCSR, ADPS2);
-  CBI(expected_ADCSR, ADPS1);
-  SBI(expected_ADCSR, ADPS0);
+  CLEAR_BIT_NUMBER(expected_ADMUX, REFS1);
+  CLEAR_BIT_NUMBER(expected_ADMUX, REFS0);
+  CLEAR_BIT_NUMBER(expected_ADMUX, ADLAR);
+  CLEAR_BIT_NUMBER(expected_ADMUX, MUX4);
+  CLEAR_BIT_NUMBER(expected_ADMUX, MUX3);
+  CLEAR_BIT_NUMBER(expected_ADMUX, MUX2);
+  CLEAR_BIT_NUMBER(expected_ADMUX, MUX1);
+  CLEAR_BIT_NUMBER(expected_ADMUX, MUX0);
+  CLEAR_BIT_NUMBER(expected_ADCSR, ADPS2);
+  CLEAR_BIT_NUMBER(expected_ADCSR, ADPS1);
+  SET_BIT_NUMBER(expected_ADCSR, ADPS0);
 
   AdcWiring_HwSetup();
-  CHECK_TRUE(IFBITMASK(expected_ADMUX, ADMUX, 0xff));
-  CHECK_TRUE(IFBITMASK(expected_ADCSR, ADCSR, 0x07));
+  CHECK_TRUE(IF_BITMASK(expected_ADMUX, ADMUX, 0xff));
+  CHECK_TRUE(IF_BITMASK(expected_ADCSR, ADCSR, 0x07));
 }
 
 TEST(AdcWiring, Enable)
 {
   AdcWiring_Enable();
-  CHECK_TRUE(IFBIT(ADCSR, ADEN));
+  CHECK_TRUE(IF_BIT_NUMBER(ADCSR, ADEN));
 }
 
 TEST(AdcWiring, FirstConversion)
 {
   AdcWiring_FirstConversion();
-  CHECK_TRUE(IFBIT(ADCSR, ADSC));
+  CHECK_TRUE(IF_BIT_NUMBER(ADCSR, ADSC));
 }
 
 TEST(AdcWiring, IsAdcBusy)
 {
   CHECK_FALSE(AdcWiring_IsAdcBusy());
-  SBI(ADCSR, ADSC);
+  SET_BIT_NUMBER(ADCSR, ADSC);
   CHECK_TRUE(AdcWiring_IsAdcBusy());
 }
 
 TEST(AdcWiring, StartConversion)
 {
   AdcWiring_StartConversion();
-  CHECK_TRUE(IFBIT(ADCSR, ADSC));
+  CHECK_TRUE(IF_BIT_NUMBER(ADCSR, ADSC));
 }
 
 TEST(AdcWiring, AdcWiring_IsInterruptFlagSet)
 {
   CHECK_FALSE(AdcWiring_IsInterruptFlagSet());
-  SBI(ADCSR, ADIF);
+  SET_BIT_NUMBER(ADCSR, ADIF);
   CHECK_TRUE(AdcWiring_IsInterruptFlagSet());
 }
 

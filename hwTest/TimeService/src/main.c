@@ -28,15 +28,15 @@ int main(void)
 
   //Timer setup
   // 8MHz system clock / (64 Prescaler * 125 compare value) = 1000 Hz / match
-  CBI(TCCR1B, CS13);  //Set Prescaler to 0111 for SystemClock/64
-  SBI(TCCR1B, CS12);
-  SBI(TCCR1B, CS11);
-  SBI(TCCR1B, CS10);
+  CLEAR_BIT_NUMBER(TCCR1B, CS13);  //Set Prescaler to 0111 for SystemClock/64
+  SET_BIT_NUMBER(TCCR1B, CS12);
+  SET_BIT_NUMBER(TCCR1B, CS11);
+  SET_BIT_NUMBER(TCCR1B, CS10);
   OCR1C = 125;        //Set Timer Compare value
-  SBI(TCCR1B, 7);     //Clear timer on match
-  SBI(TCCR1B, 6);     //Reset Timer1
-  SBI(TIMSK, 6);      //Enable Timer1 Compare interrupts
-  SBI(SREG, 7);       //Enable global interrupts [can use sei()]
+  SET_BIT_NUMBER(TCCR1B, 7);     //Clear timer on match
+  SET_BIT_NUMBER(TCCR1B, 6);     //Reset Timer1
+  SET_BIT_NUMBER(TIMSK, 6);      //Enable Timer1 Compare interrupts
+  SET_BIT_NUMBER(SREG, 7);       //Enable global interrupts [can use sei()]
 
   while(1)
   {
