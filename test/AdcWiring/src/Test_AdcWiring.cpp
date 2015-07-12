@@ -31,7 +31,7 @@ TEST_GROUP(AdcWiring)
 //*******************//
 //*** Unit Tests! ***//
 //*******************//
-TEST(AdcWiring, RegistersZeroAfterInit)
+TEST(AdcWiring, RegistersZeroAfterSetup)
 {
   LONGS_EQUAL(0, ADCSR);
   LONGS_EQUAL(0, ADMUX);

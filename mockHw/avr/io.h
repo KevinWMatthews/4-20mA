@@ -3,7 +3,13 @@
 
 #include "DataTypes.h"
 
-//Explicitly mock registers
+
+
+//**********************//
+//*** Mock Registers ***//
+//**********************//
+//Found in chip-specific io.h files (iotn26.h, etc)
+
 //*** ADC control ***//
 extern uint8_t ADCL;
 extern uint8_t ADCH;
@@ -16,9 +22,9 @@ extern uint8_t DDRB;
 extern uint8_t PORTA;
 extern uint8_t PORTB;
 
-
-
-//*** Copied from <avr/io.h> ***//
+//*** Timer/Counter 1 ***//
+extern uint8_t OCR1C;
+extern uint8_t TCCR1B;
 
 //*** ADC control ***//
 // #define ADCL    _SFR_IO8(0x04)
@@ -72,5 +78,25 @@ extern uint8_t PORTB;
 #define PB5     5
 #define PB6     6
 #define PB7     7
+
+
+//*** Timer/Counter 1 ***//
+// #define OCR1C   _SFR_IO8(0x2B)
+
+// #define TCCR1B  _SFR_IO8(0x2F)
+#define CS10    0
+#define CS11    1
+#define CS12    2
+#define CS13    3
+#define PSR1    6
+#define CTC1    7
+
+
+
+//Foundin common.h and included by io.h
+//SREG
+
+
+
 
 #endif
