@@ -211,32 +211,32 @@ void TimeService_TimerTick(void)
 //I added an extra layer of abstraction to make it easier to modify (hopefully)
 //Maybe I'll discover a better way to test the module, in which case I'll modify these Private functions
 //while leaving the file's static functions alone.
-PeriodicAlarmCallback TimeService_Private_GetCallback(PeriodicAlarm self)
+PeriodicAlarmCallback TimeServicePrivate_GetCallback(PeriodicAlarm self)
 {
   return getCallback(self);
 }
 
-int16_t TimeService_Private_GetPeriod(PeriodicAlarm self)
+int16_t TimeServicePrivate_GetPeriod(PeriodicAlarm self)
 {
   return getPeriod(self);
 }
 
-void TimeService_Private_SetCounter(PeriodicAlarm self, int16_t value)
+void TimeServicePrivate_SetCounter(PeriodicAlarm self, int16_t value)
 {
   setCounter(self, value);
 }
 
-int16_t TimeService_Private_GetCounter(PeriodicAlarm self)
+int16_t TimeServicePrivate_GetCounter(PeriodicAlarm self)
 {
   return getCounter(self);
 }
 
-void TimeService_Private_SetExecuteCallbackFlag(PeriodicAlarm self, BOOL executeCallbackNow)
+void TimeServicePrivate_SetExecuteCallbackFlag(PeriodicAlarm self, BOOL executeCallbackNow)
 {
   return setExecuteCallbackNowFlag(self, executeCallbackNow);
 }
 
-BOOL TimeService_Private_GetExecuteCallbackFlag(PeriodicAlarm self)
+BOOL TimeServicePrivate_GetExecuteCallbackFlag(PeriodicAlarm self)
 {
   return getExecuteCallbackNowFlag(self);
 }

@@ -64,6 +64,6 @@ void TimeService_TimerTick(void);
 
 
 
-#include "TimeService_Private.h"
+#include "TimeServicePrivate.h"
 
 #endif

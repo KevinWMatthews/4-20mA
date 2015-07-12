@@ -5,33 +5,15 @@
 
 
 
-//**********************//
-//*** Mock Registers ***//
-//**********************//
-//Found in chip-specific io.h files (iotn26.h, etc)
-
-//*** ADC control ***//
-extern uint8_t ADCL;
-extern uint8_t ADCH;
-extern uint8_t ADCSR;
-extern uint8_t ADMUX;
-
-//*** GPIO lines ***//
-extern uint8_t DDRA;
-extern uint8_t DDRB;
-extern uint8_t PORTA;
-extern uint8_t PORTB;
-
-//*** Timer/Counter 1 ***//
-extern uint8_t OCR1C;
-extern uint8_t TCCR1B;
-
 //*** ADC control ***//
 // #define ADCL    _SFR_IO8(0x04)
 // #define ADCH    _SFR_IO8(0x05)
+extern uint8_t ADCL;
+extern uint8_t ADCH;
 
 //ADCSR - ADC Control and Status Register
 // #define ADCSR   _SFR_IO8(0x06)
+extern uint8_t ADCSR;
 #define ADPS0   0
 #define ADPS1   1
 #define ADPS2   2
@@ -43,6 +25,7 @@ extern uint8_t TCCR1B;
 
 //ADMUX - ADC Multiplexer Selection Register
 // #define ADMUX   _SFR_IO8(0x07)
+extern uint8_t ADMUX;
 #define MUX0    0
 #define MUX1    1
 #define MUX2    2
@@ -56,8 +39,11 @@ extern uint8_t TCCR1B;
 
 //*** GPIO lines ***//
 // #define DDRA    _SFR_IO8(0x1A)
+extern uint8_t DDRA;
+
 
 // #define PORTA   _SFR_IO8(0x1B)
+extern uint8_t PORTA;
 #define PA0     0
 #define PA1     1
 #define PA2     2
@@ -68,8 +54,10 @@ extern uint8_t TCCR1B;
 #define PA7     7
 
 // #define DDRB    _SFR_IO8(0x17)
+extern uint8_t DDRB;
 
 // #define PORTB   _SFR_IO8(0x18)
+extern uint8_t PORTB;
 #define PB0     0
 #define PB1     1
 #define PB2     2
@@ -82,8 +70,10 @@ extern uint8_t TCCR1B;
 
 //*** Timer/Counter 1 ***//
 // #define OCR1C   _SFR_IO8(0x2B)
+extern uint8_t OCR1C;
 
 // #define TCCR1B  _SFR_IO8(0x2F)
+extern uint8_t TCCR1B;
 #define CS10    0
 #define CS11    1
 #define CS12    2
@@ -91,6 +81,14 @@ extern uint8_t TCCR1B;
 #define PSR1    6
 #define CTC1    7
 
+
+//*** Timer/Counter Interrupt Mask Register ***//
+// #define TIMSK   _SFR_IO8(0x39)
+extern uint8_t TIMSK;
+#define TOIE0   1
+#define TOIE1   2
+#define OCIE1B  5
+#define OCIE1A  6
 
 
 //Foundin common.h and included by io.h

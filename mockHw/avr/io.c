@@ -15,3 +15,5 @@ uint8_t PORTB;
 //*** Timer/Counter 1 ***//
 uint8_t OCR1C;
 uint8_t TCCR1B;
+
+uint8_t TIMSK;

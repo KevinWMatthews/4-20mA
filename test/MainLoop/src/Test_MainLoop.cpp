@@ -101,18 +101,18 @@ TEST(MainLoop, NoCallbacksIfIsntTime)
 TEST(MainLoop, AdcConversionExecutesIfTime)
 {
   TimeService_ActivatePeriodicAlarm(AdcConversion);
-  TimeService_Private_SetCounter(AdcConversion, 999);
+  TimeServicePrivate_SetCounter(AdcConversion, 999);
   TimeService_TimerTick();
   mock().expectOneCall("Adc_StartConversion")
         .andReturnValue(ADC_CONVERSION_STARTED);
   TimeService_ServiceSingleCallback(AdcConversion, (void*)&getReading);
-  LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeService_Private_GetCounter(getReading));
+  LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeServicePrivate_GetCounter(getReading));
 }
 
 TEST(MainLoop, ReadAdcExitsImmediatelyIfConversionWasBusy)
 {
   TimeService_ActivatePeriodicAlarm(getReading);
-  TimeService_Private_SetCounter(getReading, 9);
+  TimeServicePrivate_SetCounter(getReading, 9);
   MainLoop_Private_SetAdcConversionStatus(ADC_CONVERSION_BUSY);
   TimeService_TimerTick();
 
@@ -125,7 +125,7 @@ TEST(MainLoop, ReadAdcExitsIfReadBusy)
   int16_t adcOutput = 14;
 
   TimeService_ActivatePeriodicAlarm(getReading);
-  TimeService_Private_SetCounter(getReading, 9);
+  TimeServicePrivate_SetCounter(getReading, 9);
   MainLoop_Private_SetAdcConversionStatus(ADC_CONVERSION_STARTED);
   TimeService_TimerTick();
 
@@ -141,7 +141,7 @@ TEST(MainLoop, ReadAdcSuccess)
 {
   int16_t adcOutput = 1000;
   TimeService_ActivatePeriodicAlarm(getReading);
-  TimeService_Private_SetCounter(getReading, 9);
+  TimeServicePrivate_SetCounter(getReading, 9);
   MainLoop_Private_SetAdcConversionStatus(ADC_CONVERSION_STARTED);
   TimeService_TimerTick();
 
@@ -156,13 +156,13 @@ TEST(MainLoop, ReadAdcSuccess)
 
   TimeService_ServiceSingleCallback(getReading, (void*)&getReadingParameters);
   LONGS_EQUAL(20, ledNumberDeadDrop);
-  LONGS_EQUAL(PA_INACTIVE, TimeService_Private_GetCounter(getReading));
+  LONGS_EQUAL(PA_INACTIVE, TimeServicePrivate_GetCounter(getReading));
 }
 
 TEST(MainLoop, UpdateDisplayExecutesIfItsTime)
 {
   TimeService_ActivatePeriodicAlarm(displayUpdate);
-  TimeService_Private_SetCounter(displayUpdate, 249);
+  TimeServicePrivate_SetCounter(displayUpdate, 249);
   TimeService_TimerTick();
   mock().expectOneCall("LedNumber_ShowNumber");
   TimeService_ServiceSingleCallback(displayUpdate, (void*)ledDisplay);

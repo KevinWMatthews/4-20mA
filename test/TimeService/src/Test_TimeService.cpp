@@ -274,7 +274,7 @@ TEST(TimeService, CountersWontIncrementIfAlarmIsNotActivated)
   alarm = TimeService_AddPeriodicAlarm(callback, period);
   TimeService_TimerTick();
 
-  LONGS_EQUAL(PA_INACTIVE, TimeService_Private_GetCounter(alarm));
+  LONGS_EQUAL(PA_INACTIVE, TimeServicePrivate_GetCounter(alarm));
 }
 
 TEST(TimeService, CountersWontIncrementIfAlarmIsDeactivated)
@@ -285,7 +285,7 @@ TEST(TimeService, CountersWontIncrementIfAlarmIsDeactivated)
 
   TimeService_TimerTick();
 
-  LONGS_EQUAL(PA_INACTIVE, TimeService_Private_GetCounter(alarm));
+  LONGS_EQUAL(PA_INACTIVE, TimeServicePrivate_GetCounter(alarm));
 }
 
 TEST(TimeService, IncrementCounter)
@@ -295,19 +295,19 @@ TEST(TimeService, IncrementCounter)
 
   TimeService_TimerTick();
 
-  LONGS_EQUAL(1, TimeService_Private_GetCounter(alarm));
+  LONGS_EQUAL(1, TimeServicePrivate_GetCounter(alarm));
 }
 
 TEST(TimeService, TickSetsExecuteCallbackFlagAndResetsCounterWhenPeriodExpires)
 {
   alarm = TimeService_AddPeriodicAlarm(callback, period);
   TimeService_ActivatePeriodicAlarm(alarm);
-  TimeService_Private_SetCounter(alarm, period-1);
+  TimeServicePrivate_SetCounter(alarm, period-1);
 
   TimeService_TimerTick();
 
-  LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeService_Private_GetCounter(alarm));
-  LONGS_EQUAL(TRUE, TimeService_Private_GetExecuteCallbackFlag(alarm));
+  LONGS_EQUAL(PA_COUNTER_RESET_VALUE, TimeServicePrivate_GetCounter(alarm));
+  LONGS_EQUAL(TRUE, TimeServicePrivate_GetExecuteCallbackFlag(alarm));
 }
 
 
@@ -324,13 +324,13 @@ TEST(TimeService, CallbackExecutedWhenItsTime)
 {
   callback = callbackFunction;
   alarm = TimeService_AddPeriodicAlarm(callback, period);
-  TimeService_Private_SetExecuteCallbackFlag(alarm, TRUE);
+  TimeServicePrivate_SetExecuteCallbackFlag(alarm, TRUE);
 
   mock().expectOneCall("callbackFunction")
         .withParameter("params", nullPointer);
 
   TimeService_ServiceSingleCallback(alarm, nullPointer);
-  LONGS_EQUAL(FALSE, TimeService_Private_GetExecuteCallbackFlag(alarm));
+  LONGS_EQUAL(FALSE, TimeServicePrivate_GetExecuteCallbackFlag(alarm));
 }
 
 TEST(TimeService, ExecuteMultipleCallbacks)
@@ -346,9 +346,9 @@ TEST(TimeService, ExecuteMultipleCallbacks)
   alarm  = TimeService_AddPeriodicAlarm(callback,  period);
   alarm2 = TimeService_AddPeriodicAlarm(callback2, period);
   alarm3 = TimeService_AddPeriodicAlarm(callback3, period);
-  TimeService_Private_SetExecuteCallbackFlag(alarm, TRUE);
-  TimeService_Private_SetExecuteCallbackFlag(alarm2, TRUE);
-  TimeService_Private_SetExecuteCallbackFlag(alarm3, TRUE);
+  TimeServicePrivate_SetExecuteCallbackFlag(alarm, TRUE);
+  TimeServicePrivate_SetExecuteCallbackFlag(alarm2, TRUE);
+  TimeServicePrivate_SetExecuteCallbackFlag(alarm3, TRUE);
 
   mock().expectOneCall("callbackFunction")
         .withParameter("params", nullPointer);
@@ -361,9 +361,9 @@ TEST(TimeService, ExecuteMultipleCallbacks)
   TimeService_ServiceSingleCallback(alarm, nullPointer);
   TimeService_ServiceSingleCallback(alarm2, nullPointer);
   TimeService_ServiceSingleCallback(alarm3, nullPointer);
-  LONGS_EQUAL(FALSE, TimeService_Private_GetExecuteCallbackFlag(alarm));
-  LONGS_EQUAL(FALSE, TimeService_Private_GetExecuteCallbackFlag(alarm2));
-  LONGS_EQUAL(FALSE, TimeService_Private_GetExecuteCallbackFlag(alarm3));
+  LONGS_EQUAL(FALSE, TimeServicePrivate_GetExecuteCallbackFlag(alarm));
+  LONGS_EQUAL(FALSE, TimeServicePrivate_GetExecuteCallbackFlag(alarm2));
+  LONGS_EQUAL(FALSE, TimeServicePrivate_GetExecuteCallbackFlag(alarm3));
 }
 
 TEST(TimeService, OnlyCallbacksWithFlagWillExecute)
@@ -379,9 +379,9 @@ PeriodicAlarm alarm2;
   alarm  = TimeService_AddPeriodicAlarm(callback,  period);
   alarm2 = TimeService_AddPeriodicAlarm(callback2, period);
   alarm3 = TimeService_AddPeriodicAlarm(callback3, period);
-  TimeService_Private_SetExecuteCallbackFlag(alarm, TRUE);
-  TimeService_Private_SetExecuteCallbackFlag(alarm2, FALSE);
-  TimeService_Private_SetExecuteCallbackFlag(alarm3, TRUE);
+  TimeServicePrivate_SetExecuteCallbackFlag(alarm, TRUE);
+  TimeServicePrivate_SetExecuteCallbackFlag(alarm2, FALSE);
+  TimeServicePrivate_SetExecuteCallbackFlag(alarm3, TRUE);
 
   mock().expectOneCall("callbackFunction")
         .withParameter("params", nullPointer);
@@ -399,12 +399,12 @@ TEST(TimeService, SeveralServicesDontDisruptCounter)
   callback = callbackFunction;
   alarm = TimeService_AddPeriodicAlarm(callback, period);
   TimeService_ActivatePeriodicAlarm(alarm);
-  TimeService_Private_SetCounter(alarm, period-11);
+  TimeServicePrivate_SetCounter(alarm, period-11);
   TimeService_TimerTick();
 
-  LONGS_EQUAL(period-10, TimeService_Private_GetCounter(alarm));
+  LONGS_EQUAL(period-10, TimeServicePrivate_GetCounter(alarm));
   TimeService_ServiceSingleCallback(alarm, nullPointer);
-  LONGS_EQUAL(period-10, TimeService_Private_GetCounter(alarm));
+  LONGS_EQUAL(period-10, TimeServicePrivate_GetCounter(alarm));
   TimeService_ServiceSingleCallback(alarm, nullPointer);
-  LONGS_EQUAL(period-10, TimeService_Private_GetCounter(alarm));
+  LONGS_EQUAL(period-10, TimeServicePrivate_GetCounter(alarm));
 }

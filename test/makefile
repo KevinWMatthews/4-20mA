@@ -7,6 +7,7 @@
 TESTS_TO_RUN= BitManip\
 Adc AdcWiring LineFit LedDigit LedDigitWiring LedNumber \
              LedNumberWiring LedNumber NumericFunctions TimeService TimeServiceWiring \
+             TimeServiceWiring_ATtiny26
 
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
@@ -36,6 +37,7 @@ TIMESERVICE_DIR=TimeService
 
 TIMESERVICEWIRING_DIR=TimeServiceWiring
 
+TIMESERVICEWIRING_ATTINY26_DIR=TimeServiceWiring_ATtiny26
 
 
 #Create a makefile target for each series of tests
@@ -77,6 +79,9 @@ TimeService:
 
 TimeServiceWiring:
 	$(MAKE_TESTS) $(TIMESERVICEWIRING_DIR) $(MAKECMDGOALS)
+
+TimeServiceWiring_ATtiny26:
+	$(MAKE_TESTS) $(TIMESERVICEWIRING_ATTINY26_DIR) $(MAKECMDGOALS)
 
 
 

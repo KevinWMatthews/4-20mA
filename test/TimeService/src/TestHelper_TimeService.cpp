@@ -32,12 +32,12 @@ void callbackFunction3(void * params)
 //Condition checks
 void checkCallbackAndPeriod(PeriodicAlarm alarm, PeriodicAlarmCallback callbackFunction, int16_t alarmPeriod)
 {
-  POINTERS_EQUAL(callbackFunction, TimeService_Private_GetCallback(alarm));
-  LONGS_EQUAL(alarmPeriod, TimeService_Private_GetPeriod(alarm));
+  POINTERS_EQUAL(callbackFunction, TimeServicePrivate_GetCallback(alarm));
+  LONGS_EQUAL(alarmPeriod, TimeServicePrivate_GetPeriod(alarm));
 }
 
 void checkCounterAndFlag(PeriodicAlarm self, int16_t counter, BOOL executeNow)
 {
-  LONGS_EQUAL(counter, TimeService_Private_GetCounter(self));
-  LONGS_EQUAL(executeNow, TimeService_Private_GetExecuteCallbackFlag(self));
+  LONGS_EQUAL(counter, TimeServicePrivate_GetCounter(self));
+  LONGS_EQUAL(executeNow, TimeServicePrivate_GetExecuteCallbackFlag(self));
 }
