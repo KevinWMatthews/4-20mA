@@ -6,6 +6,7 @@
 enum
 {
   ADC_CONVERSION_BUSY    = -1,
+  ADC_INACTIVE           = 0,
   ADC_CONVERSION_STARTED = 1
 };
 

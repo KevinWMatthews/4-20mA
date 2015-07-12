@@ -17,3 +17,6 @@ uint8_t OCR1C;
 uint8_t TCCR1B;
 
 uint8_t TIMSK;
+
+//*** Global Interrupts ***//
+uint8_t SREG;

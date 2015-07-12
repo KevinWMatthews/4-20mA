@@ -6,26 +6,23 @@ endif
 ###############################
 ### Target-Specific Details ###
 ###############################
-TARGET_NAME=TimeService
+TARGET_NAME=4-20mA
 
 #mcu type according to avr-gcc
 MCU=attiny26
 
 #Root directory of the project as a whole, which may not be the current directory
-ROOT_DIR=../..
+ROOT_DIR=.
 SRC_DIRS=src
-INC_DIRS=inc $(ROOT_DIR)/inc
+INC_DIRS=inc
 #TODO LIB_DIRS=
 #Static lirary names without 'lib' prefix and .a suffix
 #TODO LIBS_LIST=
 OBJ_DIR=obj
 TARGET_DIR=build
 
-#Specify specific source files that aren't in the above directories (hopefully a temporary situation)
-SRC_FILES= \
-  $(ROOT_DIR)/src/TimeService.c \
-  $(ROOT_DIR)/src/TimeServiceWiring.c \
-  $(ROOT_DIR)/src/TimeServiceWiring_ATtiny26.c
+#Specify specific source files that aren't in the above directories (hopefully a very temporary situation)
+SRC_FILES=
 
 #Optimization level
 #use s (size opt), 1, 2, 3, 0 (off), fast, g (debugging)

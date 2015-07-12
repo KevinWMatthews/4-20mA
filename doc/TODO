@@ -1,5 +1,13 @@
 TODO
 
+Revamp ADC with new hardware/software division!
+test adc_inactive return code?
+
+Read through the manual and make chip files for the ATtiny861. Gotta get this on the hardware again!
+
+
+Think about how to handle interrupts. Should I take the timer's interrupt and put it inside the TimeService?
+
 
 
     ~~~ Documentation ~~~

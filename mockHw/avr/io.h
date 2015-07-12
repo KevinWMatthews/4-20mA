@@ -91,9 +91,18 @@ extern uint8_t TIMSK;
 #define OCIE1A  6
 
 
-//Foundin common.h and included by io.h
-//SREG
 
+//*** Global Interrupts ***//
+//I believe that is is defined in common.h and included by io.h
+/* Status Register */
+// #ifndef SREG
+// #  if __AVR_ARCH__ >= 100
+// #    define SREG _SFR_MEM8(0x3F)
+// #  else
+// #    define SREG _SFR_IO8(0x3F)
+// #  endif
+// #endif
+extern uint8_t SREG;
 
 
 

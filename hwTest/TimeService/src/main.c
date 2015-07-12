@@ -28,14 +28,16 @@ int main(void)
 
   //Timer setup
   // 8MHz system clock / (64 Prescaler * 125 compare value) = 1000 Hz / match
-  CLEAR_BIT_NUMBER(TCCR1B, CS13);  //Set Prescaler to 0111 for SystemClock/64
-  SET_BIT_NUMBER(TCCR1B, CS12);
-  SET_BIT_NUMBER(TCCR1B, CS11);
-  SET_BIT_NUMBER(TCCR1B, CS10);
-  OCR1C = 125;        //Set Timer Compare value
-  SET_BIT_NUMBER(TCCR1B, 7);     //Clear timer on match
-  SET_BIT_NUMBER(TCCR1B, 6);     //Reset Timer1
-  SET_BIT_NUMBER(TIMSK, 6);      //Enable Timer1 Compare interrupts
+  // CLEAR_BIT_NUMBER(TCCR1B, CS13);  //Set Prescaler to 0111 for SystemClock/64
+  // SET_BIT_NUMBER(TCCR1B, CS12);
+  // SET_BIT_NUMBER(TCCR1B, CS11);
+  // SET_BIT_NUMBER(TCCR1B, CS10);
+  // OCR1C = 125;        //Set Timer Compare value
+  // SET_BIT_NUMBER(TCCR1B, 7);     //Clear timer on match
+  // SET_BIT_NUMBER(TCCR1B, 6);     //Reset Timer1
+  // SET_BIT_NUMBER(TIMSK, 6);      //Enable Timer1 Compare interrupts
+  TimeService_HwSetup();  //This needs to be tested
+
   SET_BIT_NUMBER(SREG, 7);       //Enable global interrupts [can use sei()]
 
   while(1)

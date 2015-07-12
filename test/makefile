@@ -4,10 +4,21 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN= BitManip\
-Adc AdcWiring LineFit LedDigit LedDigitWiring LedNumber \
-             LedNumberWiring LedNumber NumericFunctions TimeService TimeServiceWiring \
-             TimeServiceWiring_ATtiny26
+TESTS_TO_RUN= \
+  Adc \
+  AdcWiring \
+  BitManip \
+  ChipFunctions \
+  LineFit \
+  LedDigit \
+  LedDigitWiring \
+  LedNumber \
+  LedNumberWiring \
+  LedNumber \
+  NumericFunctions \
+  TimeService \
+  TimeServiceWiring \
+  TimeServiceWiring_ATtiny26 \
 
 
 #Add the directory of the test's makefile (MakefileCppUTest.make) here
@@ -18,6 +29,8 @@ ADC_DIR=Adc
 ADCWIRING_DIR=AdcWiring
 
 BITMANIP_DIR=BitManip
+
+CHIPFUNCTIONS_DIR=ChipFunctions
 
 LINEFIT_DIR=LineFit
 
@@ -49,6 +62,9 @@ Adc:
 
 AdcWiring:
 	$(MAKE_TESTS) $(ADCWIRING_DIR) $(MAKECMDGOALS)
+
+ATtiny26:
+	$(MAKE_TESTS) $(ATTINY26_DIR) $(MAKECMDGOALS)
 
 BitManip:
 	$(MAKE_TESTS) $(BITMANIP_DIR) $(MAKECMDGOALS)
