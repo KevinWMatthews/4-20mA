@@ -1,13 +1,5 @@
 TODO
 
-Revamp ADC with new hardware/software division!
-test adc_inactive return code?
-
-Read through the manual and make chip files for the ATtiny861. Gotta get this on the hardware again!
-
-
-Think about how to handle interrupts. Should I take the timer's interrupt and put it inside the TimeService?
-
 
 
     ~~~ Documentation ~~~
@@ -20,6 +12,8 @@ Put some nice colors in the makefile to signal the start of a build.
 
 
     ~~~ Hardware ~~~
+Read through the manual and make chip files for the ATtiny861. Gotta get this on the hardware again!
+
 Revise/remove various hardware tests. They should either work and be useful or be gone.
 
 ? Set up the AVCC and VCC with a 100 nF cap and a 10uH:
@@ -30,8 +24,13 @@ Start to rig up my actual project.
 
 
     ~~~ Software ~~~
-Create tests for BitManip.h
-Round out available functions.
+Remove existing MainLoop and replace it with testMain.
+Of course, add tests to it.
+
+Revamp ADC with new hardware/software division!
+test adc_inactive return code?
+
+Think about how to handle interrupts. Should I take the timer's interrupt and put it inside the TimeService?
 
 Document and streamline testing for NULL pointers for a generic multi-instance module.
 
