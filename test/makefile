@@ -4,7 +4,7 @@
 
 ### User config ###
 #To run tests, add them to this list
-TESTS_TO_RUN=TimeService
+TESTS_TO_RUN=TimeServiceWiring
 #Adc AdcWiring LineFit LedDigit LedDigitWiring LedNumber \
 #             LedNumberWiring LedNumber MainLoop NumericFunctions TimeService
 
@@ -30,6 +30,9 @@ MAINLOOP_DIR=MainLoop
 NUMERICFUNCTIONS_DIR=NumericFunctions
 
 TIMESERVICE_DIR=TimeService
+
+TIMESERVICEWIRING_DIR=TimeServiceWiring
+
 
 
 #Create a makefile target for each series of tests
@@ -57,14 +60,18 @@ LedNumberWiring:
 LedNumber:
 	$(MAKE_TESTS) $(LEDNUMBER_DIR) $(MAKECMDGOALS)
 
-TimeService:
-	$(MAKE_TESTS) $(TIMESERVICE_DIR) $(MAKECMDGOALS)
-
 MainLoop:
 	$(MAKE_TESTS) $(MAINLOOP_DIR) $(MAKECMDGOALS)
 
 NumericFunctions:
 	$(MAKE_TESTS) $(NUMERICFUNCTIONS_DIR) $(MAKECMDGOALS)
+
+TimeService:
+	$(MAKE_TESTS) $(TIMESERVICE_DIR) $(MAKECMDGOALS)
+
+TimeServiceWiring:
+	$(MAKE_TESTS) $(TIMESERVICEWIRING_DIR) $(MAKECMDGOALS)
+
 
 
 ### Makefile targets ###
