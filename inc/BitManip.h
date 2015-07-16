@@ -41,6 +41,10 @@
 //Helper macros
 #define BITWISE_AND(bitmask1, bitmask2)  ((bitmask1) & (bitmask2))
 
-
+//This is GCC specific!
+//The compiler's return value is 1-indexed.
+//I return a 0-indexed value that can be used directly for bitshifting.
+//Manually return 0 if the bitmask is 0.
+#define RIGHTMOST_BIT_NUMBER(bitmask) ((bitmask) == 0 ? 0 : __builtin_ffs(bitmask) - 1)
 
 #endif

@@ -160,3 +160,23 @@ TEST(BitManip, SetBitmask_WillClearBits)
   SET_BITMASK(eightBit, 0x00, 0x18);
   BYTES_EQUAL(eightBit, 0xe7);
 }
+
+TEST(BitManip, RightMostBit_NoBitsSet)
+{
+  BYTES_EQUAL(0, RIGHTMOST_BIT_NUMBER(0x00));
+}
+
+TEST(BitManip, RightMostBit_LeastSignificantBitSet)
+{
+  BYTES_EQUAL(0, RIGHTMOST_BIT_NUMBER(0x01));
+}
+
+TEST(BitManip, RightMostBit_MostSignificantBitSet)
+{
+  BYTES_EQUAL(7, RIGHTMOST_BIT_NUMBER(0x80));
+}
+
+TEST(BitManip, RightMostBit_SeveralBitsSet)
+{
+  BYTES_EQUAL(3, RIGHTMOST_BIT_NUMBER(0x18));
+}
