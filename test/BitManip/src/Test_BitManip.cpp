@@ -180,3 +180,91 @@ TEST(BitManip, RightMostBit_SeveralBitsSet)
 {
   BYTES_EQUAL(3, RIGHTMOST_BIT_NUMBER(0x18));
 }
+
+TEST(BitManip, SetBitmaskShiftValue_NoNewValueNoBitmaskSetsNothing)
+{
+  BYTES_EQUAL(0x00, NEWMACRO(eightBit, 0x00, 0x00));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_NoBitmaskSetsNothing)
+{
+  BYTES_EQUAL(0x00, NEWMACRO(eightBit, 0xff, 0x00));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_NoNewValueSetsNothing)
+{
+  BYTES_EQUAL(0x00, NEWMACRO(eightBit, 0x00, 0xff));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_SetEntireBitmask)
+{
+  BYTES_EQUAL(0xff, NEWMACRO(eightBit, 0xff, 0xff));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_SetLeastSignificantBit)
+{
+  BYTES_EQUAL(0x01, NEWMACRO(eightBit, 0x01, 0x01));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_etMostSignificantBit)
+{
+  BYTES_EQUAL(0x80, NEWMACRO(eightBit, 0x01, 0x80));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_SetBitsWithinButNotOutsideBitmask)
+{
+  BYTES_EQUAL(0x14, NEWMACRO(eightBit, 0xff, 0x14));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_SetFewerBitsThanInBitmask)
+{
+  BYTES_EQUAL(0x42, NEWMACRO(eightBit, 0x42, 0xff));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_NoNewValueNoBitmaskClearsNothing)
+{
+  eightBit = 0xff;
+  BYTES_EQUAL(0xff, NEWMACRO(eightBit, 0x00, 0x00));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_AllNewValueBitSetFullBitmaskClearsNothing)
+{
+  eightBit = 0xff;
+  BYTES_EQUAL(0xff, NEWMACRO(eightBit, 0xff, 0xff));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_NoBitmaskClearsNothing)
+{
+  eightBit = 0xff;
+  BYTES_EQUAL(0xff, NEWMACRO(eightBit, 0xff, 0x00));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_ClearEntireBitmask)
+{
+  eightBit = 0xff;
+  BYTES_EQUAL(0x00, NEWMACRO(eightBit, 0x00, 0xff));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_ClearLeastSignificantBit)
+{
+  eightBit = 0xff;
+  BYTES_EQUAL(0xfe, NEWMACRO(eightBit, 0x00, 0x01));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_ClearMostSignificantBit)
+{
+  eightBit = 0xff;
+  BYTES_EQUAL(0x7f, NEWMACRO(eightBit, 0x00, 0x80));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_ClearWithinButNotOutsideBitmask)
+{
+  eightBit = 0xff;
+  BYTES_EQUAL(0xc3, NEWMACRO(eightBit, 0x00, 0x3c));
+}
+
+TEST(BitManip, SetBitmaskShiftValue_ClearFewerBitsThanBitmask)
+{
+  eightBit = 0xc3;
+  BYTES_EQUAL(0xff, NEWMACRO(eightBit, 0xff, 0x3c));
+}

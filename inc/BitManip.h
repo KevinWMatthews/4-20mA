@@ -3,6 +3,10 @@
 
 
 
+//Multi-statement macros cannot be rvalues or be placed within parenthesis!!
+
+
+
 //These functions expect bit in the form: 1<<bitNumber
 #define IF_BIT(variable, bit) (1 && BITWISE_AND(variable, bit))
 #define SET_BIT(variable, bit) ((variable) |= (bit))
@@ -32,11 +36,16 @@
 //Use this when the new value needs to be bit shifted.
 //For example, set bits 6 and 7 to 0b11 with
 // SET_BITMASK_SHIFT_VALUE(variable, 0b11, 0b11, 6)
-#define SET_BITMASK_SHIFT_VALUE(variable, newValue, bitsToSet, shiftForValue) \
+#define SET_BITMASK_SHIFT_VALUE(variable, newValue, bitsToSet, shiftForValue) { \
   CLEAR_BITMASK(variable, bitsToSet); \
-  (variable) |= BITWISE_AND((newValue) << (shiftForValue), bitsToSet)
+  (variable) |= BITWISE_AND((newValue) << (shiftForValue), bitsToSet); \
+}
 
-
+//Bitmask must be of consecutive bits!
+#define NEWMACRO(variable, newValue, bitsToSet) { \
+  CLEAR_BITMASK(variable, bitsToSet); \
+  (variable) |= BITWISE_AND((newValue) << RIGHTMOST_BIT_NUMBER(bitsToSet), bitsToSet); \
+}
 
 //Helper macros
 #define BITWISE_AND(bitmask1, bitmask2)  ((bitmask1) & (bitmask2))
@@ -46,5 +55,7 @@
 //I return a 0-indexed value that can be used directly for bitshifting.
 //Manually return 0 if the bitmask is 0.
 #define RIGHTMOST_BIT_NUMBER(bitmask) ((bitmask) == 0 ? 0 : __builtin_ffs(bitmask) - 1)
+
+
 
 #endif
