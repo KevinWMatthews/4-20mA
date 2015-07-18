@@ -28,7 +28,7 @@ TEST_GROUP(LedNumberWiring)
   }
 };
 
-TEST(LedNumberWiring, InitCheck)
+TEST(LedNumberWiring, HwSetup)
 {
   checkMemoryRegisters(0x0f, 0x0f);
 }

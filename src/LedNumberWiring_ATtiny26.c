@@ -8,12 +8,13 @@
 //~~~ Edit here to change hardware wiring! ~~~//
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //Currently only 4 LEDs are supported
-#define WIRINGPIN_NONE 0
-#define WIRINGPIN_LED1 (1<<PB0)
-#define WIRINGPIN_LED2 (1<<PB1)
-#define WIRINGPIN_LED3 (1<<PB2)
-#define WIRINGPIN_LED4 (1<<PB3)
-#define WIRINGPIN_ERROR 0xff
+#define WIRINGPIN_NONE    0
+#define WIRINGPIN_LED1    (1<<PB0)
+#define WIRINGPIN_LED2    (1<<PB1)
+#define WIRINGPIN_LED3    (1<<PB2)
+#define WIRINGPIN_LED4    (1<<PB3)
+#define WIRINGPIN_ERROR   0xff
+#define WIRINGPIN_BITMASK (WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //~~~ Edit here to change hardware wiring! ~~~//
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -32,18 +33,15 @@ static uint8_t convertPinToWiringPin(LedNumberWiring_Place pin);
 //************************//
 void LedNumberWiring_HwSetup(void)
 {
-  DDRB  |= WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
-  PORTB |= WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4;
+  SET_BITS(DDRB, WIRINGPIN_BITMASK);
+  SET_BITS(PORTB, WIRINGPIN_BITMASK);
 }
 
 void LedNumberWiring_SetSelectPin(LedNumberWiring_Place place)
 {
   uint8_t pin;
 
-  SET_BITS(PORTB, WIRINGPIN_LED1);
-  SET_BITS(PORTB, WIRINGPIN_LED2);
-  SET_BITS(PORTB, WIRINGPIN_LED3);
-  SET_BITS(PORTB, WIRINGPIN_LED4);
+  SET_BITS(PORTB, WIRINGPIN_BITMASK);
   pin = convertPinToWiringPin(place);
   if (pin == WIRINGPIN_NONE)
   {
