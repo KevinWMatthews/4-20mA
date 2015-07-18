@@ -42,6 +42,14 @@ TEST_GROUP(LedNumber)
     mock().checkExpectations();
     mock().clear();
   }
+
+  void expectShowNumber(LedNumberWiring_Place place, LedDigit_Value number)
+  {
+    expectTurnOffDigit();
+    expectSetSelectPin(place);
+    expectSetDigit(number);
+    expectShowDigit();
+  }
 };
 
 
@@ -140,34 +148,19 @@ TEST(LedNumber, ShowMaxDigits)
 {
   LedNumber_SetNumber(maxDigits, numberWithMaxDigits);
 
-  expectTurnOffDigit();
-  expectSetSelectPin(WIRINGLED_UNITS);
-  expectSetDigit(ZERO);
-  expectShowDigit();
+  expectShowNumber(WIRINGLED_UNITS, ZERO);
   LedNumber_ShowNumber(maxDigits);
 
-  expectTurnOffDigit();
-  expectSetSelectPin(WIRINGLED_TENS);
-  expectSetDigit(ONE);
-  expectShowDigit();
+  expectShowNumber(WIRINGLED_TENS, ONE);
   LedNumber_ShowNumber(maxDigits);
 
-  expectTurnOffDigit();
-  expectSetSelectPin(WIRINGLED_HUNDREDS);
-  expectSetDigit(TWO);
-  expectShowDigit();
+  expectShowNumber(WIRINGLED_HUNDREDS, TWO);
   LedNumber_ShowNumber(maxDigits);
 
-  expectTurnOffDigit();
-  expectSetSelectPin(WIRINGLED_THOUSANDS);
-  expectSetDigit(THREE);
-  expectShowDigit();
+  expectShowNumber(WIRINGLED_THOUSANDS, THREE);
   LedNumber_ShowNumber(maxDigits);
 
-  expectTurnOffDigit();
-  expectSetSelectPin(WIRINGLED_UNITS);
-  expectSetDigit(ZERO);
-  expectShowDigit();
+  expectShowNumber(WIRINGLED_UNITS, ZERO);
   LedNumber_ShowNumber(maxDigits);
 }
 
@@ -186,16 +179,10 @@ TEST(LedNumber, ShowMinDigits)
 {
   LedNumber_SetNumber(minDigits, numberWithMinDigits);
 
-  expectTurnOffDigit();
-  expectSetSelectPin(WIRINGLED_UNITS);
-  expectSetDigit(ZERO);
-  expectShowDigit();
+  expectShowNumber(WIRINGLED_UNITS, ZERO);
   LedNumber_ShowNumber(minDigits);
 
-  expectTurnOffDigit();
-  expectSetSelectPin(WIRINGLED_UNITS);
-  expectSetDigit(ZERO);
-  expectShowDigit();
+  expectShowNumber(WIRINGLED_UNITS, ZERO);
   LedNumber_ShowNumber(minDigits);
 }
 
