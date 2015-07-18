@@ -14,6 +14,8 @@ TEST_GROUP(LedDigitWiring)
 {
   void setup()
   {
+    DDRA = 0;
+    PORTA = 0;
     LedDigitWiring_HwSetup();
   }
 
@@ -21,6 +23,7 @@ TEST_GROUP(LedDigitWiring)
   {
   }
 
+  //Memory registers are defined or mocked in avr/io.h
   void checkMemoryRegisters(uint8_t ddra, uint8_t porta)
   {
     LONGS_EQUAL(ddra, DDRA);
@@ -33,7 +36,7 @@ TEST_GROUP(LedDigitWiring)
 //*******************//
 //*** Unit Tests! ***//
 //*******************//
-TEST(LedDigitWiring, Initialize)
+TEST(LedDigitWiring, HwSetup)
 {
   //Set GPIO to outputs, pull high to turn off LED digit segments
   checkMemoryRegisters(0xff, 0xff);
