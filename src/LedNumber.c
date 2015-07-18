@@ -45,6 +45,7 @@ void LedNumber_HwSetup(void)
 LedNumber LedNumber_Create(LedNumber_Place largestDigit)
 {
   LedNumber self;
+  int8_t i;
 
   if (isDigitOutOfBounds(largestDigit))
   {
@@ -58,8 +59,10 @@ LedNumber LedNumber_Create(LedNumber_Place largestDigit)
 
   self->digits = calloc(largestDigit+1, sizeof(LedDigit_Value));
   RETURN_VALUE_IF_NULL(self->digits, NULL);
-  memset(self->digits, NO_DIGIT, largestDigit+1);
-
+  for (i = LED_UNITS; i <= largestDigit; i++)
+  {
+    self->digits[i] = NO_DIGIT;
+  }
   self->largestDigit = largestDigit;
   self->visibleDigit = LED_NONE;
   return self;
