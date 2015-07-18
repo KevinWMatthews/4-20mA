@@ -4,7 +4,7 @@ ifndef SILENCE
 endif
 
 TARGET_NAME=4-20mA
-TEST_TARGET_NAME=TimeServiceWiringPrivate
+TEST_TARGET_NAME=TimeServiceWiringHw
 
 ### Directory structure ###
 # List all production code folders
