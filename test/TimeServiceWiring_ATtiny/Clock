@@ -1,0 +1,23 @@
+    Clock frequencies:
+Can we set up a timer to generate a 1kHz interrupt (once per ms)? Yes!!
+
+ATtiny861 system clock defaults to 1MHz.
+
+1MHz / 4 = 250000
+If we set our 8-bit counter to match at 250, we'll get
+250000 Hz / 250 = 1000 Hz
+Interrupts at 1 kHz.
+
+1MHz / 8 = 125000
+If we set our 8-bit counter to match at 125, we'll get
+125000 / 125 = 1000
+Interrupts at 1 kHz!
+Set timer prescaler to 8 and timer match to 125.
+:)
+
+8 mHz / 64 = 125000
+If we set our 8-bit counter to match at 125, we'll get
+125000 / 125 = 1000
+Interrupts at 1 kHz.
+
+We have options!

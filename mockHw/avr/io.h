@@ -4,6 +4,10 @@
 #include "DataTypes.h"
 
 
+//This mocking system is designed for a single ATtiny chip only.
+//We'll need to (re)implement the layers found in the avr headers
+//if we wish to support multiple chips.
+
 
 //*** ADC control ***//
 // #define ADCL    _SFR_IO8(0x04)
@@ -68,27 +72,37 @@ extern uint8_t PORTB;
 #define PB7     7
 
 
-//*** Timer/Counter 1 ***//
-// #define OCR1C   _SFR_IO8(0x2B)
-extern uint8_t OCR1C;
+//*** ATtiny861 Timer/Counter 0 ***//
+// #define TCCR0A  _SFR_IO8(0x15)
+extern uint8_t TCCR0A;
+#define CTC0    0
+#define ACIC0   3
+#define ICES0   4
+#define ICNC0   5
+#define ICEN0   6
+#define TCW0    7
 
-// #define TCCR1B  _SFR_IO8(0x2F)
-extern uint8_t TCCR1B;
-#define CS10    0
-#define CS11    1
-#define CS12    2
-#define CS13    3
-#define PSR1    6
-#define CTC1    7
+// #define TCCR0B  _SFR_IO8(0x33)
+extern uint8_t TCCR0B;
+#define CS00    0
+#define CS01    1
+#define CS02    2
+#define PSR0    3
+#define TSM     4
 
+// #define OCR0A   _SFR_IO8(0x13)
+extern uint8_t OCR0A;
 
-//*** Timer/Counter Interrupt Mask Register ***//
 // #define TIMSK   _SFR_IO8(0x39)
 extern uint8_t TIMSK;
+#define TICIE0  0
 #define TOIE0   1
 #define TOIE1   2
+#define OCIE0B  3
+#define OCIE0A  4
 #define OCIE1B  5
 #define OCIE1A  6
+#define OCIE1D  7
 
 
 

@@ -17,7 +17,6 @@ TESTS_TO_RUN= \
   LedNumber \
   NumericFunctions \
   TimeService \
-  TimeServiceWiring \
   TimeServiceWiring_ATtiny \
 
 
@@ -47,8 +46,6 @@ MAINLOOP_DIR=MainLoop
 NUMERICFUNCTIONS_DIR=NumericFunctions
 
 TIMESERVICE_DIR=TimeService
-
-TIMESERVICEWIRING_DIR=TimeServiceWiring
 
 TIMESERVICEWIRING_ATTINY_DIR=TimeServiceWiring_ATtiny
 
@@ -89,9 +86,6 @@ NumericFunctions:
 
 TimeService:
 	$(MAKE_TESTS) $(TIMESERVICE_DIR) $(MAKECMDGOALS)
-
-TimeServiceWiring:
-	$(MAKE_TESTS) $(TIMESERVICEWIRING_DIR) $(MAKECMDGOALS)
 
 TimeServiceWiring_ATtiny:
 	$(MAKE_TESTS) $(TIMESERVICEWIRING_ATTINY_DIR) $(MAKECMDGOALS)

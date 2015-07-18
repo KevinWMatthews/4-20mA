@@ -12,11 +12,12 @@ uint8_t DDRB;
 uint8_t PORTA;
 uint8_t PORTB;
 
-//*** Timer/Counter 1 ***//
-uint8_t OCR1C;
-uint8_t TCCR1B;
-
+//*** ATtiny861 Timer/Counter 0 ***//
+uint8_t TCCR0A;
+uint8_t TCCR0B;
+uint8_t OCR0A;
 uint8_t TIMSK;
+
 
 //*** Global Interrupts ***//
 uint8_t SREG;

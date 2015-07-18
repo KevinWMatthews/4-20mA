@@ -35,11 +35,13 @@ Tiny861_Timers
   Look into this bit when configuring the timer.
   Holds the value in PSR0, enabling you to hold the prescaler reset signal. This allows you to configure the timer without the prescaler advancing.
   ** I think you need to do this! **
+  ** Maybe not if we enable the timer last **
 
 • Bit 3 – PSR0: Prescaler Reset Timer/Counter0
   Write 1 to clear the prescaler.
-  Should we do this after configuration?
   Cleared by hardware unless the TSM bit (TCCR0B bit 4) is set.
+  ** Should we do this after configuration? **
+  ** Can't hurt **
 
 • Bits 2:0 – CS02, CS01, CS00: Clock Select0, Bit 2, 1, and 0
   Define the clock source/prescaler for Timer 0

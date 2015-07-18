@@ -4,7 +4,7 @@ extern "C"
 }
 #include "CppUTestExt/MockSupport.h"
 
-void TimeServiceWiring_HwSetup(void)
+void TimeServiceWiring_HardwareSetup(void)
 {
-  mock().actualCall("TimeServiceWiring_HwSetup");
+  mock().actualCall("TimeServiceWiring_HardwareSetup");
 }
