@@ -48,7 +48,7 @@ void LedDigitWiring_TurnSegmentOn(LedDigitWiring_Pin pin)
   {
     return;
   }
-  CLEAR_BIT(PORTA, wiringPin);
+  CLEAR_BITS(PORTA, wiringPin);
 }
 
 void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
@@ -60,7 +60,7 @@ void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
   {
     return;
   }
-  SET_BIT(PORTA, wiringPin);;
+  SET_BITS(PORTA, wiringPin);
 }
 
 

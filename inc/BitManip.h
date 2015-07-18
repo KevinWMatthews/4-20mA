@@ -4,51 +4,57 @@
 
 
 //Multi-statement macros cannot be rvalues or be placed within parenthesis!!
+//Bit numbers are zero-indexed.
 
 
-
-//These functions expect bit in the form: 1<<bitNumber
+//Check if a single bit is set, given by a bitmask.
+//To check multiple bits, use IF_BITMASK.
 #define IF_BIT(variable, bit) (1 && BITWISE_AND(variable, bit))
-#define SET_BIT(variable, bit) ((variable) |= (bit))
-#define CLEAR_BIT(variable, bit) ((variable) &= ~(bit))
 
-
-
-//These functions expect a bit number (0 to 7 for 8-bit integers)
+//Check if a signel bit is set, given by a bit number.
 #define IF_BIT_NUMBER(variable, bitNumber) (1 && BITWISE_AND(1<<(bitNumber), variable))
-#define SET_BIT_NUMBER(variable, bitNumber) ((variable) |= (1<<(bitNumber)))
-#define CLEAR_BIT_NUMBER(variable, bitNumber) ((variable) &= ~(1<<(bitNumber)))
 
-
-
-//These functions can process a bitmask containing multiple bits.
-//You must also pass a bitmask containing the bits that are to be affected.
+//Compare sections of two bitmasks.
 #define IF_BITMASK(expectedBitmask, actualBitmask, bitsToCheck) \
   ( ((bitsToCheck) != 0) && \
     (BITWISE_AND(expectedBitmask, bitsToCheck) == BITWISE_AND(actualBitmask, bitsToCheck)) )
 
-#define SET_BITMASK(variable, newValue, bitsToSet) \
-  CLEAR_BITMASK(variable, bitsToSet); \
-  ((variable) |= BITWISE_AND(newValue, bitsToSet))
+//Set a single or several bits given by a bitmask.
+//This macro will not clear bits.
+#define SET_BITS(variable, bits) ((variable) |= (bits))
 
-#define CLEAR_BITMASK(variable, bitmask) (variable) &= ~(bitmask)
+//Set a single bit given by a bit number.
+//This macro will not clear bits.
+#define SET_BIT_NUMBER(variable, bitNumber) ((variable) |= (1<<(bitNumber)))
 
+//Set and clear bits in variable so they match the new value
+#define SET_BITMASK_TO(variable, newValue, bitsToSet) \
+{ \
+  CLEAR_BITS(variable, bitsToSet); \
+  SET_BITS(variable, BITWISE_AND(newValue, bitsToSet)); \
+}
+
+//Set and clear bits in variable so they match the new value
 //Use this when the new value needs to be bit shifted.
-//For example, set bits 6 and 7 to 0b11 with
-// SET_BITMASK_SHIFT_VALUE(variable, 0b11, 0b11, 6)
-#define SET_BITMASK_SHIFT_VALUE(variable, newValue, bitsToSet, shiftForValue) { \
-  CLEAR_BITMASK(variable, bitsToSet); \
-  (variable) |= BITWISE_AND((newValue) << (shiftForValue), bitsToSet); \
+//For example, set the bits 4 to 7 to 0x55 with
+// SHIFT_AND_SET_BITMASK_TO(variable, 0x55, 0xf0)
+//Bitmask must be of consecutive bits!
+#define SHIFT_AND_SET_BITMASK_TO(variable, newValue, bitsToSet) \
+{ \
+  CLEAR_BITS(variable, bitsToSet); \
+  SET_BITS(variable, BITWISE_AND((newValue) << RIGHTMOST_BIT_NUMBER(bitsToSet), bitsToSet)); \
 }
 
-//Bitmask must be of consecutive bits!
-#define NEWMACRO(variable, newValue, bitsToSet) { \
-  CLEAR_BITMASK(variable, bitsToSet); \
-  (variable) |= BITWISE_AND((newValue) << RIGHTMOST_BIT_NUMBER(bitsToSet), bitsToSet); \
-}
+//Clear a single or several bits given by a bitmask
+#define CLEAR_BITS(variable, bits) ((variable) &= ~(bits))
+
+//Clear a single bit given by a bit number
+#define CLEAR_BIT_NUMBER(variable, bitNumber) ((variable) &= ~(1<<(bitNumber)))
+
+
 
 //Helper macros
-#define BITWISE_AND(bitmask1, bitmask2)  ((bitmask1) & (bitmask2))
+#define BITWISE_AND(bitmask1, bitmask2) ((bitmask1) & (bitmask2))
 
 //This is GCC specific!
 //The compiler's return value is 1-indexed.
