@@ -207,3 +207,16 @@ TEST(LedNumber, SetBeyondLargestDigit)
   expectShowNumber(WIRINGLED_UNITS, NO_DIGIT);
   LedNumber_ShowNumber(minDigits);
 }
+
+TEST(LedNumber, SetRejectsNegativeNumbers)
+{
+  numberWithMinDigits = -7;
+  LedNumber_SetNumber(minDigits, numberWithMinDigits);
+  expectShowNumber(WIRINGLED_UNITS, NO_DIGIT);
+  LedNumber_ShowNumber(minDigits);
+
+  numberWithMaxDigits = -1234;
+  LedNumber_SetNumber(maxDigits, numberWithMaxDigits);
+  expectShowNumber(WIRINGLED_UNITS, NO_DIGIT);
+  LedNumber_ShowNumber(maxDigits);
+}

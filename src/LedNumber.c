@@ -29,7 +29,7 @@ static LedDigit_Value getDigitFromNumber(int16_t number, LedNumber_Place place);
 static BOOL isDigitOutOfBounds(LedNumber_Place place);
 static BOOL isDigitVisible(LedNumber_Place place);
 static BOOL isBeyondLargestDigit(LedNumber self);
-static BOOL isNumberTooLarge(LedNumber self, int16_t number);
+static BOOL isNumberOutOfRange(LedNumber self, int16_t number);
 
 
 
@@ -89,7 +89,7 @@ void LedNumber_SetNumber(LedNumber self, int16_t number)
 
   RETURN_IF_NULL(self);
 
-  if (isNumberTooLarge(self, number) == TRUE)
+  if (isNumberOutOfRange(self, number) == TRUE )
   {
     return;
   }
@@ -172,7 +172,11 @@ static BOOL isBeyondLargestDigit(LedNumber self)
   return self->visibleDigit > self->largestDigit;
 }
 
-static BOOL isNumberTooLarge(LedNumber self, int16_t number)
+static BOOL isNumberOutOfRange(LedNumber self, int16_t number)
 {
+  if (number < 0)
+  {
+    return TRUE;
+  }
   return getDigitFromNumber(number, (LedNumber_Place)(self->largestDigit+1)) != 0;
 }
