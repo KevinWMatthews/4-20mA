@@ -94,7 +94,6 @@ void LedNumber_SetNumber(LedNumber self, int16_t number)
   {
     self->digits[place] = getDigitFromNumber(number, place);
   }
-  self->visibleDigit = LED_UNITS;
 }
 
 void LedNumber_ShowNumber(LedNumber self)
@@ -105,7 +104,7 @@ void LedNumber_ShowNumber(LedNumber self)
 
   if (!isDigitVisible(self->visibleDigit))
   {
-    return;
+    self->visibleDigit = LED_UNITS;
   }
   if (isBeyondLargestDigit(self))   //Wraparound
   {

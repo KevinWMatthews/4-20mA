@@ -102,6 +102,7 @@ TEST(LedNumber, HardwareSetup)
 //*** Test private functions ***//
 TEST(LedNumber, ShowNothingAfterCreate)
 {
+  expectShowNumber(WIRINGLED_UNITS, NO_DIGIT);
   LedNumber_ShowNumber(maxDigits);
 }
 
@@ -164,9 +165,23 @@ TEST(LedNumber, ShowMaxDigits)
   LedNumber_ShowNumber(maxDigits);
 }
 
+TEST(LedNumber, CurrentDigitIncrementsRegardlessOfSetNumber)
+{
+  LedNumber_SetNumber(maxDigits, numberWithMaxDigits);
+
+  expectShowNumber(WIRINGLED_UNITS, ZERO);
+  LedNumber_ShowNumber(maxDigits);
+
+  LedNumber_SetNumber(maxDigits, numberWithMaxDigits);
+
+  expectShowNumber(WIRINGLED_TENS, ONE);
+  LedNumber_ShowNumber(maxDigits);
+}
+
 TEST(LedNumber, SetBeyondUpperBound)
 {
   LedNumber_SetNumber(maxDigits, numberWithMaxDigits*10);
+  expectShowNumber(WIRINGLED_UNITS, NO_DIGIT);
   LedNumber_ShowNumber(maxDigits);
 }
 
@@ -189,5 +204,6 @@ TEST(LedNumber, ShowMinDigits)
 TEST(LedNumber, SetBeyondLargestDigit)
 {
   LedNumber_SetNumber(minDigits, numberWithMinDigits+10);
+  expectShowNumber(WIRINGLED_UNITS, NO_DIGIT);
   LedNumber_ShowNumber(minDigits);
 }
