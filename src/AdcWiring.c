@@ -67,27 +67,22 @@ void AdcWiring_ClearInterruptFlag(void)
 //*** Private Functions ***//
 //*************************//
 //These functions are in the header file only to facilitate in-depth testing
-//These will go away in a later refactoring ;)
 void AdcWiring_Private_SelectReferenceVoltage(Adc_VoltageSource voltageSource)
 {
-  ADMUX &= ~(0x03 << REFS0);
-  ADMUX |= (voltageSource & 0x03) << REFS0;
+  SHIFT_AND_SET_BITMASK_TO(ADMUX, voltageSource, ADC_VOLTAGE_SOURCE_BITMASK);
 }
 
 void AdcWiring_Private_SelectResultAdjust(Adc_ResultAdjust resultAdjust)
 {
-  ADMUX &= ~(0x01 << ADLAR);
-  ADMUX |= (resultAdjust & 0x01) << ADLAR;
+  SHIFT_AND_SET_BITMASK_TO(ADMUX, resultAdjust, ADC_RESULT_ADJUST_BITMASK);
 }
 
 void AdcWiring_Private_SelectInputAndGain(Adc_AnalogInputAndGain inputAndGain)
 {
-  ADMUX &= ~(0x1f << MUX0);
-  ADMUX |= (inputAndGain & 0x1f) << MUX0;
+  SHIFT_AND_SET_BITMASK_TO(ADMUX, inputAndGain, ADC_ANALOG_INPUT_AND_GAIN_BITMASK);
 }
 
 void AdcWiring_Private_SelectPrescaleFactor(Adc_PrescaleFactor prescaleFactor)
 {
-  ADCSR &= ~(0x07 << ADPS0);
-  ADCSR |= (prescaleFactor & 0x07) << ADPS0;
+  SHIFT_AND_SET_BITMASK_TO(ADCSR, prescaleFactor, ADC_PRESCALE_FACTOR_BITMASK);
 }

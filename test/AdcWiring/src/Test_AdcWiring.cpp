@@ -13,12 +13,15 @@ extern "C"
 
 TEST_GROUP(AdcWiring)
 {
+  uint8_t expected;
+
   void setup()
   {
     ADCSR = 0;
     ADMUX = 0;
     ADCH = 0;
     ADCL = 0;
+    expected = 0;
   }
 
   void teardown()
@@ -39,12 +42,20 @@ TEST(AdcWiring, RegistersZeroAfterSetup)
   LONGS_EQUAL(0, ADCL);
 }
 
-TEST(AdcWiring, SelectReferenceVoltage)
+TEST(AdcWiring, SetAllReferenceVoltageBits)
 {
-  uint8_t expected = 0xff;
+  SET_BIT_NUMBER(expected, REFS1);
+  SET_BIT_NUMBER(expected, REFS0);
+
+  AdcWiring_Private_SelectReferenceVoltage(ADC_INTERNAL_WITH_AREF);
+  CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
+}
+
+TEST(AdcWiring, ClearAllReferenceVoltageBits)
+{
+  expected = 0xff;
   ADMUX = 0xff;
 
-  //ADC_AVCC = 0b00, so clear its bits
   CLEAR_BIT_NUMBER(expected, REFS1);
   CLEAR_BIT_NUMBER(expected, REFS0);
 
@@ -52,24 +63,42 @@ TEST(AdcWiring, SelectReferenceVoltage)
   CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
 }
 
-TEST(AdcWiring, SelectResultAdjust)
+TEST(AdcWiring, SetAllResultAdjustBits)
 {
-  uint8_t expected = 0xff;
+  SET_BIT_NUMBER(expected, ADLAR);
+
+  AdcWiring_Private_SelectResultAdjust(ADC_LEFT_ADJUST);
+  CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
+}
+
+TEST(AdcWiring, ClearAllResultAdjustBits)
+{
+  expected = 0xff;
   ADMUX = 0xff;
 
-  //ADC_RIGHT_ADJUST= 0b0, so clear its bit
   CLEAR_BIT_NUMBER(expected, ADLAR);
 
   AdcWiring_Private_SelectResultAdjust(ADC_RIGHT_ADJUST);
   CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
 }
 
-TEST(AdcWiring, SelectInputAndGain)
+TEST(AdcWiring, SetAllInputAndGainBits)
 {
-  uint8_t expected = 0xff;
+  SET_BIT_NUMBER(expected, MUX4);
+  SET_BIT_NUMBER(expected, MUX3);
+  SET_BIT_NUMBER(expected, MUX2);
+  SET_BIT_NUMBER(expected, MUX1);
+  SET_BIT_NUMBER(expected, MUX0);
+
+  AdcWiring_Private_SelectInputAndGain(ADC_GROUND);
+  CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
+}
+
+TEST(AdcWiring, ClearAllInputAndGainBits)
+{
+  expected = 0xff;
   ADMUX = 0xff;
 
-  //ADC_SINGLE_ENDED_ADC0 = 0b00000, so clear its bits
   CLEAR_BIT_NUMBER(expected, MUX4);
   CLEAR_BIT_NUMBER(expected, MUX3);
   CLEAR_BIT_NUMBER(expected, MUX2);
@@ -80,9 +109,19 @@ TEST(AdcWiring, SelectInputAndGain)
   CHECK_TRUE(IF_BITMASK(expected, ADMUX, 0xff));
 }
 
-TEST(AdcWiring, SetPrescaleFactor)
+TEST(AdcWiring, SetAllPrescaleFactorBits)
 {
-  uint8_t expected = 0xff;
+  SET_BIT_NUMBER(expected, ADPS2);
+  SET_BIT_NUMBER(expected, ADPS1);
+  SET_BIT_NUMBER(expected, ADPS0);
+
+  AdcWiring_Private_SelectPrescaleFactor(ADC_PRESCALE_FACTOR_128);
+  BYTES_EQUAL(expected, ADCSR);
+}
+
+TEST(AdcWiring, ClearAllPrescaleFactorBits)
+{
+  expected = 0xff;
   ADCSR = 0xff;
 
   CLEAR_BIT_NUMBER(expected, ADPS2);
@@ -97,6 +136,7 @@ TEST(AdcWiring, Init)
 {
   uint8_t expected_ADMUX = 0, expected_ADCSR = 0;
 
+  //Expanded for ease of manipulation
   CLEAR_BIT_NUMBER(expected_ADMUX, REFS1);
   CLEAR_BIT_NUMBER(expected_ADMUX, REFS0);
   CLEAR_BIT_NUMBER(expected_ADMUX, ADLAR);
