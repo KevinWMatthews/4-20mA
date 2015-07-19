@@ -79,9 +79,9 @@ int main(void)
   numericDisplay = LedNumber_Create(LED_THOUSANDS);
 
   //Set up interfaces
-  alarm_UpdateDisplay = TimeService_AddPeriodicAlarm(callback_UpdateDisplay, 2);
-  alarm_StartAdcRead = TimeService_AddPeriodicAlarm(callback_StartAdcRead, 1000);
-  alarm_AdcRead = TimeService_AddPeriodicAlarm(callback_ReadAdc, 25);
+  alarm_UpdateDisplay = TimeService_AddPeriodicAlarm(callback_UpdateDisplay, 2, FALSE);
+  alarm_StartAdcRead = TimeService_AddPeriodicAlarm(callback_StartAdcRead, 1000, FALSE);
+  alarm_AdcRead = TimeService_AddPeriodicAlarm(callback_ReadAdc, 25, FALSE);
   LedNumber_SetNumber(numericDisplay, 0);
   TimeService_ActivatePeriodicAlarm(alarm_UpdateDisplay);
   TimeService_ActivatePeriodicAlarm(alarm_StartAdcRead);

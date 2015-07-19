@@ -68,7 +68,7 @@ TEST(TimeService, HwSetup)
 //Add alarms
 TEST(TimeService, AddSingleAlarm)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   checkCallbackAndPeriod(alarm, callback, period);
   checkCounterAndFlag(alarm, PA_INACTIVE, FALSE);
 }
@@ -79,7 +79,7 @@ TEST(TimeService, AddMaxAlarms)
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period);
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   }
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
@@ -93,16 +93,16 @@ TEST(TimeService, ExceedMaxAlarms)
 {
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    CHECK_TRUE(TimeService_AddPeriodicAlarm(callback, period));
+    CHECK_TRUE(TimeService_AddPeriodicAlarm(callback, period, FALSE));
   }
-  POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm(callback, period));
+  POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm(callback, period, FALSE));
 }
 
 
 //Remove alarms
 TEST(TimeService, RemoveSingleAlarm)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_RemovePeriodicAlarm(alarm);
 
   checkCallbackAndPeriod(alarm, NULL, PA_UNUSED);
@@ -115,7 +115,7 @@ TEST(TimeService, RemoveMaxAlarms)
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period);
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   }
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
@@ -136,7 +136,7 @@ TEST(TimeService, PutHolesInAlarmArray)
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period);
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   }
 
   //Remove odd-numbered alarms
@@ -157,20 +157,20 @@ TEST(TimeService, PutHolesInAlarmArray)
   //Add odd-numbered alarms again
   for (int i = 1; i < MAX_PERIODIC_ALARMS; i += 2)
   {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period);
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period, FALSE);
     checkCallbackAndPeriod(alarmArray[i], callback, period);
     checkCounterAndFlag(alarmArray[i], PA_INACTIVE, FALSE);
   }
 
   //TimeService should be maxed out
-  POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm(callback, period));
+  POINTERS_EQUAL(NULL, TimeService_AddPeriodicAlarm(callback, period, FALSE));
 }
 
 
 //Destroy TimeService
 TEST(TimeService, DestroyWhenSingleAlarm)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_Destroy();
 
   checkCallbackAndPeriod(alarm, NULL, PA_UNUSED);
@@ -183,7 +183,7 @@ TEST(TimeService, DestroyWhenMaxAlarm)
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period);
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   }
 
   TimeService_Destroy();
@@ -199,7 +199,7 @@ TEST(TimeService, DestroyWhenMaxAlarm)
 //Activate alarms
 TEST(TimeService, ActivateSinglePeriodicAlarm)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
   checkCallbackAndPeriod(alarm, callback, period);
   checkCounterAndFlag(alarm, PA_COUNTER_RESET_VALUE, FALSE);
@@ -212,7 +212,7 @@ TEST(TimeService, ActivateMaxAlarms)
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callbackArray[i], i*100+period);
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callbackArray[i], i*100+period, FALSE);
   }
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
@@ -234,7 +234,7 @@ TEST(TimeService, ActivateNonconsecutiveAlarms)
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i++)
   {
-    alarmArray[i] = TimeService_AddPeriodicAlarm(callbackArray[i], i*100+period);
+    alarmArray[i] = TimeService_AddPeriodicAlarm(callbackArray[i], i*100+period, FALSE);
   }
 
   for (int i = 0; i < MAX_PERIODIC_ALARMS; i += 2)
@@ -260,7 +260,7 @@ TEST(TimeService, ActivateNonconsecutiveAlarms)
 //Deactivate alarms
 TEST(TimeService, DeactivateSinglePeriodicAlarm)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeService_DeactivatePeriodicAlarm(alarm);
   checkCallbackAndPeriod(alarm, callback, period);
@@ -271,7 +271,7 @@ TEST(TimeService, DeactivateSinglePeriodicAlarm)
 //Counter
 TEST(TimeService, CountersWontIncrementIfAlarmIsNotActivated)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_TimerTick();
 
   LONGS_EQUAL(PA_INACTIVE, TimeServicePrivate_GetCounter(alarm));
@@ -279,7 +279,7 @@ TEST(TimeService, CountersWontIncrementIfAlarmIsNotActivated)
 
 TEST(TimeService, CountersWontIncrementIfAlarmIsDeactivated)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeService_DeactivatePeriodicAlarm(alarm);
 
@@ -290,7 +290,7 @@ TEST(TimeService, CountersWontIncrementIfAlarmIsDeactivated)
 
 TEST(TimeService, IncrementCounter)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
 
   TimeService_TimerTick();
@@ -300,7 +300,7 @@ TEST(TimeService, IncrementCounter)
 
 TEST(TimeService, TickSetsExecuteCallbackFlagAndResetsCounterWhenPeriodExpires)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeServicePrivate_SetCounter(alarm, period-1);
 
@@ -320,9 +320,9 @@ TEST(TimeService, TickSetsMultipleCallbackFlags)
   callback  = callbackFunction;
   callback2 = callbackFunction2;
   callback3 = callbackFunction3;
-  alarm  = TimeService_AddPeriodicAlarm(callback,  period-1);
-  alarm2 = TimeService_AddPeriodicAlarm(callback2, period-1);
-  alarm3 = TimeService_AddPeriodicAlarm(callback3, period-1);
+  alarm  = TimeService_AddPeriodicAlarm(callback,  period-1, FALSE);
+  alarm2 = TimeService_AddPeriodicAlarm(callback2, period-1, FALSE);
+  alarm3 = TimeService_AddPeriodicAlarm(callback3, period-1, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeService_ActivatePeriodicAlarm(alarm2);
   TimeService_ActivatePeriodicAlarm(alarm3);
@@ -345,7 +345,7 @@ TEST(TimeService, TickSetsMultipleCallbackFlags)
 //Execute callback now flag
 TEST(TimeService, NoCallbackExecutedIfIsntTime)
 {
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
 
   TimeService_ServiceSingleCallback(alarm, nullPointer);
   //Mock will fail if callback is executed
@@ -354,7 +354,7 @@ TEST(TimeService, NoCallbackExecutedIfIsntTime)
 TEST(TimeService, CallbackExecutedWhenItsTime)
 {
   callback = callbackFunction;
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeServicePrivate_SetExecuteCallbackFlag(alarm, TRUE);
 
   mock().expectOneCall("callbackFunction")
@@ -374,9 +374,9 @@ TEST(TimeService, OnlyCallbacksWithFlagWillExecute)
   callback  = callbackFunction;
   callback2 = callbackFunction2;
   callback3 = callbackFunction3;
-  alarm  = TimeService_AddPeriodicAlarm(callback,  period);
-  alarm2 = TimeService_AddPeriodicAlarm(callback2, period);
-  alarm3 = TimeService_AddPeriodicAlarm(callback3, period);
+  alarm  = TimeService_AddPeriodicAlarm(callback,  period, FALSE);
+  alarm2 = TimeService_AddPeriodicAlarm(callback2, period, FALSE);
+  alarm3 = TimeService_AddPeriodicAlarm(callback3, period, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeService_ActivatePeriodicAlarm(alarm2);
   TimeService_ActivatePeriodicAlarm(alarm3);
@@ -397,7 +397,7 @@ TEST(TimeService, OnlyCallbacksWithFlagWillExecute)
 TEST(TimeService, SeveralServicesDontDisruptCounter)
 {
   callback = callbackFunction;
-  alarm = TimeService_AddPeriodicAlarm(callback, period);
+  alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   TimeService_ActivatePeriodicAlarm(alarm);
   TimeServicePrivate_SetCounter(alarm, period-11);
   TimeService_TimerTick();

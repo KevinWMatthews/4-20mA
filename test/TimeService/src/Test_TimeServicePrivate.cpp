@@ -23,7 +23,7 @@ TEST_GROUP(TimeServicePrivate)
     TimeService_Create();
     period = 42;
     callback = &callbackFunctionPrivateTest;
-    alarm = TimeService_AddPeriodicAlarm(callback, period);
+    alarm = TimeService_AddPeriodicAlarm(callback, period, FALSE);
   }
 
   void teardown()

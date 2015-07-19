@@ -36,7 +36,7 @@ void TimeService_Destroy(void);
 
 //Creates and returns a pointer to a new periodic alarm.
 //This alarm will not trigger until it is activated.
-PeriodicAlarm TimeService_AddPeriodicAlarm(PeriodicAlarmCallback callback, int16_t period);
+PeriodicAlarm TimeService_AddPeriodicAlarm(PeriodicAlarmCallback callback, int16_t period, BOOL executeInIsr);
 
 //Removes the given alarm from the TimeService.
 //The pointer to the alarm will be set to NULL.
