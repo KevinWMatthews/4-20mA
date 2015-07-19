@@ -8,11 +8,24 @@
 //****************************//
 //*** File-scope functions ***//
 //****************************//
+LedNumber numericDisplay;
+
+
 //Callbacks for TimeService
-void updateDisplay(void * params)
+typedef struct
 {
-  LedNumber self = (LedNumber)params;
-  LedNumber_ShowNumber(self);
+  LedNumber numericDisplay;
+  int16_t displayValue;
+} UpdateDisplayValueParams;
+void updateDisplayValue(void * params)
+{
+  UpdateDisplayValueParams * self = (UpdateDisplayValueParams *)params;
+  (self->displayValue)++;
+  if (self->displayValue >= 10000)
+  {
+    self->displayValue = 0;
+  }
+  LedNumber_SetNumber(self->numericDisplay, self->displayValue);
 }
 
 
@@ -21,9 +34,10 @@ void updateDisplay(void * params)
 //*******************//
 int main(void)
 {
-  PeriodicAlarm alarm_UpdateDisplay = NULL;
-  PeriodicAlarmCallback callback_UpdateDisplay = &updateDisplay;
-  LedNumber numericDisplay;
+  PeriodicAlarm alarm_UpdateDisplayValue;
+  PeriodicAlarmCallback callback_UpdateDisplayValue = &updateDisplayValue;
+  int16_t displayValue = 0;
+  UpdateDisplayValueParams updateDisplayValueParams;
 
   //Set up hardware
   TimeService_HwSetup();
@@ -34,20 +48,24 @@ int main(void)
   numericDisplay = LedNumber_Create(LED_THOUSANDS);
 
   //Set up interfaces
-  alarm_UpdateDisplay = TimeService_AddPeriodicAlarm(callback_UpdateDisplay, 2);
+  alarm_UpdateDisplayValue = TimeService_AddPeriodicAlarm(callback_UpdateDisplayValue, 1000);
+  updateDisplayValueParams.numericDisplay = numericDisplay;
+  updateDisplayValueParams.displayValue = displayValue;
+
   LedNumber_SetNumber(numericDisplay, 0);
-  TimeService_ActivatePeriodicAlarm(alarm_UpdateDisplay);
+  TimeService_ActivatePeriodicAlarm(alarm_UpdateDisplayValue);
 
   ChipFunctions_EnableGlobalInterrupts();
 
   while (1)
   {
-    TimeService_ServiceSingleCallback(alarm_UpdateDisplay, (void *)numericDisplay);
+    TimeService_ServiceSingleCallback(alarm_UpdateDisplayValue, (void *)&updateDisplayValueParams);
   }
 }
 
 //Interrupt handlers
-ISR(TIMER1_COMPA_vect)
+ISR(TIMER0_COMPA_vect)
 {
   TimeService_TimerTick();
+  LedNumber_ShowNumber(numericDisplay);
 }

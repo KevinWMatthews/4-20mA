@@ -1,5 +1,10 @@
 Todo_TimeService
 
+Need to find a way to give some tasks priority, or to execute from within the ISR (!).
+Need to learn how to do timing testing so that we can make sure that the screen update takes < 1 or 2 ms.
+
+
+
 Create separate test file for private functions?
 Rethink the organization of the tests. It's a bit messy right now.
 

@@ -29,7 +29,9 @@ void TimeServiceWiring_ClearTimerOnMatch(BOOL);
 typedef enum
 {
   TS_TIMER_STOPPED      = 0b000,
+  TS_NO_PRESCALING      = 0b001,
   TS_PRESCALE_FACTOR_8  = 0b010,
+  TS_PRESCALE_FACTOR_64 = 0b011,
   TS_EXTERNAL_T0_RISING = 0b111
 } TimeService_PrescaleFactor;
 #define BITMASK_TS_PRESCALE_FACTOR ((1<<CS02) | (1<<CS01) | (1<<CS00))
