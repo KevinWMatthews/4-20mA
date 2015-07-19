@@ -12,6 +12,12 @@ LedNumber numericDisplay;
 
 
 //Callbacks for TimeService
+void updateDisplay(void * params)
+{
+  LedNumber_ShowNumber(numericDisplay);
+}
+
+
 typedef struct
 {
   LedNumber numericDisplay;
@@ -34,7 +40,9 @@ void updateDisplayValue(void * params)
 //*******************//
 int main(void)
 {
+  PeriodicAlarm alarm_UpdateDisplay;
   PeriodicAlarm alarm_UpdateDisplayValue;
+  PeriodicAlarmCallback callback_UpdateDisplay = &updateDisplay;
   PeriodicAlarmCallback callback_UpdateDisplayValue = &updateDisplayValue;
   int16_t displayValue = 0;
   UpdateDisplayValueParams updateDisplayValueParams;
@@ -48,11 +56,13 @@ int main(void)
   numericDisplay = LedNumber_Create(LED_THOUSANDS);
 
   //Set up interfaces
-  alarm_UpdateDisplayValue = TimeService_AddPeriodicAlarm(callback_UpdateDisplayValue, 1000);
+  alarm_UpdateDisplay = TimeService_AddPeriodicAlarm(callback_UpdateDisplay, 5, TRUE);
+  alarm_UpdateDisplayValue = TimeService_AddPeriodicAlarm(callback_UpdateDisplayValue, 100, FALSE);
   updateDisplayValueParams.numericDisplay = numericDisplay;
   updateDisplayValueParams.displayValue = displayValue;
 
   LedNumber_SetNumber(numericDisplay, 0);
+  TimeService_ActivatePeriodicAlarm(alarm_UpdateDisplay);
   TimeService_ActivatePeriodicAlarm(alarm_UpdateDisplayValue);
 
   ChipFunctions_EnableGlobalInterrupts();
@@ -67,5 +77,4 @@ int main(void)
 ISR(TIMER0_COMPA_vect)
 {
   TimeService_TimerTick();
-  LedNumber_ShowNumber(numericDisplay);
 }
