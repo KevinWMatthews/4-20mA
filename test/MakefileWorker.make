@@ -12,30 +12,58 @@
 # Support for MCU-specific code may not yet be supported.
 # Dat hard to do.
 
+ifndef DEBUG
+	DEBUG=Y
+endif
+
 ### Generate target name ###
 TARGET=$(TARGET_DIR)/$(TARGET_NAME)
 
 
+
 ### Generate and set flags ###
+##User-entered flags
 # Production code
-COMPILER_FLAGS = -c -MMD -MP -Wall
+COMPILER_FLAGS=-Wall
+INCLUDE_FLAGS=
+LINKER_FLAGS=
+LINKER_FLAGS=
+
+#Flags for user's unit tests written under CppUTest framework
+TEST_COMPILER_FLAGS=
+TEST_INCLUDE_FLAGS=
+TEST_LINKER_FLAGS=
+
+#Flags for CppUTest framework's source code
+#(not the user's unit tests; the test framework itself)
+CPPUTEST_LINKER_FLAGS=
+
+
+##Auto-generated flags
+# Production code
+COMPILER_FLAGS+=-c -MMD -MP
+ifeq ($(DEBUG),Y)
+	COMPILER_FLAGS+=-g
+endif
 INCLUDE_FLAGS=$(addprefix -I,$(INC_DIRS))
 LINKER_FLAGS=$(addprefix -L,$(LIB_DIRS))
 LINKER_FLAGS+=$(addprefix -l,$(LIB_LIST))
 
-# Test code written under CppUTest test harness
-#Flags for user unit tests
-TEST_COMPILER_FLAGS=
-TEST_INCLUDE_FLAGS=$(addprefix -I,$(TEST_INC_DIR))
+#Flags for user's unit tests written under CppUTest framework
+ifeq ($DEBUG,Y)
+	TEST_COMPILER_FLAGS+=-g
+endif
+TEST_INCLUDE_FLAGS+=$(addprefix -I,$(TEST_INC_DIR))
 #Link to any other libraries utilized by user tests
-TEST_LINKER_FLAGS=$(addprefix -L,$(TEST_LIB_DIR))
+TEST_LINKER_FLAGS+=$(addprefix -L,$(TEST_LIB_DIR))
 TEST_LINKER_FLAGS+=$(addprefix -l,$(TEST_LIB_LIST))
 #Link to production source code library is included as a prerequisite in rule for building TEST_TARGET
 # TEST_LINKER_FLAGS+=$(addprefix -L,$(TEST_TARGET_DIR))
 # TEST_LINKER_FLAGS+=$(addprefix -l,$(TARGET_NAME))
 
-#Flags for CppUTest test harness source code
-CPPUTEST_LINKER_FLAGS=$(addprefix -l,$(CPPUTEST_LIB_LIST))
+#Flags for CppUTest framework's source code
+#(not the user's unit tests; the test framework itself)
+CPPUTEST_LINKER_FLAGS+=$(addprefix -l,$(CPPUTEST_LIB_LIST))
 ifeq ("$(OSTYPE)","Cygwin")
 CPPUTEST_LINKER_FLAGS+=$(addprefix -L,$(CPPUTEST_LIB_DIR))
 endif
@@ -46,6 +74,7 @@ ifdef SILENCE
 else
 	ARCHIVER_FLAGS=rcvs
 endif
+
 
 
 ### Auto-detect source code and generate object files ###
