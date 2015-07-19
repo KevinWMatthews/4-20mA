@@ -59,6 +59,7 @@ LedNumber LedNumber_Create(LedNumber_Place largestDigit)
 
   self->digits = calloc(largestDigit+1, sizeof(LedDigit_Value));
   RETURN_VALUE_IF_NULL(self->digits, NULL);
+  //Manually initialize because memset will set varialbes as unsigned chars
   for (i = LED_UNITS; i <= largestDigit; i++)
   {
     self->digits[i] = NO_DIGIT;
