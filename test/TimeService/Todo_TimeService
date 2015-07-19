@@ -1,23 +1,25 @@
 Todo_TimeService
 
-Need to find a way to give some tasks priority, or to execute from within the ISR (!).
+Consider making the time service multi-instance. This way you can hook one or several processes to an interrupt and service them in the main loop *OR* hook one or several interrupts to a timer interrupt and service them there.
+We can then create several ISR and non-ISR TimeServices.
+
+We might need to rename the TimeService.
+
+For this chip we should consider moving the display process over to timer1 because it has a higher-priority interrupt.
+Look into what this actually does.
+
+Also could (should?) bump up the CPU frequency? We could get large performance benefits.
+
+Maybe only service one process per interrupt, but this changes things a lot.
+
+
+
+Check execution time of TimerTick!
 Need to learn how to do timing testing so that we can make sure that the screen update takes < 1 or 2 ms.
 
-
-
-Create separate test file for private functions?
-Rethink the organization of the tests. It's a bit messy right now.
+Still want to rethink the organization of the tests and functions. It's a bit messy right now.
 
 Think about splitting counter and period enums for clarity.
-Perhaps we should add devoted activate anddeactivate functions.
+Perhaps we should add devoted activate and deactivate functions.
 
 Test deactivate() with nonconsecutive alarms?
-
-Consider redesigning TimeService so that the callbacks can take a void pointer as an argument.
-We'd have to service alarms individually but it makes them much more powerful.
-
-Remove callback parameter demo (don't need the null demo, I think; we'll test that when we test/create the actual callback function).
-Clean up the tests.
-Try out a struct, even though I know it should work.
-
-Check execution time of TimerTick.

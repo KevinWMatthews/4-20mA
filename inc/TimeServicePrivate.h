@@ -22,6 +22,7 @@ typedef struct PeriodicAlarmStruct
   PeriodicAlarmCallback callback;
   int16_t period;
   int16_t counter;
+  BOOL executeInIsr;
   BOOL executeCallbackNow;
 } PeriodicAlarmStruct;
 

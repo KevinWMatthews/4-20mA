@@ -74,6 +74,18 @@ static BOOL getExecuteCallbackNowFlag(PeriodicAlarm self)
   return self->executeCallbackNow;
 }
 
+static void setExecuteInIsrFlag(PeriodicAlarm self, BOOL executeInIsr)
+{
+  RETURN_IF_NULL(self);
+  self->executeInIsr = executeInIsr;
+}
+
+static BOOL getExecuteInIsrFlag(PeriodicAlarm self)
+{
+  RETURN_VALUE_IF_NULL(self, FALSE);
+  return self->executeInIsr;
+}
+
 static void markSingleAlarmAsUnused(PeriodicAlarm self)
 {
   setCallback(self, NULL);
@@ -151,6 +163,7 @@ PeriodicAlarm TimeService_AddPeriodicAlarm(PeriodicAlarmCallback callback, int16
       setCallback(thisAlarm, callback);
       setPeriod(thisAlarm, period);
       setCounter(thisAlarm, PA_INACTIVE);
+      setExecuteInIsrFlag(thisAlarm, executeInIsr);
       return thisAlarm;
     }
   }
@@ -196,8 +209,15 @@ void TimeService_TimerTick(void)
     incrementCounter(thisAlarm);
     if (getCounter(thisAlarm) >= getPeriod(thisAlarm))
     {
-      setExecuteCallbackNowFlag(thisAlarm, TRUE);
       resetCounter(thisAlarm);
+      if (getExecuteInIsrFlag(thisAlarm))
+      {
+        executeCallback(thisAlarm, NULL);
+      }
+      else
+      {
+        setExecuteCallbackNowFlag(thisAlarm, TRUE);
+      }
     }
   }
 }

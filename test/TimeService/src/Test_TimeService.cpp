@@ -408,3 +408,18 @@ TEST(TimeService, SeveralServicesDontDisruptCounter)
   TimeService_ServiceSingleCallback(alarm, nullPointer);
   LONGS_EQUAL(period-10, TimeServicePrivate_GetCounter(alarm));
 }
+
+TEST(TimeService, ExecuteSingleAlarmWithinTimerTick)
+{
+  callback = callbackFunction;
+  alarm = TimeService_AddPeriodicAlarm(callback, period, TRUE);
+
+  TimeService_ActivatePeriodicAlarm(alarm);
+  TimeServicePrivate_SetCounter(alarm, period-1);
+
+  mock().expectOneCall("callbackFunction")
+        .withParameter("params", nullPointer);
+
+  TimeService_TimerTick();
+  checkCounterAndFlag(alarm, PA_COUNTER_RESET_VALUE, FALSE);
+}
