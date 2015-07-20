@@ -164,6 +164,7 @@ clean:
 	$(ECHO) "${Yellow}Cleaning project...${NoColor}"
 	$(SILENCE)rm -rf $(TARGET_DIR)
 	$(SILENCE)rm -rf $(OBJ_DIR)
+	$(SILENCE)rm -rf $(PRODUCTION_LIB_DIR)
 	$(SILENCE)rm -rf $(TEST_OBJ_DIR)
 	$(SILENCE)rm -rf $(TEST_TARGET_DIR)
 	$(ECHO) "${Green}...Clean finished!${NoColor}\n"
