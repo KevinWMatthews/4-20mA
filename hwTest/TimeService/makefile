@@ -28,7 +28,7 @@ SRC_FILES=$(ROOT_DIR)/src/LedNumber.c \
           $(ROOT_DIR)/src/LedDigitWiring_ATtiny.c \
           $(ROOT_DIR)/src/TimeService.c \
           $(ROOT_DIR)/src/TimeServiceWiring_ATtiny861.c \
-          $(ROOT_DIR)/src/ChipFunctions_AT.c \
+          $(ROOT_DIR)/src/ChipFunctions_ATtiny861.c \
 
 #Optimization level
 #use s (size opt), 1, 2, 3, 0 (off), fast, g (debugging)

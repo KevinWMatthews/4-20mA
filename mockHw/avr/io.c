@@ -1,5 +1,8 @@
 #include "io.h"
 
+//*** CPU prescaler ***//
+uint8_t CLKPR;
+
 //*** ADC control ***//
 uint8_t ADCL;
 uint8_t ADCH;

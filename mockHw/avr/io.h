@@ -9,6 +9,16 @@
 //if we wish to support multiple chips.
 
 
+//*** CPU prescaler ***//
+extern uint8_t CLKPR;
+// #define CLKPR _SFR_IO8(0x28)
+#define CLKPS0 0
+#define CLKPS1 1
+#define CLKPS2 2
+#define CLKPS3 3
+#define CLKPCE 7
+
+
 //*** ADC control ***//
 // #define ADCL    _SFR_IO8(0x04)
 // #define ADCH    _SFR_IO8(0x05)

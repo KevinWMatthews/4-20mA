@@ -4,7 +4,7 @@ ifndef SILENCE
 endif
 
 TARGET_NAME=4-20mA
-TEST_TARGET_NAME=ATtiny26
+TEST_TARGET_NAME=ChipFunctions
 
 ### Directory structure ###
 # List all production code folders

@@ -1,6 +1,8 @@
 #include "ChipFunctions.h"
 #include "BitManip.h"
 #include <avr/interrupt.h>
+#include <avr/io.h>
+
 
 void ChipFunctions_EnableGlobalInterrupts(void)
 {
@@ -14,4 +16,10 @@ void ChipFunctions_DisableGlobalInterrupts(void)
   //This call is specific to AVR chips
   //Can also manually clear bit 7 (I) of SREG
   cli();
+}
+
+void ChipFunctions_SetCpuPrescaler(Cf_CpuPrescaleFactor prescaleFactor)
+{
+  CLKPR = (1<<CLKPCE);
+  CLKPR = prescaleFactor;
 }
