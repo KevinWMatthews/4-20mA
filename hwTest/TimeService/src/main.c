@@ -5,9 +5,9 @@
 
 
 
-//****************************//
-//*** File-scope functions ***//
-//****************************//
+//******************//
+//*** File-scope ***//
+//******************//
 LedNumber numericDisplay;
 
 
@@ -35,6 +35,7 @@ void updateDisplayValue(void * params)
 }
 
 
+
 //*******************//
 //*** The program ***//
 //*******************//
@@ -48,6 +49,7 @@ int main(void)
   UpdateDisplayValueParams updateDisplayValueParams;
 
   //Set up hardware
+  ChipFunctions_SetCpuPrescaler(CF_CPU_PRESCALE_FACTOR_1);
   TimeService_HwSetup();
   LedNumber_HwSetup();
 
@@ -57,7 +59,7 @@ int main(void)
 
   //Set up interfaces
   alarm_UpdateDisplay = TimeService_AddPeriodicAlarm(callback_UpdateDisplay, 5, TRUE);
-  alarm_UpdateDisplayValue = TimeService_AddPeriodicAlarm(callback_UpdateDisplayValue, 100, FALSE);
+  alarm_UpdateDisplayValue = TimeService_AddPeriodicAlarm(callback_UpdateDisplayValue, 1000, FALSE);
   updateDisplayValueParams.numericDisplay = numericDisplay;
   updateDisplayValueParams.displayValue = displayValue;
 

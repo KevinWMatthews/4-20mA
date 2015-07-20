@@ -13,7 +13,7 @@ void TimeServiceWiring_HwSetup(void)
   TimeServiceWiring_ClearTimerOnMatch(TRUE);
   TimeServiceWiring_SetTimerCompareValue0A(125);
   TimeServiceWiring_SetTimerCompareInterrupt0A(TRUE);
-  TimeServiceWiring_SetPrescaleFactor(TS_PRESCALE_FACTOR_8);
+  TimeServiceWiring_SetPrescaleFactor(TS_PRESCALE_FACTOR_64);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //~~~ Hardware setup modification should not cause changes below this point! ~~~//

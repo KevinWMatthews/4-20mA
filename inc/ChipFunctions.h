@@ -7,6 +7,7 @@
 void ChipFunctions_EnableGlobalInterrupts(void);
 void ChipFunctions_DisableGlobalInterrupts(void);
 
+//The ATtiny861 defaults to 8MHz CPU clock with a prescal factor of 8.
 typedef enum
 {
   CF_CPU_PRESCALE_FACTOR_1   = 0b0000,
