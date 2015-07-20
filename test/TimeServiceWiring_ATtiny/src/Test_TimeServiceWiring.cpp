@@ -42,7 +42,7 @@ TEST(TimeServiceWiring, HardwareSetup)
   expectedOCR0A = 125;
   SHIFT_AND_SET_BITMASK_TO(expectedTIMSK, TRUE, BITMASK_TS_COMPARE_INTERRUPT_0A);
 
-  TimeServiceWiring_HardwareSetup();
+  TimeServiceWiring_HwSetup();
 
   BYTES_EQUAL(expectedTCCR0A, TCCR0A);
   BYTES_EQUAL(expectedTCCR0B, TCCR0B);

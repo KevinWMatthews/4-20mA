@@ -60,7 +60,7 @@ TEST(TimeService, NullPointerToAnyFunctionWontCrash)
 //Wiring
 TEST(TimeService, HwSetup)
 {
-  mock().expectOneCall("TimeServiceWiring_HardwareSetup");
+  mock().expectOneCall("TimeServiceWiring_HwSetup");
   TimeService_HwSetup();
 }
 

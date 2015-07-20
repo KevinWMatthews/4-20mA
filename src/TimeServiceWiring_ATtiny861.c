@@ -7,7 +7,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //~~~ Edit here to change hardware setup! ~~~//
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-void TimeServiceWiring_HardwareSetup(void)
+void TimeServiceWiring_HwSetup(void)
 {
   TimeServiceWiring_SetTimerBitWidth(TS_EIGHT_BIT);
   TimeServiceWiring_ClearTimerOnMatch(TRUE);

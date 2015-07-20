@@ -8,7 +8,7 @@
 //************************//
 //*** Public Functions ***//
 //************************//
-void TimeServiceWiring_HardwareSetup(void);
+void TimeServiceWiring_HwSetup(void);
 
 
 
