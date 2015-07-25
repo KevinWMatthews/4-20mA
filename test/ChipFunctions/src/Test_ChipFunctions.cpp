@@ -14,7 +14,7 @@ TEST_GROUP(ChipFunctions)
   void setup()
   {
     SREG = 0;
-    CLKPR = 0;
+    CLKPR = 0b0011;
   }
 
   void teardown()
@@ -22,10 +22,18 @@ TEST_GROUP(ChipFunctions)
   }
 };
 
-TEST(ChipFunctions, AllRegistersZeroAfterSetup)
+TEST(ChipFunctions, AllRegistersSetToFactoryDefaultsAfterSetup)
 {
   BYTES_EQUAL(0, SREG);
-  BYTES_EQUAL(0, CLKPR);
+  BYTES_EQUAL(0b0011, CLKPR);
+}
+
+TEST(ChipFunctions, HardwareSetup)
+{
+  uint8_t expectedCLKPR = 0;
+  SET_BITMASK_TO(expectedCLKPR, CF_CPU_PRESCALE_FACTOR_1, BITMASK_CF_PRESCALE_FACTOR);
+  ChipFunctions_HwSetup();
+  BYTES_EQUAL(expectedCLKPR, CLKPR);
 }
 
 TEST(ChipFunctions, EnableGlobalInterrupts_OtherBitsNotSet)

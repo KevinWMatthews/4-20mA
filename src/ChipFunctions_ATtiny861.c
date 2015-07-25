@@ -4,6 +4,11 @@
 #include <avr/io.h>
 
 
+void ChipFunctions_HwSetup(void)
+{
+  ChipFunctions_SetCpuPrescaler(CF_CPU_PRESCALE_FACTOR_1);
+}
+
 void ChipFunctions_EnableGlobalInterrupts(void)
 {
   //This call is specific to AVR chips
