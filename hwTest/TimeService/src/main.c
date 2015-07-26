@@ -49,7 +49,7 @@ int main(void)
   UpdateDisplayValueParams updateDisplayValueParams;
 
   //Set up hardware
-  ChipFunctions_SetCpuPrescaler(CF_CPU_PRESCALE_FACTOR_1);
+  ChipFunctions_HwSetup();
   TimeService_HwSetup();
   LedNumber_HwSetup();
 
