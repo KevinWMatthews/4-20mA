@@ -14,8 +14,8 @@ TEST_GROUP(LedDigitWiring)
 {
   void setup()
   {
-    DDRA = 0;
-    PORTA = 0;
+    DDRB = 0;
+    PORTB = 0;
     LedDigitWiring_HwSetup();
   }
 
@@ -24,10 +24,10 @@ TEST_GROUP(LedDigitWiring)
   }
 
   //Memory registers are defined or mocked in avr/io.h
-  void checkMemoryRegisters(uint8_t ddra, uint8_t porta)
+  void checkMemoryRegisters(uint8_t ddr, uint8_t port)
   {
-    LONGS_EQUAL(ddra, DDRA);
-    LONGS_EQUAL(porta, PORTA);
+    LONGS_EQUAL(ddr, DDRB);;
+    LONGS_EQUAL(port, PORTB);
   }
 };
 

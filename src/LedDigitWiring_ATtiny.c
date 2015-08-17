@@ -7,14 +7,16 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //~~~ Edit here to change hardware wiring! ~~~//
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-#define HWPIN_A       (1<<PA0)
-#define HWPIN_B       (1<<PA1)
-#define HWPIN_C       (1<<PA2)
-#define HWPIN_D       (1<<PA3)
-#define HWPIN_E       (1<<PA4)
-#define HWPIN_F       (1<<PA5)
-#define HWPIN_G       (1<<PA6)
-#define HWPIN_DP      (1<<PA7)
+#define HWDDR         (DDRB)
+#define HWPORT        (PORTB)
+#define HWPIN_A       (1<<PB0)
+#define HWPIN_B       (1<<PB1)
+#define HWPIN_C       (1<<PB2)
+#define HWPIN_D       (1<<PB3)
+#define HWPIN_E       (1<<PB4)
+#define HWPIN_F       (1<<PB5)
+#define HWPIN_G       (1<<PB6)
+#define HWPIN_DP      (1<<PB7)
 #define HWPIN_ERROR   0xff
 #define HWPIN_BITMASK (HWPIN_A | HWPIN_B | HWPIN_C | HWPIN_D | HWPIN_E | HWPIN_F | HWPIN_G | HWPIN_DP)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -36,8 +38,8 @@ static uint8_t convertPinToWiringPin(LedDigitWiring_Pin pin);
 void LedDigitWiring_HwSetup(void)
 {
   //Configure LED pins as outputs
-  SET_BITS(DDRA, HWPIN_BITMASK);
-  SET_BITS(PORTA, HWPIN_BITMASK);
+  SET_BITS(HWDDR, HWPIN_BITMASK);
+  SET_BITS(HWPORT, HWPIN_BITMASK);
 }
 
 void LedDigitWiring_TurnSegmentOn(LedDigitWiring_Pin pin)
@@ -49,7 +51,7 @@ void LedDigitWiring_TurnSegmentOn(LedDigitWiring_Pin pin)
   {
     return;
   }
-  CLEAR_BITS(PORTA, wiringPin);
+  CLEAR_BITS(HWPORT, wiringPin);
 }
 
 void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
@@ -61,7 +63,7 @@ void LedDigitWiring_TurnSegmentOff(LedDigitWiring_Pin pin)
   {
     return;
   }
-  SET_BITS(PORTA, wiringPin);
+  SET_BITS(HWPORT, wiringPin);
 }
 
 

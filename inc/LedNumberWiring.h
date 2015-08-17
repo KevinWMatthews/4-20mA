@@ -3,6 +3,25 @@
 
 
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~ Edit here to change hardware wiring! ~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//Currently only 4 LEDs are supported
+#define WIRINGDDR         (DDRA)
+#define WIRINGPORT        (PORTA)
+#define WIRINGPIN_NONE    0
+#define WIRINGPIN_LED1    (1<<PA4)
+#define WIRINGPIN_LED2    (1<<PA5)
+#define WIRINGPIN_LED3    (1<<PA6)
+#define WIRINGPIN_LED4    (1<<PA7)
+#define WIRINGPIN_ERROR   0xff
+#define WIRINGPIN_BITMASK (WIRINGPIN_LED1 | WIRINGPIN_LED2 | WIRINGPIN_LED3 | WIRINGPIN_LED4)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//~~~ Edit here to change hardware wiring! ~~~//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+
+
 //******************//
 //*** Data types ***//
 //******************//

@@ -2,6 +2,7 @@ extern "C"
 {
   #include "LedNumberWiring.h"
   #include <avr/io.h>
+  #include "BitManip.h"
 }
 
 //CppUTest includes should be after your system includes
@@ -12,8 +13,8 @@ TEST_GROUP(LedNumberWiring)
 {
   void setup()
   {
-    PORTB = 0;
-    DDRB = 0;
+    WIRINGPORT = 0;
+    WIRINGDDR = 0;
     LedNumberWiring_HwSetup();
   }
 
@@ -21,57 +22,60 @@ TEST_GROUP(LedNumberWiring)
   {
   }
 
-  void checkMemoryRegisters(uint8_t ddrb, uint8_t portb)
+  void checkMemoryRegisters(uint8_t ddr, uint8_t port)
   {
-    LONGS_EQUAL(ddrb, DDRB);
-    LONGS_EQUAL(portb, PORTB);
+    uint8_t expectedPort = 0;
+    SET_BITMASK_TO(expectedPort, WIRINGPIN_BITMASK, 0xff);
+    CLEAR_BITS(expectedPort, (port));
+    BYTES_EQUAL(ddr, WIRINGDDR);
+    BYTES_EQUAL(expectedPort, WIRINGPORT);
   }
 };
 
 TEST(LedNumberWiring, HwSetup)
 {
-  checkMemoryRegisters(0x0f, 0x0f);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_NONE);
 }
 
 TEST(LedNumberWiring, SelectNoLed)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_NONE);
-  checkMemoryRegisters(0x0f, 0x0f);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_NONE);
 }
 
 TEST(LedNumberWiring, SelectLed1)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_UNITS);
-  checkMemoryRegisters(0x0f, 0x0e);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_LED1);
 }
 
 TEST(LedNumberWiring, SelectLed2)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_TENS);
-  checkMemoryRegisters(0x0f, 0x0d);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_LED2);
 }
 
 TEST(LedNumberWiring, SelectLed3)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_HUNDREDS);
-  checkMemoryRegisters(0x0f, 0x0b);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_LED3);
 }
 
 TEST(LedNumberWiring, SelectLed4)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_THOUSANDS);
-  checkMemoryRegisters(0x0f, 0x07);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_LED4);
 }
 
 TEST(LedNumberWiring, SetUpperBound)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_UPPER_BOUND);
-  checkMemoryRegisters(0x0f, 0x0f);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_NONE);
 }
 
-TEST(LedNumberWiring, SetConsecutiveSelectPins)
+TEST(LedNumberWiring, SetConsecutiveSelectPinsClearsPreviousPins)
 {
   LedNumberWiring_SetSelectPin(WIRINGLED_UNITS);
   LedNumberWiring_SetSelectPin(WIRINGLED_TENS);
-  checkMemoryRegisters(0x0f, 0x0d);
+  checkMemoryRegisters(WIRINGPIN_BITMASK, WIRINGPIN_LED2);
 }
